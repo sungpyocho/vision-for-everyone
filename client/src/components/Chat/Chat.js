@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useDispatch, useSelector } from 'react-redux';
 import { saveMessage } from '../../_actions/message_actions';
@@ -39,6 +39,12 @@ function Chat() {
 
   // chime mp3
   const sound = new Audio(chime);
+
+  const [Input, setInput] = useState("");
+
+  const inputHandler = (event) => {
+      setInput(event.currentTarget.value);
+  }
 
   // component가 mount되면 실행
   // useEffect를 써서 렌더링하면 이 컴포넌트에서 이거 해야해!라고 지시
@@ -122,6 +128,7 @@ function Chat() {
     }
   }
 
+  // Functions about query input
   const keyPressHandler = (event) => {
     if (event.key === "Enter") {
       if (!event.target.value) {
@@ -129,9 +136,27 @@ function Chat() {
       }
       // request를 server의 text Query로 전송
       textQuery(event.target.value);
-
       event.target.value = "";
     }
+  }
+
+  const handleSubmit = (event) => {
+    if (event) event.preventDefault();
+
+    if (!Input) {
+      return alert("내용을 입력해주세요");
+    }
+    // request를 server의 text Query로 전송
+    textQuery(Input);
+    setInput("");
+    // const inputValue = this.input.value;
+
+    // if (!inputValue) {
+    //   return alert("내용을 이이입입력해주세요");
+    // }
+    // // request를 server의 text Query로 전송
+    // textQuery(inputValue);
+    // this.input.value = "";
   }
 
   // Helper functions
@@ -164,12 +189,23 @@ function Chat() {
 
   return (
     <div>
-      <Paper component="form" className={classes.root}>
+      <div>
+        지금 여기는 버튼이에욤
+
+      </div>
+      <div>
+        여기는 채팅이구요
+      </div>
+      {/* Input Field and Button */}
+      <Paper component="form" className={classes.root} onSubmit={handleSubmit}>
         <InputBase
           className={classes.input}
           placeholder="메세지를 입력하세요"
+          type="text"
+          value={Input}
+          onChange={inputHandler}
         />
-        <Button variant="contained" className={classes.button}>
+        <Button variant="contained" className={classes.button} type="submit">
           <SendIcon />
         </Button>
       </Paper>
