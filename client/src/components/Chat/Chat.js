@@ -3,11 +3,42 @@ import axios from "axios";
 import { useDispatch, useSelector } from 'react-redux';
 import { saveMessage } from '../../_actions/message_actions';
 
+import { makeStyles } from '@material-ui/core/styles';
+import { Button, Paper, InputBase } from '@material-ui/core';
+import SendIcon from '@material-ui/icons/Send';
+
+import chime from '../../assets/chime.mp3';
+
+const useStyles = makeStyles(theme => ({
+  root: {
+    padding: '2px 4px',
+    display: 'flex',
+    alignItems: 'center',
+    width: "100%",
+    borderRadius: 5,
+    marginTop: 500,
+    borderTop: '1px solid lightgrey',
+  },
+  input: {
+    marginLeft: theme.spacing(1),
+    flex: 1,
+  },
+  button: {
+    backgroundColor: "#70db70",
+    color: "white",
+    borderRadius: 5,
+  }
+}));
+
 function Chat() {
-  const dispatch = useDispatch();
+  const classes = useStyles(); // Customize Material-UI
+
   // redux 구조를 보면 state.message.messages가 메세지들의 배열이다.
   const messagesFromRedux = useSelector(state => state.message.messages);
+  const dispatch = useDispatch();
 
+  // chime mp3
+  const sound = new Audio(chime);
 
   // component가 mount되면 실행
   // useEffect를 써서 렌더링하면 이 컴포넌트에서 이거 해야해!라고 지시
@@ -38,14 +69,15 @@ function Chat() {
     try {
       // textQuery route로 리퀘스트 전송
       const response = await axios.post('/api/dialogflow/textQuery', textQueryVariables);
-      for (let content of response.data.fullfillmentMessages) {
+      response.data.fullfillmentMessages.forEach(content => {
         conversation = {
           who: 'kiwe',
           content: content
         }
         dispatch(saveMessage(conversation));
-      }
-
+      })
+      sound.play(); // chime 재생
+    
     } catch (error) {
         conversation = {
           who: 'kiwe',
@@ -68,13 +100,15 @@ function Chat() {
     try {
       // textQuery 라우트로 리퀘스트 전송
       const response = await axios.post('/api/dialogflow/eventQuery', eventQueryVariables);
-      for (let content of response.data.fullfillmentMessages) {
+      response.data.fullfillmentMessages.foreach(content => {
         let conversation = {
           who: 'kiwe',
           content: content
         }
         dispatch(saveMessage(conversation));
-      }
+      })
+      sound.play(); // chime 재생
+
     } catch (error) {
     let conversation = {
         who: 'bot',
@@ -100,9 +134,45 @@ function Chat() {
     }
   }
 
+  // Helper functions
+  const isNormalMessage = (message) => {
+    return message.message && message.message.text && message.message.text.text; 
+  }
+
+  const isCardMessage = (message) => {
+    return message.content && message.content.payload.fields.card;
+  }
+
+  // Render functions
+  const renderCards = (cards) => {
+
+  }
+
+  const renderOneMessage = (message, i) => {
+
+  }
+
+  const renderMessages = (messagesFromRedux) => {
+    if (messagesFromRedux) {
+      return messagesFromRedux.map((message, i) => {
+        return renderOneMessage(message, i)
+      })
+    } else {
+      return null;
+    }
+  }
+
   return (
     <div>
-      This is chat
+      <Paper component="form" className={classes.root}>
+        <InputBase
+          className={classes.input}
+          placeholder="메세지를 입력하세요"
+        />
+        <Button variant="contained" className={classes.button}>
+          <SendIcon />
+        </Button>
+      </Paper>
     </div>
   )
 }
