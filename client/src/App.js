@@ -5,19 +5,24 @@ import Chat from "./components/Chat/Chat";
 
 function App() {
   return (
-    <Grid container direction="column">
-      <Grid item>
-        <Header />
-      </Grid>
-      
-      <Grid item container>
-        <Grid item xs={false} sm={2} />
-        <Grid item xs={12} sm={8}>
-          <Chat />
-        </Grid>
-        <Grid item xs={false} sm={2} />
-      </Grid>
-    </Grid>
+    <div>
+      <Header/>
+      <Chat />
+    </div>
+
+    // <Grid container direction="column">
+    //   <Grid item>
+    //     <Header />
+    //   </Grid>
+    //   {/* <Chat /> */}
+    //   <Grid item container>
+    //     <Grid item xs={false} sm={2} />
+    //     <Grid item xs={12} sm={8}>
+    //       <Chat />
+    //     </Grid>
+    //     <Grid item xs={false} sm={2} />
+    //   </Grid>
+    // </Grid>
   );
 }
 

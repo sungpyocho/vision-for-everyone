@@ -10,11 +10,13 @@ const useStyles = makeStyles((theme) => ({
     flexGrow: 1,
   },
   appBar: {
-    background: 'linear-gradient(90deg, #faf796 20%,  #70db70 90%)',
+    background: 'linear-gradient(90deg, #faf796 20%,  #6ac48a 90%)',
   },
   title: {
     flexGrow: 1,
-    color: 'black'
+    color: 'black',
+    fontWeight: 500,
+    fontFamily: 'Spoqa Han Sans',
   },
   settingsIcon: {
     marginRight: theme.spacing(2),

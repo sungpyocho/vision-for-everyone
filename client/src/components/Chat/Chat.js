@@ -6,25 +6,28 @@ import { saveMessage } from '../../_actions/message_actions';
 import { makeStyles } from '@material-ui/core/styles';
 import { Button, Paper, InputBase } from '@material-ui/core';
 import SendIcon from '@material-ui/icons/Send';
+import styled from 'styled-components';
 
+import OrderMenu from './Sections/OrderMenu';
+import Message from './Sections/Message';
+import Card from './Sections/Card';
 import chime from '../../assets/chime.mp3';
 
 const useStyles = makeStyles(theme => ({
-  root: {
-    padding: '2px 4px',
+  inputForm: {
     display: 'flex',
-    alignItems: 'center',
-    width: "100%",
     borderRadius: 5,
-    marginTop: 500,
     borderTop: '1px solid lightgrey',
+    bottom: 0,
+    position: 'absolute',
+    width: '100%',
   },
   input: {
     marginLeft: theme.spacing(1),
     flex: 1,
   },
   button: {
-    backgroundColor: "#70db70",
+    backgroundColor: "#6ac48a",
     color: "white",
     borderRadius: 5,
   }
@@ -40,8 +43,8 @@ function Chat() {
   // chime mp3
   const sound = new Audio(chime);
 
+  // Keyboard Input State
   const [Input, setInput] = useState("");
-
   const inputHandler = (event) => {
       setInput(event.currentTarget.value);
   }
@@ -72,10 +75,11 @@ function Chat() {
     const textQueryVariables = {
       text
     }
+
     try {
       // textQuery route로 리퀘스트 전송
       const response = await axios.post('/api/dialogflow/textQuery', textQueryVariables);
-      response.data.fullfillmentMessages.forEach(content => {
+      response.data.fulfillmentMessages.forEach(content => {
         conversation = {
           who: 'kiwe',
           content: content
@@ -89,7 +93,7 @@ function Chat() {
           who: 'kiwe',
           content: {
             text: {
-              text: "챗봇의 답변 처리과정에서 에러가 발생했습니다."
+              text: "챗봇의 답변 처리과정에서 에러가 발생했습니다. 페이지를 새로고침해주세요."
             }
           }
         }
@@ -104,9 +108,9 @@ function Chat() {
       event
     }
     try {
-      // textQuery 라우트로 리퀘스트 전송
+      // eventQuery 라우트로 리퀘스트 전송
       const response = await axios.post('/api/dialogflow/eventQuery', eventQueryVariables);
-      response.data.fullfillmentMessages.foreach(content => {
+      response.data.fulfillmentMessages.forEach(content => {
         let conversation = {
           who: 'kiwe',
           content: content
@@ -117,10 +121,10 @@ function Chat() {
 
     } catch (error) {
     let conversation = {
-        who: 'bot',
+        who: 'kiwe',
         content: {
           text: {
-            text: "챗봇의 답변 처리과정에서 에러가 발생했습니다."
+            text: "챗봇의 답변 처리과정에서 에러가 발생했습니다. 페이지를 새로고침해주세요."
           }
         }
       }
@@ -129,17 +133,6 @@ function Chat() {
   }
 
   // Functions about query input
-  const keyPressHandler = (event) => {
-    if (event.key === "Enter") {
-      if (!event.target.value) {
-        return alert("내용을 입력해주세요");
-      }
-      // request를 server의 text Query로 전송
-      textQuery(event.target.value);
-      event.target.value = "";
-    }
-  }
-
   const handleSubmit = (event) => {
     if (event) event.preventDefault();
 
@@ -148,20 +141,12 @@ function Chat() {
     }
     // request를 server의 text Query로 전송
     textQuery(Input);
-    setInput("");
-    // const inputValue = this.input.value;
-
-    // if (!inputValue) {
-    //   return alert("내용을 이이입입력해주세요");
-    // }
-    // // request를 server의 text Query로 전송
-    // textQuery(inputValue);
-    // this.input.value = "";
+    setInput(""); 
   }
 
   // Helper functions
   const isNormalMessage = (message) => {
-    return message.message && message.message.text && message.message.text.text; 
+    return message.content && message.content.text && message.content.text.text; 
   }
 
   const isCardMessage = (message) => {
@@ -170,10 +155,22 @@ function Chat() {
 
   // Render functions
   const renderCards = (cards) => {
-
+    return cards.map((card, i) => <Card key={i} cardInfo={card.structValue} /> )
   }
 
   const renderOneMessage = (message, i) => {
+    // 일반 메세지일 경우
+      if (isNormalMessage(message)) {
+        return <Message key={i} who={message.who} text={message.content.text.text} />
+      } else if (isCardMessage(message)){
+        return (
+          <div>
+          {renderCards(message.content.payload.fields.card.listValue.values)}
+          </div>
+        )
+      }
+
+    // 카드 메세지일 경우
 
   }
 
@@ -188,29 +185,67 @@ function Chat() {
   }
 
   return (
-    <div>
+    <Wrapper>
+      {/* Order Buttons */}
+      <MenuComponent>
+        <OrderMenu/>
+      </MenuComponent>
       <div>
-        지금 여기는 버튼이에욤
-
+        {/* Chat Messages */}
+        <Messages>
+          {renderMessages(messagesFromRedux)}
+        </Messages>
+        {/* Input Field and Button */}
+        <Paper component="form" className={classes.inputForm} onSubmit={handleSubmit}>
+          <InputBase
+            className={classes.input}
+            placeholder="메세지를 입력하세요"
+            type="text"
+            value={Input}
+            onChange={inputHandler}
+          />
+          <Button variant="contained" className={classes.button} type="submit">
+            <SendIcon />
+          </Button>
+        </Paper>
       </div>
-      <div>
-        여기는 채팅이구요
-      </div>
-      {/* Input Field and Button */}
-      <Paper component="form" className={classes.root} onSubmit={handleSubmit}>
-        <InputBase
-          className={classes.input}
-          placeholder="메세지를 입력하세요"
-          type="text"
-          value={Input}
-          onChange={inputHandler}
-        />
-        <Button variant="contained" className={classes.button} type="submit">
-          <SendIcon />
-        </Button>
-      </Paper>
-    </div>
+    </Wrapper>
   )
 }
+
+const Wrapper = styled.div`
+  height: calc(100% - 64px);
+  position: absolute;
+  width: 66.6%;
+  left: 16.7%;
+  right: 16.7%;
+  @media (max-width: 768px) {
+    width: 90%;
+    left: 5%;
+    right: 5%;
+  }
+`;
+
+const Messages = styled.div`
+  overflow: auto;
+  background-color: #f1f0f0;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  bottom: 36px;
+  position: absolute;
+  height: calc(100% - 110px);
+  width: 100%;
+`;
+
+const MenuComponent = styled.div`
+  display: flex;
+  top: 56px;
+  height: 74px;
+  align-items: center;
+  justify-content: center;
+  @media (min-width: 600px) {
+    top: 64px;
+  }
+`;
 
 export default Chat;

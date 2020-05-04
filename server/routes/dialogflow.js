@@ -6,6 +6,10 @@ const config = require('../config/keys');
 const projectId = config.googleProjectID;
 const sessionId = config.dialogFlowSessionID;
 const languageCode = config.dialogFlowSessionLanguageCode;
+// const credentials = {
+//     client_email: config.googleClientEmail,
+//     private_key: config.googlePrivateKey,
+// }
 
 // 새로운 생성 세션
 const sessionClient = new dialogflow.SessionsClient();
@@ -32,7 +36,6 @@ router.post('/textQuery', async(req, res) => {
     const responses = await sessionClient.detectIntent(request);
     console.log('Detected intent');
     const result = responses[0].queryResult;
-    console.log(result);
     console.log(`  Query: ${result.queryText}`);
     console.log(`  Response: ${result.fulfillmentText}`);
 
