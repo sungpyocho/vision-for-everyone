@@ -1,26 +1,26 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { useDispatch, useSelector } from 'react-redux';
-import { saveMessage } from '../../_actions/message_actions';
+import { useDispatch, useSelector } from "react-redux";
+import { saveMessage } from "../../_actions/message_actions";
 
-import { makeStyles } from '@material-ui/core/styles';
-import { Button, Paper, InputBase } from '@material-ui/core';
-import SendIcon from '@material-ui/icons/Send';
-import styled from 'styled-components';
+import { makeStyles } from "@material-ui/core/styles";
+import { Button, Paper, InputBase } from "@material-ui/core";
+import SendIcon from "@material-ui/icons/Send";
+import styled from "styled-components";
 
-import OrderMenu from './Sections/OrderMenu';
-import Message from './Sections/Message';
-import Card from './Sections/Card';
-import chime from '../../assets/chime.mp3';
+import OrderMenu from "./Sections/OrderMenu";
+import Message from "./Sections/Message";
+import Card from "./Sections/Card";
+import chime from "../../assets/chime.mp3";
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   inputForm: {
-    display: 'flex',
+    display: "flex",
     borderRadius: 5,
-    borderTop: '1px solid lightgrey',
+    borderTop: "1px solid lightgrey",
     bottom: 0,
-    position: 'absolute',
-    width: '100%',
+    position: "absolute",
+    width: "100%",
   },
   input: {
     marginLeft: theme.spacing(1),
@@ -30,14 +30,14 @@ const useStyles = makeStyles(theme => ({
     backgroundColor: "#6ac48a",
     color: "white",
     borderRadius: 5,
-  }
+  },
 }));
 
 function Chat() {
   const classes = useStyles(); // Customize Material-UI
 
   // redux 구조를 보면 state.message.messages가 메세지들의 배열이다.
-  const messagesFromRedux = useSelector(state => state.message.messages);
+  const messagesFromRedux = useSelector((state) => state.message.messages);
   const dispatch = useDispatch();
 
   // chime mp3
@@ -46,14 +46,14 @@ function Chat() {
   // Keyboard Input State
   const [Input, setInput] = useState("");
   const inputHandler = (event) => {
-      setInput(event.currentTarget.value);
-  }
+    setInput(event.currentTarget.value);
+  };
 
   // component가 mount되면 실행
   // useEffect를 써서 렌더링하면 이 컴포넌트에서 이거 해야해!라고 지시
   useEffect(() => {
-      eventQuery('firstGreetings');
-  }, [])
+    eventQuery("firstGreetings");
+  }, []);
 
   // 클라이언트가 보낸 메세지 처리
   const textQuery = async (text) => {
@@ -61,76 +61,88 @@ function Chat() {
     // conversation을 이렇게 만든 이유는
     // dialogflow의 fulfillmentMessages의 형식과 같은 형식을 취하기 위해!
     let conversation = {
-      who: 'user',
+      who: "user",
       content: {
         text: {
-          text: text
-        }
-      }
-    }
+          text: text,
+        },
+      },
+    };
 
     // 보낸 메세지 데이터를 리덕스 스토어에 저장
     dispatch(saveMessage(conversation));
     // 챗봇이 보낸 답변 처리
     const textQueryVariables = {
-      text
-    }
+      text,
+    };
 
     try {
       // textQuery route로 리퀘스트 전송
-      const response = await axios.post('/api/dialogflow/textQuery', textQueryVariables);
-      response.data.fulfillmentMessages.forEach(content => {
+      const response = await axios.post(
+        "/api/dialogflow/textQuery",
+        textQueryVariables
+      );
+      response.data.fulfillmentMessages.forEach((content) => {
         conversation = {
-          who: 'kiwe',
-          content: content
-        }
+          who: "kiwe",
+          content: content,
+        };
         dispatch(saveMessage(conversation));
-      })
-      sound.play(); // chime 재생
-    
+      });
+      // chime 재생
+      sound.play();
     } catch (error) {
-        conversation = {
-          who: 'kiwe',
-          content: {
-            text: {
-              text: "챗봇의 답변 처리과정에서 에러가 발생했습니다. 페이지를 새로고침해주세요."
-            }
-          }
-        }
+      // 에러 발생 시
+      conversation = {
+        who: "kiwe",
+        content: {
+          text: {
+            text:
+              "챗봇의 답변 처리과정에서 에러가 발생했습니다. 페이지를 새로고침해주세요.",
+          },
+        },
+      };
       dispatch(saveMessage(conversation));
+      sound.play(); // chime 재생
     }
-  }
+  };
 
   // 챗봇의 첫 인사 메세지 처리
   const eventQuery = async (event) => {
     // 챗봇이 보낸 답변 처리
     const eventQueryVariables = {
-      event
-    }
+      event,
+    };
     try {
       // eventQuery 라우트로 리퀘스트 전송
-      const response = await axios.post('/api/dialogflow/eventQuery', eventQueryVariables);
-      response.data.fulfillmentMessages.forEach(content => {
+      const response = await axios.post(
+        "/api/dialogflow/eventQuery",
+        eventQueryVariables
+      );
+      response.data.fulfillmentMessages.forEach((content) => {
         let conversation = {
-          who: 'kiwe',
-          content: content
-        }
+          who: "kiwe",
+          content: content,
+        };
         dispatch(saveMessage(conversation));
-      })
-      sound.play(); // chime 재생
-
+      });
+      // chime 재생
+      sound.play();
     } catch (error) {
-    let conversation = {
-        who: 'kiwe',
+      // 에러 발생 시
+      let conversation = {
+        who: "kiwe",
         content: {
           text: {
-            text: "챗봇의 답변 처리과정에서 에러가 발생했습니다. 페이지를 새로고침해주세요."
-          }
-        }
-      }
+            text:
+              "챗봇의 답변 처리과정에서 에러가 발생했습니다. 페이지를 새로고침해주세요.",
+          },
+        },
+      };
       dispatch(saveMessage(conversation));
+      sound.play(); // chime 재생
     }
-  }
+  };
 
   // Functions about query input
   const handleSubmit = (event) => {
@@ -141,63 +153,67 @@ function Chat() {
     }
     // request를 server의 text Query로 전송
     textQuery(Input);
-    setInput(""); 
-  }
+    setInput("");
+  };
 
   // Helper functions
   const isNormalMessage = (message) => {
-    return message.content && message.content.text && message.content.text.text; 
-  }
+    return message.content && message.content.text && message.content.text.text;
+  };
 
   const isCardMessage = (message) => {
     return message.content && message.content.payload.fields.card;
-  }
+  };
 
   // Render functions
   const renderCards = (cards) => {
-    return cards.map((card, i) => <Card key={i} cardInfo={card.structValue} /> )
-  }
+    return cards.map((card, i) => <Card key={i} cardInfo={card.structValue} />);
+  };
 
   const renderOneMessage = (message, i) => {
     // 일반 메세지일 경우
-      if (isNormalMessage(message)) {
-        return <Message key={i} who={message.who} text={message.content.text.text} />
-      } else if (isCardMessage(message)){
-        return (
-          <div>
+    if (isNormalMessage(message)) {
+      return (
+        <Message key={i} who={message.who} text={message.content.text.text} />
+      );
+    } else if (isCardMessage(message)) {
+      return (
+        <div>
           {renderCards(message.content.payload.fields.card.listValue.values)}
-          </div>
-        )
-      }
+        </div>
+      );
+    }
 
     // 카드 메세지일 경우
-
-  }
+  };
 
   const renderMessages = (messagesFromRedux) => {
     if (messagesFromRedux) {
       return messagesFromRedux.map((message, i) => {
-        return renderOneMessage(message, i)
-      })
+        return renderOneMessage(message, i);
+      });
     } else {
       return null;
     }
-  }
+  };
 
   return (
     <Wrapper>
       {/* Order Buttons */}
       <MenuComponent>
-        <OrderMenu/>
+        <OrderMenu />
       </MenuComponent>
       <div>
         {/* Chat Messages */}
-        <Messages>
-          {renderMessages(messagesFromRedux)}
-        </Messages>
+        <Messages>{renderMessages(messagesFromRedux)}</Messages>
         {/* Input Field and Button */}
-        <Paper component="form" className={classes.inputForm} onSubmit={handleSubmit}>
+        <Paper
+          component="form"
+          className={classes.inputForm}
+          onSubmit={handleSubmit}
+        >
           <InputBase
+            autoFocus
             className={classes.input}
             placeholder="메세지를 입력하세요"
             type="text"
@@ -210,7 +226,7 @@ function Chat() {
         </Paper>
       </div>
     </Wrapper>
-  )
+  );
 }
 
 const Wrapper = styled.div`
@@ -233,14 +249,14 @@ const Messages = styled.div`
   border-top-right-radius: 10px;
   bottom: 36px;
   position: absolute;
-  height: calc(100% - 110px);
+  height: calc(90% - 36px);
   width: 100%;
 `;
 
 const MenuComponent = styled.div`
   display: flex;
   top: 56px;
-  height: 74px;
+  height: 10%;
   align-items: center;
   justify-content: center;
   @media (min-width: 600px) {
