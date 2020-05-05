@@ -31,7 +31,9 @@ export default function Header() {
       <AppBar position="static" className={classes.appBar}>
         <Toolbar>
           <Typography variant="h5" className={classes.title}>
-            KiWE
+            <a href="/" style={{ color: "black", textDecoration: "none" }}>
+              KiWE
+            </a>
           </Typography>
           <SettingsIcon className={classes.settingsIcon} />
           <AccountCircleIcon />

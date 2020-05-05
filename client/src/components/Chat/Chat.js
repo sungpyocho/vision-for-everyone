@@ -200,9 +200,7 @@ function Chat() {
   return (
     <Wrapper>
       {/* Order Buttons */}
-      <MenuComponent>
-        <OrderMenu />
-      </MenuComponent>
+      <OrderMenu />
       <div>
         {/* Chat Messages */}
         <Messages>{renderMessages(messagesFromRedux)}</Messages>
@@ -251,17 +249,6 @@ const Messages = styled.div`
   position: absolute;
   height: calc(90% - 36px);
   width: 100%;
-`;
-
-const MenuComponent = styled.div`
-  display: flex;
-  top: 56px;
-  height: 10%;
-  align-items: center;
-  justify-content: center;
-  @media (min-width: 600px) {
-    top: 64px;
-  }
 `;
 
 export default Chat;
