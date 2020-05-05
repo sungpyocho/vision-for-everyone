@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const moment = require("moment");
 const saltRounds = 10; // 해시 암호화를 할 때 필요한 salt의 길이
 
 const userSchema = mongoose.Schema({
@@ -69,8 +70,10 @@ userSchema.methods.comparePassword = function (plainPassword, cb) {
 
 userSchema.methods.generateToken = function (cb) {
   let user = this;
-
   let token = jwt.sign(user._id.toHexString(), "secret-Token");
+  let halfHour = moment().add(30, "minutes").valueOf();
+
+  user.tokenExp = halfHour;
   user.token = token;
   user.save((err, user) => {
     if (err) return cb(err);

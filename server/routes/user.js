@@ -3,6 +3,10 @@ const router = express.Router();
 const { User } = require("../models/User");
 const { auth } = require("../middleware/auth");
 
+//=================================
+//             User
+//=================================
+
 router.post("/login", (req, res) => {
   // 요청된 이메일을 DB에서 찾기
   User.findOne({ email: req.body.email }, (err, user) => {
@@ -26,6 +30,7 @@ router.post("/login", (req, res) => {
 
         // 토큰을 저장할 땐 쿠키, 로컬스토리지, 세션 등 다양한 방법이 있으나
         // 여기에서는 쿠키 사용
+        res.cookie("x_authExp", user.tokenExp);
         res
           .cookie("x_auth", user.token)
           .status(200)
@@ -65,12 +70,16 @@ router.get("/auth", auth, (req, res) => {
 
 // 로그아웃. auth 미들웨어를 넣어준 것은 로그아웃 전 로그인 상태이기 때문
 router.get("/logout", auth, (req, res) => {
-  User.findOneAndUpdate({ _id: req.user._id }, { token: "" }, (err, user) => {
-    if (err) return res.json({ success: false, err });
-    return res.status(200).send({
-      success: true,
-    });
-  });
+  User.findOneAndUpdate(
+    { _id: req.user._id },
+    { token: "", tokenExp: "" },
+    (err, user) => {
+      if (err) return res.json({ success: false, err });
+      return res.status(200).send({
+        success: true,
+      });
+    }
+  );
 });
 
 module.exports = router;
