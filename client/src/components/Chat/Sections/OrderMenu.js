@@ -1,17 +1,6 @@
 import React from "react";
 import styled from "styled-components";
 
-// const useStyles = makeStyles((theme) => ({
-//     root: {
-//       '& > *': {
-//         margin: theme.spacing(1.5),
-//         backgroundColor: "#f1f0f0",
-//         borderRadius: "5px",
-//         fontFamily: "Spoqa Han Sans",
-//       },
-//     }
-//   }));
-
 function OrderMenu() {
   return (
     <MenuComponent>

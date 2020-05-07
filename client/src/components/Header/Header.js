@@ -4,6 +4,7 @@ import { makeStyles } from "@material-ui/core/styles";
 // import { SettingsIcon, AccountCircleIcon } from '@material-ui/icons';
 import SettingsIcon from "@material-ui/icons/Settings";
 import AccountCircleIcon from "@material-ui/icons/AccountCircle";
+import IconButton from "@material-ui/core/IconButton";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -19,7 +20,7 @@ const useStyles = makeStyles((theme) => ({
     fontFamily: "Spoqa Han Sans",
   },
   settingsIcon: {
-    marginRight: theme.spacing(2),
+    marginRight: theme.spacing(1),
   },
 }));
 
@@ -35,8 +36,12 @@ export default function Header() {
               KiWE
             </a>
           </Typography>
-          <SettingsIcon className={classes.settingsIcon} />
-          <AccountCircleIcon />
+          <IconButton aria-label="설정" aria-haspopup="true" color="inherit">
+            <SettingsIcon className={classes.settingsIcon} />
+          </IconButton>
+          <IconButton aria-label="계정" aria-haspopup="true" color="inherit">
+            <AccountCircleIcon />
+          </IconButton>
         </Toolbar>
       </AppBar>
     </div>
