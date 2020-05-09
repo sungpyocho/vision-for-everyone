@@ -10,7 +10,7 @@ import styled from "styled-components";
 
 import OrderMenu from "./Sections/OrderMenu";
 import Message from "./Sections/Message";
-import Card from "./Sections/Card";
+import CardMessage from "./Sections/CardMessage";
 import chime from "../../assets/chime.mp3";
 
 const useStyles = makeStyles((theme) => ({
@@ -167,7 +167,9 @@ function Chat() {
 
   // Render functions
   const renderCards = (cards) => {
-    return cards.map((card, i) => <Card key={i} cardInfo={card.structValue} />);
+    return cards.map((card, i) => (
+      <CardMessage key={i} cardInfo={card.structValue} />
+    ));
   };
 
   const renderOneMessage = (message, i) => {

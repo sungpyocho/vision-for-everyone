@@ -27,6 +27,10 @@ function LandingPage(props) {
     props.history.push("/register");
   };
 
+  const toChatPage = () => {
+    props.history.push("/chat");
+  };
+
   return (
     <div style={{ fontSize: "30px", textAlign: "center", fontWeight: "500" }}>
       시각장애인을 위한
@@ -49,6 +53,15 @@ function LandingPage(props) {
         >
           회원가입 페이지로
         </Button>
+        <div>
+          <Button
+            variant="outlined"
+            className={classes.button}
+            onClick={toChatPage}
+          >
+            챗봇 페이지로
+          </Button>
+        </div>
       </div>
     </div>
   );
