@@ -6,16 +6,19 @@ const config = require("../config/keys");
 const projectId = config.googleProjectID;
 const sessionId = config.dialogFlowSessionID;
 const languageCode = config.dialogFlowSessionLanguageCode;
-const credentials = {
-  client_email: config.googleClientEmail,
-  private_key: config.googlePrivateKey.replace(/\\n/g, "\n"),
-};
+// 아래 방법을 써보려고 했으나 전혀 말을 듣지 않았다...
+// const credentials = {
+//   client_email: config.googleClientEmail,
+//   private_key: config.googlePrivateKey.replace(/\\n/g, "\n"),
+// };
 
-// 새로운 생성 세션
-const sessionClient = new dialogflow.SessionsClient({
-  projectId: projectId,
-  credentials: credentials,
-});
+// const sessionClient = new dialogflow.SessionsClient({
+//   projectId: projectId,
+//   credentials: credentials,
+// });
+
+// 결국, 구글 인증 관련은 GOOGLE_APPLICATION_CREDENTIALS 환경변수를 설정하여 해결하자.
+const sessionClient = new dialogflow.SessionsClient();
 const sessionPath = sessionClient.sessionPath(projectId, sessionId);
 
 // Text Query Route
