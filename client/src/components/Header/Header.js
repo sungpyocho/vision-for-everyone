@@ -4,21 +4,12 @@ import { useDispatch } from "react-redux";
 import { auth } from "../../_actions/user_actions";
 import { withRouter } from "react-router-dom";
 
-import {
-  AppBar,
-  Button,
-  Toolbar,
-  Typography,
-  Menu,
-  MenuItem,
-  FormGroup,
-  FormControlLabel,
-} from "@material-ui/core";
+import { AppBar, Button, Toolbar, Menu, MenuItem } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
-// import { SettingsIcon, AccountCircleIcon } from '@material-ui/icons';
 import SettingsIcon from "@material-ui/icons/Settings";
 import AccountCircleIcon from "@material-ui/icons/AccountCircle";
 import IconButton from "@material-ui/core/IconButton";
+import KiweHeaderIcon from "../../assets/kiwe-header.jpg";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -29,9 +20,6 @@ const useStyles = makeStyles((theme) => ({
   },
   title: {
     flexGrow: 1,
-    color: "black",
-    fontWeight: 500,
-    fontFamily: "Spoqa Han Sans",
   },
   settingsIcon: {
     marginRight: theme.spacing(1),
@@ -96,19 +84,18 @@ function Header(props) {
   const handleLogin = () => {
     props.history.push("/login");
   };
-  // const toggleChecked = () => {
-  //   setChecked((prev) => !prev);
-  // };
 
   return (
     <div className={classes.root}>
       <AppBar position="static" className={classes.appBar}>
         <Toolbar>
-          <Typography variant="h5" className={classes.title}>
-            <a href="/" style={{ color: "black", textDecoration: "none" }}>
-              KiWE
-            </a>
-          </Typography>
+          <a href="/" className={classes.title}>
+            <img
+              alt="키위 로고"
+              src={KiweHeaderIcon}
+              style={{ height: "28px" }}
+            />
+          </a>
           <IconButton
             aria-label="설정"
             aria-haspopup="true"

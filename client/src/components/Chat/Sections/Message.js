@@ -25,7 +25,7 @@ const Message = (props) => {
   return (
     <MessageComponent who={props.who}>
       <div>
-        <Avatar alt={props.who} src={srcOfAvatar} className={classes.avatar} />
+        <Avatar alt="" src={srcOfAvatar} className={classes.avatar} />
         <AvatarName>{whoIsAvatar}</AvatarName>
       </div>
       <MessageBox who={props.who}>
