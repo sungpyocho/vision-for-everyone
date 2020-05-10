@@ -180,7 +180,7 @@ function Chat() {
       );
     } else if (isCardMessage(message)) {
       return (
-        <div>
+        <div style={{ width: "100%", maxHeight: "350px", overflow: "auto" }}>
           {renderCards(message.content.payload.fields.card.listValue.values)}
         </div>
       );

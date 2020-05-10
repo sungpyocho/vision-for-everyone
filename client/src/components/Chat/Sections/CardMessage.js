@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Card from "@material-ui/core/Card";
 import CardActionArea from "@material-ui/core/CardActionArea";
@@ -21,6 +21,11 @@ const useStyles = makeStyles({
 
 function CardMessage(props) {
   const classes = useStyles();
+  let endOfMessage = null;
+
+  useEffect(() => {
+    endOfMessage.scrollIntoView({ behaviour: "smooth" });
+  }, []);
 
   return (
     <div
@@ -56,6 +61,13 @@ function CardMessage(props) {
           </Button>
         </CardActions>
       </Card>
+      {/* 자동 scroll을 위한 div */}
+      <div
+        ref={(el) => {
+          endOfMessage = el;
+        }}
+        style={{ float: "left", clear: "both" }}
+      ></div>
     </div>
   );
 }
