@@ -37,6 +37,12 @@ const userSchema = mongoose.Schema({
   tokenExp: {
     type: Number,
   },
+  resetPwdToken: {
+    type: String,
+  },
+  resetPwdExp: {
+    type: Number,
+  },
 });
 
 // pre()를 처리하고 index.js의 save()를 실행함. next() -> save()
@@ -51,6 +57,8 @@ userSchema.pre("save", function (next) {
       bcrypt.hash(user.password, salt, (err, encrypted) => {
         if (err) return next(err);
         user.password = encrypted;
+        user.resetPwdToken = null;
+        user.resetPwdExp = null;
         next();
       });
     });

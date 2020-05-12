@@ -1,19 +1,15 @@
 import React, { useState } from "react";
+import Alert from "@material-ui/lab/Alert";
 import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import TextField from "@material-ui/core/TextField";
-// import FormControlLabel from "@material-ui/core/FormControlLabel";
-// import Checkbox from "@material-ui/core/Checkbox";
-import Link from "@material-ui/core/Link";
-import Grid from "@material-ui/core/Grid";
 import Box from "@material-ui/core/Box";
-import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
+import DraftsIcon from "@material-ui/icons/Drafts";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
-import { useDispatch } from "react-redux";
-import { loginUser } from "../../_actions/user_actions";
+import axios from "axios";
 
 function Copyright() {
   return (
@@ -46,38 +42,40 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function LoginPage(props) {
+export default function ForgotPasswordPage(props) {
   const classes = useStyles();
-  const dispatch = useDispatch();
 
   const [Email, setEmail] = useState("");
-  const [Password, setPassword] = useState("");
+  const [showError, setShowError] = useState(false);
+  const [sentEmail, setSentEmail] = useState(false);
 
   const emailHandler = (event) => {
     setEmail(event.currentTarget.value);
   };
 
-  const passwordHandler = (event) => {
-    setPassword(event.currentTarget.value);
-  };
-
-  const onSubmitHandler = (event) => {
+  const sendEmailHandler = (event) => {
     event.preventDefault(); // page refresh 방지
 
-    let body = {
-      email: Email,
-      password: Password,
-    };
-
-    // _actions/user_action.js의 loginUser로 보내져서, Axios로 처리
-    dispatch(loginUser(body)).then((response) => {
-      if (response.payload.loginSuccess) {
-        // 페이지를 이동할 때는 props.history.push를 사용
-        props.history.push("/chat");
-      } else {
-        alert("로그인에 실패하였습니다.");
-      }
-    });
+    if (Email === "") {
+      alert("이메일을 입력해주세요.");
+    } else {
+      axios
+        .post("/api/users/forgot", {
+          email: Email,
+        })
+        .then((res) => {
+          if (res.data.message === "해당 이메일로 가입한 이력이 없습니다.") {
+            setShowError(true);
+            setSentEmail(false);
+          } else if (res.data.message === "비밀번호 복구 이메일 송신 완료") {
+            setShowError(false);
+            setSentEmail(true);
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
   };
 
   return (
@@ -85,12 +83,16 @@ export default function LoginPage(props) {
       <CssBaseline />
       <div className={classes.paper}>
         <Avatar className={classes.avatar}>
-          <LockOutlinedIcon />
+          <DraftsIcon />
         </Avatar>
         <Typography component="h1" variant="h5">
-          키위 로그인
+          비밀번호 찾기
         </Typography>
-        <form className={classes.form} onSubmit={onSubmitHandler} noValidate>
+        <Typography>회원가입 때 사용했던 비밀번호를 입력해 주세요.</Typography>
+        <Typography>
+          해당 이메일로 비밀번호 재설정 URL을 보내드립니다.
+        </Typography>
+        <form className={classes.form} onSubmit={sendEmailHandler} noValidate>
           <TextField
             variant="outlined"
             margin="normal"
@@ -104,46 +106,25 @@ export default function LoginPage(props) {
             value={Email}
             onChange={emailHandler}
           />
-          <TextField
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            name="password"
-            label="비밀번호"
-            type="password"
-            id="password"
-            autoComplete="current-password"
-            value={Password}
-            onChange={passwordHandler}
-          />
-          {/* <FormControlLabel
-            control={<Checkbox value="remember" color="primary" />}
-            label="로그인 유지"
-          /> */}
+          {showError && (
+            <Alert severity="error">
+              해당 이메일로 가입한 이력이 없습니다.
+            </Alert>
+          )}
+          {sentEmail && (
+            <Alert severity="success">비밀번호 복구 이메일을 보냈습니다!</Alert>
+          )}
           <Button
             type="submit"
             fullWidth
             variant="contained"
             className={classes.submit}
           >
-            로그인
+            확인
           </Button>
-          <Grid container>
-            <Grid item xs>
-              <Link href="/forgot" variant="body2">
-                비밀번호 찾기
-              </Link>
-            </Grid>
-            <Grid item>
-              <Link href="/register" variant="body2">
-                {"회원가입"}
-              </Link>
-            </Grid>
-          </Grid>
         </form>
       </div>
-      <Box mt={8}>
+      <Box mt={4}>
         <Copyright />
       </Box>
     </Container>

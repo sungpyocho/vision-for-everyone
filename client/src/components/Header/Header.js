@@ -42,12 +42,10 @@ function Header(props) {
     dispatch(auth()).then((response) => {
       // 로그인하지 않은 상태일때는 로그인 버튼을 표시
       if (!response.payload.isAuth) {
-        console.log("지금 로그인 안한상태");
         setIsLogin(false);
       } else {
         // 로그인 한 상태일때는 회원 버튼을 표시
         // 마이페이지, 로그아웃의 두 메뉴를 가진 회원버튼
-        console.log("지금은 로그인 한상태");
         setIsLogin(true);
       }
     });
