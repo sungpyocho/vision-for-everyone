@@ -162,4 +162,37 @@ router.post("/forgot", (req, res) => {
   });
 });
 
+// 비밀번호 재설정 API
+router.get("/reset", (req, res, next) => {
+  console.log("어이 나 리셋인데", req.query.resetPwdToken);
+  User.findOne({
+    resetPwdToken: req.query.resetPwdToken,
+    resetPwdExp: { $gt: Date.now() },
+  })
+    .then((user) => {
+      if (!user) {
+        return res.json({
+          message: "비밀번호 재설정 링크가 유효하지 않습니다",
+        });
+      }
+      // 유저가 있다면...
+      // 만약 새로 입력한 비밀번호가 기존 비밀번호와 일치한다면 거부.
+
+      // 이 관문을 넘었다면 새로운 비밀번호로 업데이트.
+
+      console.log("여기까지 왔어요", user);
+      // user.save((err, userInfo) => {
+      //   // 실패 또는 성공시, 유저에게 JSON형식으로 전달
+      //   if (err) return res.json({ success: false, err });
+      //   return res.status(200).json({
+      //     success: true,
+      //     userInfo: userInfo,
+      //   });
+      // });
+    })
+    .catch((err) => {
+      console.log("비밀번호 재설정 오류.\n", err);
+    });
+});
+
 module.exports = router;
