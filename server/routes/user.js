@@ -2,10 +2,15 @@ const express = require("express");
 const router = express.Router();
 const { User } = require("../models/User");
 const { auth } = require("../middleware/auth");
+
+// 비밀번호 재설정 메일 발송 관련
+const config = require("../config/keys");
 const crypto = require("crypto");
 const nodemailer = require("nodemailer");
 const moment = require("moment");
-const config = require("../config/keys");
+// heroku 서버에서 시간을 KST로 설정해주도록
+require("moment-timezone");
+moment.tz.setDefault("Asia/Seoul");
 
 //=================================
 //             User
@@ -102,9 +107,11 @@ router.post("/forgot", (req, res) => {
       });
     } else {
       // 만약 유저를 찾았다면 해시토큰 생성
+      // Date.now() 대신 moment().valueOf()를 사용한 것은
+      // 서버가 전 세계 어디 있든 같은 시간값을 사용하기 위해
       const resetToken = crypto.randomBytes(20).toString("hex");
       user.resetPwdToken = resetToken;
-      user.resetPwdExp = Date.now() + 600000; // 유효기간 10분
+      user.resetPwdExp = moment().valueOf() + 600000; // 유효기간 10분
       user.save();
 
       const transporter = nodemailer.createTransport({
@@ -166,7 +173,7 @@ router.post("/forgot", (req, res) => {
 router.post("/reset", (req, res, next) => {
   User.findOne({
     resetPwdToken: req.body.resetPwdToken,
-    resetPwdExp: { $gt: Date.now() },
+    resetPwdExp: { $gt: moment().valueOf() },
   })
     .then((user) => {
       if (!user) {
