@@ -4,6 +4,7 @@ const { User } = require("../models/User");
 const { auth } = require("../middleware/auth");
 const crypto = require("crypto");
 const nodemailer = require("nodemailer");
+const moment = require("moment");
 const config = require("../config/keys");
 
 //=================================
@@ -102,12 +103,8 @@ router.post("/forgot", (req, res) => {
     } else {
       // 만약 유저를 찾았다면 해시토큰 생성
       const resetToken = crypto.randomBytes(20).toString("hex");
-      // user.update({
-      //   resetPwdToken: resetToken,
-      //   resetPwdExp: Date.now() + 300000, // 유효기간 5분
-      // });
       user.resetPwdToken = resetToken;
-      user.resetPwdExp = Date.now() + 300000; // 유효기간 5분
+      user.resetPwdExp = Date.now() + 600000; // 유효기간 10분
       user.save();
 
       const transporter = nodemailer.createTransport({
@@ -120,14 +117,17 @@ router.post("/forgot", (req, res) => {
         },
       });
 
+      let tenMinsFromNow = moment().add(10, "minutes").format("LT");
+
       const message = {
         from: `${config.emailAddress}`,
         to: `${user.email}`,
         bcc: "korra0501@gmail.com",
-        subject: "[키위] 패스워드 재설정 안내",
+        subject: "[키위] 비밀번호 재설정 안내",
         text:
           "키위 계정에 대해서 새로운 비밀번호 설정 요청이 있었습니다.\n" +
-          "요청하셨다면, 아래 링크로 접속해 새로운 비밀번호를 설정해 주세요.\n\n" +
+          "혹시 요청하신 적이 있으시다면 아래 링크로 접속해 새로운 비밀번호를 설정해 주세요.\n" +
+          `링크는 ${tenMinsFromNow}까지 유효합니다.\n\n` +
           `https://kiwebot.herokuapp.com/reset/${user.resetPwdToken}\n\n` +
           "요청하신 적이 없다면 이메일을 무시해 주세요. 비밀번호는 변경되지 않은 채 안전하게 유지됩니다.\n\n" +
           "키위 개발팀 드림.",
@@ -163,32 +163,41 @@ router.post("/forgot", (req, res) => {
 });
 
 // 비밀번호 재설정 API
-router.get("/reset", (req, res, next) => {
-  console.log("어이 나 리셋인데", req.query.resetPwdToken);
+router.post("/reset", (req, res, next) => {
   User.findOne({
-    resetPwdToken: req.query.resetPwdToken,
+    resetPwdToken: req.body.resetPwdToken,
     resetPwdExp: { $gt: Date.now() },
   })
     .then((user) => {
       if (!user) {
         return res.json({
-          message: "비밀번호 재설정 링크가 유효하지 않습니다",
+          message: "link not valid",
+        });
+      } else {
+        // 유저가 있다면...
+        // 만약 새로 입력한 비밀번호가 기존 비밀번호와 일치한다면 거부
+        user.comparePassword(req.body.password, (err, isSame) => {
+          if (isSame)
+            return res.json({
+              pwdNotChanged: true,
+              message:
+                "기존 비밀번호와 같습니다. 다른 비밀번호를 입력해주세요.",
+            });
+          // 이 관문을 넘었다면 새로운 비밀번호로 업데이트.
+          user.password = req.body.password;
+          user.resetPwdToken = null;
+          user.resetPwdExp = null;
+
+          user.save((err, userInfo) => {
+            // 실패 또는 성공시, 유저에게 JSON형식으로 전달
+            if (err) return res.json({ success: false, err });
+            return res.status(200).json({
+              success: true,
+              userInfo: userInfo,
+            });
+          });
         });
       }
-      // 유저가 있다면...
-      // 만약 새로 입력한 비밀번호가 기존 비밀번호와 일치한다면 거부.
-
-      // 이 관문을 넘었다면 새로운 비밀번호로 업데이트.
-
-      console.log("여기까지 왔어요", user);
-      // user.save((err, userInfo) => {
-      //   // 실패 또는 성공시, 유저에게 JSON형식으로 전달
-      //   if (err) return res.json({ success: false, err });
-      //   return res.status(200).json({
-      //     success: true,
-      //     userInfo: userInfo,
-      //   });
-      // });
     })
     .catch((err) => {
       console.log("비밀번호 재설정 오류.\n", err);

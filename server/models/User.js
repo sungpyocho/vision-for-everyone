@@ -57,8 +57,6 @@ userSchema.pre("save", function (next) {
       bcrypt.hash(user.password, salt, (err, encrypted) => {
         if (err) return next(err);
         user.password = encrypted;
-        user.resetPwdToken = null;
-        user.resetPwdExp = null;
         next();
       });
     });
