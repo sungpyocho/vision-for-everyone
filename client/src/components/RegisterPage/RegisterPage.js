@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import Alert from "@material-ui/lab/Alert";
 import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -55,6 +56,8 @@ export default function RegisterPage(props) {
   const [Address, setAddress] = useState("");
   const [Password, setPassword] = useState("");
   const [ConfirmPassword, setConfirmPassword] = useState("");
+  const [arePasswordsSame, setArePasswordsSame] = useState(true); // 두 비번이 같은가?
+  const [registerSuccess, setRegisterSuccess] = useState(true);
 
   const emailHandler = (event) => {
     setEmail(event.currentTarget.value);
@@ -78,9 +81,11 @@ export default function RegisterPage(props) {
 
   const submitHandler = (event) => {
     event.preventDefault();
+    setArePasswordsSame(true);
+    setRegisterSuccess(true);
 
     if (Password !== ConfirmPassword) {
-      return alert("비밀번호와 비밀번호 확인을 똑같이 입력해주세요.");
+      setArePasswordsSame(false);
     }
 
     let body = {
@@ -89,11 +94,12 @@ export default function RegisterPage(props) {
       password: Password,
       address: Address,
     };
+
     dispatch(registerUser(body)).then((response) => {
       if (response.payload.success) {
         props.history.push("/login");
       } else {
-        alert("회원가입에 실패했습니다.");
+        setRegisterSuccess(false);
       }
     });
   };
@@ -143,7 +149,7 @@ export default function RegisterPage(props) {
                 required
                 fullWidth
                 name="password"
-                label="비밀번호"
+                label="비밀번호(8자 이상)"
                 type="password"
                 id="password"
                 autoComplete="current-password"
@@ -165,6 +171,13 @@ export default function RegisterPage(props) {
                 onChange={confirmPasswordHandler}
               />
             </Grid>
+            {!arePasswordsSame && (
+              <Grid item xs={12}>
+                <Alert severity="error">
+                  비밀번호를 동일하게 입력해주세요.
+                </Alert>
+              </Grid>
+            )}
             <Grid item xs={12}>
               <TextField
                 variant="outlined"
@@ -184,6 +197,14 @@ export default function RegisterPage(props) {
               />
             </Grid> */}
           </Grid>
+          {!registerSuccess && (
+            <Grid item xs={12} style={{ marginTop: "15px" }}>
+              <Alert severity="error">
+                회원가입에 실패했습니다. <br />
+                입력 내용을 다시 확인해주세요.
+              </Alert>
+            </Grid>
+          )}
           <Button
             type="submit"
             fullWidth
