@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import Avatar from "@material-ui/core/Avatar";
+import Alert from "@material-ui/lab/Alert";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import TextField from "@material-ui/core/TextField";
@@ -52,6 +53,7 @@ export default function LoginPage(props) {
 
   const [Email, setEmail] = useState("");
   const [Password, setPassword] = useState("");
+  const [loginError, setLoginError] = useState(false);
 
   const emailHandler = (event) => {
     setEmail(event.currentTarget.value);
@@ -75,7 +77,7 @@ export default function LoginPage(props) {
         // 페이지를 이동할 때는 props.history.push를 사용
         props.history.push("/chat");
       } else {
-        alert("로그인에 실패하였습니다.");
+        setLoginError(true);
       }
     });
   };
@@ -121,6 +123,12 @@ export default function LoginPage(props) {
             control={<Checkbox value="remember" color="primary" />}
             label="로그인 유지"
           /> */}
+          {loginError && (
+            <Alert severity="error">
+              로그인에 실패하였습니다. <br />
+              아이디 혹은 비밀번호를 다시 확인해주세요.
+            </Alert>
+          )}
           <Button
             type="submit"
             fullWidth
