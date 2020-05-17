@@ -18,17 +18,13 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: 5,
     boxShadow: "0 0 0.2rem rgba(0, 0, 0, .1)",
   },
-  // button: {
-
-  //   backgroundColor: "white",
-  //   background: "white",
-  //   borderRadius: 5,
-
-  //   margin: "10px",
-  // },
 }));
 
 const TopBlock = styled.div`
+  img {
+    width: 100%;
+    height: auto;
+  }
   .title-block {
     margin-top: 30px;
   }
