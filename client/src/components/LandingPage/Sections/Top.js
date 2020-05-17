@@ -29,6 +29,10 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const TopBlock = styled.div`
+  img {
+    width: 100%;
+    height: auto;
+  }
   .title-block {
     margin-top: 30px;
   }
