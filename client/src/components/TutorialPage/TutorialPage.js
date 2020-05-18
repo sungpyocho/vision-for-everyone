@@ -40,7 +40,7 @@ export default function TutorialPage(props) {
             <CardActionArea>
               <CardMedia
                 component="img"
-                alt="첫번째 가이드"
+                alt="첫번째 가이드."
                 height="130"
                 image={chatImg}
                 title="guide"
@@ -50,6 +50,7 @@ export default function TutorialPage(props) {
                   className={classes.title}
                   color="textSecondary"
                   gutterBottom
+                  aria-hidden="true"
                 >
                   시작 가이드 1
                 </Typography>
@@ -71,7 +72,7 @@ export default function TutorialPage(props) {
             <CardActionArea>
               <CardMedia
                 component="img"
-                alt="두번째 가이드"
+                alt="두번째 가이드."
                 height="130"
                 image={restImg}
                 title="guide"
@@ -81,6 +82,7 @@ export default function TutorialPage(props) {
                   className={classes.title}
                   color="textSecondary"
                   gutterBottom
+                  aria-hidden="true"
                 >
                   시작 가이드 2
                 </Typography>
@@ -102,7 +104,7 @@ export default function TutorialPage(props) {
             <CardActionArea>
               <CardMedia
                 component="img"
-                alt="세번째 가이드"
+                alt="세번째 가이드."
                 height="130"
                 image={foodImg}
                 title="guide"
@@ -112,6 +114,7 @@ export default function TutorialPage(props) {
                   className={classes.title}
                   color="textSecondary"
                   gutterBottom
+                  aria-hidden="true"
                 >
                   시작 가이드 3
                 </Typography>
@@ -133,7 +136,7 @@ export default function TutorialPage(props) {
             <CardActionArea>
               <CardMedia
                 component="img"
-                alt="네번째 가이드"
+                alt="네번째 가이드."
                 height="130"
                 image={byeImg}
                 title="guide"
@@ -143,6 +146,7 @@ export default function TutorialPage(props) {
                   className={classes.title}
                   color="textSecondary"
                   gutterBottom
+                  aria-hidden="true"
                 >
                   시작 가이드 4
                 </Typography>
@@ -164,7 +168,7 @@ export default function TutorialPage(props) {
             <CardActionArea>
               <CardMedia
                 component="img"
-                alt="다섯번째 가이드"
+                alt="다섯번째 가이드."
                 height="130"
                 image={restImg}
                 title="guide"
@@ -174,6 +178,7 @@ export default function TutorialPage(props) {
                   className={classes.title}
                   color="textSecondary"
                   gutterBottom
+                  aria-hidden="true"
                 >
                   시작 가이드 5
                 </Typography>
@@ -195,7 +200,7 @@ export default function TutorialPage(props) {
             <CardActionArea>
               <CardMedia
                 component="img"
-                alt="여섯번째 가이드"
+                alt="여섯번째 가이드."
                 height="130"
                 image={chatImg}
                 title="guide"
@@ -205,6 +210,7 @@ export default function TutorialPage(props) {
                   className={classes.title}
                   color="textSecondary"
                   gutterBottom
+                  aria-hidden="true"
                 >
                   시작 가이드 6
                 </Typography>
@@ -226,7 +232,7 @@ export default function TutorialPage(props) {
             <CardActionArea>
               <CardMedia
                 component="img"
-                alt="일곱번째 가이드"
+                alt="일곱번째 가이드."
                 height="130"
                 image={payImg}
                 title="guide"
@@ -236,6 +242,7 @@ export default function TutorialPage(props) {
                   className={classes.title}
                   color="textSecondary"
                   gutterBottom
+                  aria-hidden="true"
                 >
                   시작 가이드 7
                 </Typography>
@@ -257,7 +264,7 @@ export default function TutorialPage(props) {
             <CardActionArea>
               <CardMedia
                 component="img"
-                alt="여덟번째 가이드"
+                alt="여덟번째 가이드."
                 height="130"
                 image={byeImg}
                 title="guide"
@@ -267,6 +274,7 @@ export default function TutorialPage(props) {
                   className={classes.title}
                   color="textSecondary"
                   gutterBottom
+                  aria-hidden="true"
                 >
                   시작 가이드 8
                 </Typography>
