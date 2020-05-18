@@ -205,7 +205,7 @@ function Chat() {
       <OrderMenu />
       <div>
         {/* Chat Messages */}
-        <Messages>{renderMessages(messagesFromRedux)}</Messages>
+        <Messages aria-live='polite'>{renderMessages(messagesFromRedux)}</Messages>
         {/* Input Field and Button */}
         <Paper
           component="form"
