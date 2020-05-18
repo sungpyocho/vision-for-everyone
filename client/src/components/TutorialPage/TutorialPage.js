@@ -37,7 +37,7 @@ export default function TutorialPage(props) {
       <Grid container justify="center" spacing={0}>
         <Grid item xs={12} sm={6} md={4} lg={3} xl={4} align="center">
           <Card className={classes.root}>
-            <CardActionArea>
+            <CardActionArea ref={input => input && input.focus()}>
               <CardMedia
                 component="img"
                 alt="첫번째 가이드."
