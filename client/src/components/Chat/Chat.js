@@ -202,8 +202,8 @@ function Chat() {
   return (
     <Wrapper>
       {/* Order Buttons */}
-      <OrderMenu />
-      <div>
+      <OrderMenu aria-label="메뉴"/>
+      <div aria-label="키위봇과 대화하는 채팅창입니다">
         {/* Chat Messages */}
         <Messages aria-live='polite'>{renderMessages(messagesFromRedux)}</Messages>
         {/* Input Field and Button */}
@@ -220,7 +220,7 @@ function Chat() {
             value={Input}
             onChange={inputHandler}
           />
-          <Button variant="contained" className={classes.button} type="submit">
+          <Button variant="contained" className={classes.button} type="submit" aria-label="메시지 보내기">
             <SendIcon />
           </Button>
         </Paper>
