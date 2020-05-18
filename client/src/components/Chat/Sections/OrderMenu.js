@@ -37,12 +37,13 @@ function OrderMenu() {
   };
 
   return (
-    <MenuComponent>
+    <MenuComponent >
       {/* 메뉴 버튼 */}
       <CustomButton onClick={handleOpenMenu}>메뉴</CustomButton>
       <Dialog
         open={openMenu}
         onClose={handleCloseMenu}
+        aria-label="메뉴버튼 바입니다"
         aria-labelledby="menu-title"
         aria-describedby="menu-description"
       >
@@ -66,9 +67,9 @@ function OrderMenu() {
         aria-labelledby="event-title"
         aria-describedby="event-description"
       >
-        <DialogTitle id="event-title">{"키위 오픈 기념 이벤트"}</DialogTitle>
-        <DialogContent>
-          <DialogContentText id="event-description">
+        <DialogTitle id="event-title" >{"키위 오픈 기념 이벤트"}</DialogTitle>
+        <DialogContent >
+          <DialogContentText id="event-description" >
             고려대학교 학식 키위로 결제시 5% 할인
           </DialogContentText>
         </DialogContent>
@@ -79,7 +80,7 @@ function OrderMenu() {
         </DialogActions>
       </Dialog>
       {/* 직원호출 버튼 */}
-      <CustomButton onClick={handleOpenCall}>직원호출</CustomButton>
+      <CustomButton onClick={handleOpenCall} >직원호출</CustomButton>
       <Dialog
         open={openCall}
         onClose={handleCloseCall}
