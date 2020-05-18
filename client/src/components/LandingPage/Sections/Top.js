@@ -61,13 +61,13 @@ function Top(props) {
         <Grid container>
           <Grid item xs={12} sm={6} align="center">
             <div>
-              <img src={kiweLanding} alt="kiwe-landing-page-image" />
+              <img src={kiweLanding} alt="키위소개" aria-hidden="true" />
             </div>
           </Grid>
           <Grid item xs={12} sm={6} align="center">
             <div>
               <div className="title-block">
-                <h3>Kiosk We: </h3>
+                <h3 aria-label="키오스크 위">Kiosk + We: </h3>
                 <h3>함께하는 키오스크 키위.</h3>
 
                 <div className="sub-title">

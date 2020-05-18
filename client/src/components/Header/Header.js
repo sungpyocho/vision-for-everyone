@@ -90,6 +90,7 @@ function Header(props) {
           <a href="/" className={classes.title}>
             <img
               alt="키위 로고"
+              aria-label="키위 홈으로"
               src={KiweHeaderIcon}
               style={{ height: "28px" }}
             />
