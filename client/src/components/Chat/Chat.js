@@ -205,7 +205,7 @@ function Chat() {
       <OrderMenu aria-label="메뉴"/>
       <div aria-label="키위봇과 대화하는 채팅창입니다">
         {/* Chat Messages */}
-        <Messages >{renderMessages(messagesFromRedux)}</Messages>
+        <Messages aria-live='polite'>{renderMessages(messagesFromRedux)}</Messages>
         {/* Input Field and Button */}
         <Paper
           component="form"
