@@ -50,7 +50,7 @@ function MiddleOne() {
   return (
     <MiddleOneBlock>
       <div>
-        <img src={kiweDetail} alt="kiwe-landing-page-image" className="img" />
+        <img src={kiweDetail} alt="키위 소개" aria-hidden="true" className="img" />
         <div className="sub-header">
           <h3>함께하는 키오스크 키위가 질문합니다.</h3>
         </div>
