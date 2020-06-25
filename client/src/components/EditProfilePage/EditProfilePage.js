@@ -8,7 +8,7 @@ import TextField from "@material-ui/core/TextField";
 import Link from "@material-ui/core/Link";
 import Grid from "@material-ui/core/Grid";
 import Box from "@material-ui/core/Box";
-import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
+import Settings from "@material-ui/icons/Settings";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
@@ -121,7 +121,7 @@ export default function RegisterPage(props) {
       <CssBaseline />
       <div className={classes.paper}>
         <Avatar className={classes.avatar}>
-          <LockOutlinedIcon />
+          <Settings />
         </Avatar>
         <Typography component="h1" variant="h5">
           회원정보 수정
@@ -196,15 +196,8 @@ export default function RegisterPage(props) {
             variant="contained"
             className={classes.submit}
           >
-            회원가입
+            수정
           </Button>
-          <Grid container justify="flex-end">
-            <Grid item>
-              <Link href="/login" variant="body2">
-                이미 계정이 있으신가요? 로그인
-              </Link>
-            </Grid>
-          </Grid>
         </form>
       </div>
       <Box mt={5}>
@@ -213,5 +206,8 @@ export default function RegisterPage(props) {
     </Container>
   );
 }     
+     
+     
+     
      
      
