@@ -14,6 +14,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 import { useDispatch } from "react-redux";
 import { auth } from "../../_actions/user_actions";
+import { editProfile } from "../../_actions/user_actions";
 
 function Copyright() {
   return (
@@ -112,7 +113,12 @@ export default function RegisterPage(props) {
       password: Password,
       address: Address,
     };
-
+    dispatch(editProfile(body)).then((response) => {
+      if (response.payload.success) {
+        props.history.push("/chat");
+      }
+      else alert("에러 발생");
+    });
 
   };
 

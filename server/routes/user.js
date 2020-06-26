@@ -63,6 +63,41 @@ router.post("/register", (req, res) => {
   });
 });
 
+router.post("/edit", (req, res) => {
+  User.findOne({ email:req.body.email }, (err, user) => {
+    user.comparePassword(req.body.password, (err, isSame) => {
+      if (!isSame) {
+        return res.json({
+          loginSuccess: false,
+          message: "올바른 비밀번호를 입력하세요.",
+        });
+      };
+      user.name = req.body.name;
+      user.password = req.body.password;
+      user.address = req.body.address;
+
+      user.save((err, userInfo) => {
+        // 실패 또는 성공시, 유저에게 JSON형식으로 전달
+        if (err) return res.json({ success: false, err });
+        return res.status(200).json({
+          success: true,
+          userInfo: userInfo,
+        });
+      });
+
+      // 저장한 정보로 토큰 재생성(로그인과 동일 로직)
+      user.generateToken((err, user) => {
+        if (err) return res.status(400).send(err);
+        res.cookie("x_authExp", user.tokenExp);
+        res
+          .cookie("x_auth", user.token)
+          .status(200)
+          .json({ loginSuccess: true, userId: user._id });
+      });
+    }); 
+  })
+})
+
 // auth는 미들웨어. 리퀘스트를 받은 후, 콜백함수를 넘겨주기 전에 하는 것.
 router.get("/auth", auth, (req, res) => {
   // 여기까지 미들웨어를 통과했다는 것 = 인증 성공
@@ -77,6 +112,7 @@ router.get("/auth", auth, (req, res) => {
     role: req.user.role,
   });
 });
+
 
 // 로그아웃. auth 미들웨어를 넣어준 것은 로그아웃 전 로그인 상태이기 때문
 router.get("/logout", auth, (req, res) => {
