@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useDispatch } from "react-redux";
 import { auth } from "../../_actions/user_actions";
-import { withRouter } from "react-router-dom";
+import { withRouter, useHistory } from "react-router-dom";
 
 import { AppBar, Button, Toolbar, Menu, MenuItem } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
@@ -66,6 +66,10 @@ function Header(props) {
   const handleCloseMypage = () => {
     setAnchorElMypage(null);
   };
+
+  const redirectToEditPage = () => {
+    props.history.push("/edit");
+  }
 
   const handleLogout = () => {
     axios.get("/api/users/logout").then((response) => {
@@ -147,7 +151,7 @@ function Header(props) {
                 open={openMypage}
                 onClose={handleCloseMypage}
               >
-                <MenuItem onClick={handleCloseMypage}>마이페이지</MenuItem>
+                <MenuItem onClick={redirectToEditPage}>마이페이지</MenuItem>
                 <MenuItem onClick={handleLogout}>로그아웃</MenuItem>
               </Menu>
             </div>
