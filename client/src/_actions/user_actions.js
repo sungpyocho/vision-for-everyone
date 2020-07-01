@@ -24,6 +24,8 @@ export function registerUser(dataToSubmit) {
 }
 
 export function editProfile(dataToSubmit) {
+  console.log(dataToSubmit);
+  console.log("edit profile action");
   const request = axios
     .post("/api/users/edit", dataToSubmit)
     .then((response) => response.data);
