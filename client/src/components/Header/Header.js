@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useDispatch } from "react-redux";
 import { auth } from "../../_actions/user_actions";
-import { withRouter, useHistory } from "react-router-dom";
+import { withRouter } from "react-router-dom";
 
 import { AppBar, Button, Toolbar, Menu, MenuItem } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
