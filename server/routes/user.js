@@ -63,10 +63,25 @@ router.post("/register", (req, res) => {
   });
 });
 
-// 회원정보 수정 API 
+// 회원정보 수정 API
 router.post("/edit", (req, res) => {
-  console.log(req.body);
-})
+  User.findOne({ email: req.body.email }, (err, user) => {
+    if (err) {
+      return res.status(400).send(err);
+    }
+    user.name = req.body.name;
+    user.address = req.body.address;
+    user.password = req.body.password;
+    user.save((err, userInfo) => {
+      // 실패 또는 성공시, 유저에게 JSON형식으로 전달
+      if (err) return res.json({ success: false, err });
+      return res.status(200).json({
+        success: true,
+        userInfo: userInfo,
+      });
+    });
+  });
+});
 
 // auth는 미들웨어. 리퀘스트를 받은 후, 콜백함수를 넘겨주기 전에 하는 것.
 router.get("/auth", auth, (req, res) => {
@@ -82,7 +97,6 @@ router.get("/auth", auth, (req, res) => {
     role: req.user.role,
   });
 });
-
 
 // 로그아웃. auth 미들웨어를 넣어준 것은 로그아웃 전 로그인 상태이기 때문
 router.get("/logout", auth, (req, res) => {
