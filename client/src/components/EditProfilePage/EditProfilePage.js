@@ -60,6 +60,7 @@ export default function RegisterPage(props) {
   const [Name, setName] = useState("");
   const [Address, setAddress] = useState("");
   const [Password, setPassword] = useState("");
+  const [Email, setEmail] = useState("");
   const [ConfirmPassword, setConfirmPassword] = useState("");
   const [arePasswordsSame, setArePasswordsSame] = useState(true); // 두 비번이 같은가?
 
@@ -70,8 +71,10 @@ export default function RegisterPage(props) {
           const pastImage = response.payload.image;
           const pastName = response.payload.name;
           const pastAddress = response.payload.address;
+          const email = response.payload.email;
           setName(pastName);
           setAddress(pastAddress);
+          setEmail(email);
       } else {
           props.history.push("/login");
         }
@@ -107,19 +110,23 @@ export default function RegisterPage(props) {
       name: Name,
       password: Password,
       address: Address,
+      email: Email,
     };
-    dispatch(editProfile(body)).then((response) => {
-      if (response.payload.success) {
-        props.history.push("/chat");
-      }
-    })
-    .catch((err) => console.log(err));
+    var isEdit = window.confirm("사용자 정보를 변경합니다");
+    if (isEdit) {
+      dispatch(editProfile(body)).then((response) => {
+        if (response.payload.success) {
+          props.history.push("/chat");
+        }
+      })
+      .catch((err) => console.log(err));
+    }
 
   };
 
   const handleClick = () => {
     // DB 정보 수정
-    alert('헤헿ㅎ헤헿')
+    alert('클릭시 발동되는 알림')
   } 
 
   return (
