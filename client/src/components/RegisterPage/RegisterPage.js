@@ -97,7 +97,7 @@ export default function RegisterPage(props) {
 
     dispatch(registerUser(body)).then((response) => {
       if (response.payload.success) {
-        props.history.push("/login");
+        props.history.push("/login") ;
       } else {
         setRegisterSuccess(false);
       }

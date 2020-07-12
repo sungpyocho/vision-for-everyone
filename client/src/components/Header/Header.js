@@ -67,6 +67,10 @@ function Header(props) {
     setAnchorElMypage(null);
   };
 
+  const redirectToEditPage = () => {
+    props.history.push("/edit");
+  }
+
   const handleLogout = () => {
     axios.get("/api/users/logout").then((response) => {
       if (response.data.success) {
@@ -147,7 +151,7 @@ function Header(props) {
                 open={openMypage}
                 onClose={handleCloseMypage}
               >
-                <MenuItem onClick={handleCloseMypage}>마이페이지</MenuItem>
+                <MenuItem onClick={redirectToEditPage}>마이페이지</MenuItem>
                 <MenuItem onClick={handleLogout}>로그아웃</MenuItem>
               </Menu>
             </div>

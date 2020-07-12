@@ -26,7 +26,7 @@ function App() {
           <Route exact path="/chat" component={Auth(Chat, null)} />
           <Route exact path="/login" component={Auth(LoginPage, false)} />
           <Route exact path="/register" component={Auth(RegisterPage, false)} />
-          <Route exact path="/edit" component={Auth(EditProfilePage, false)} />
+          <Route exact path="/edit" component={Auth(EditProfilePage, true)} />
           <Route
             exact
             path="/forgot"
