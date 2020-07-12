@@ -1,4 +1,4 @@
-import { LOGIN_USER, REGISTER_USER, AUTH_USER } from "../_actions/types";
+import { LOGIN_USER, REGISTER_USER, AUTH_USER, EDIT_PROFILE } from "../_actions/types";
 
 // Reducer: (previousState, action) => nextState
 export default function (state = {}, action) {
@@ -14,6 +14,9 @@ export default function (state = {}, action) {
       return { ...state, registerSucess: action.payload };
 
     case AUTH_USER:
+      return { ...state, userData: action.payload };
+
+    case EDIT_PROFILE:
       return { ...state, userData: action.payload };
 
     default:

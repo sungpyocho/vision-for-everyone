@@ -1,5 +1,5 @@
 import axios from "axios";
-import { LOGIN_USER, REGISTER_USER, AUTH_USER } from "./types";
+import { LOGIN_USER, REGISTER_USER, AUTH_USER, EDIT_PROFILE } from "./types";
 
 export function loginUser(dataToSubmit) {
   const request = axios
@@ -19,6 +19,19 @@ export function registerUser(dataToSubmit) {
 
   return {
     type: REGISTER_USER,
+    payload: request,
+  };
+}
+
+export function editProfile(dataToSubmit) {
+  console.log(dataToSubmit);
+  console.log("edit profile action");
+  const request = axios
+    .post("/api/users/edit", dataToSubmit)
+    .then((response) => response.data);
+
+  return {
+    type: EDIT_PROFILE,
     payload: request,
   };
 }
