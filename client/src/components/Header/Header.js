@@ -100,7 +100,7 @@ function Header(props) {
             />
           </a>
           <IconButton
-            aria-label="설정"
+            aria-label="편의성 설정"
             aria-haspopup="true"
             color="inherit"
             onClick={handleMenuSettings}

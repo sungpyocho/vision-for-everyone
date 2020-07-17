@@ -2,7 +2,9 @@ const express = require("express");
 const router = express.Router();
 const dialogflow = require("dialogflow");
 
+
 const config = require("../config/keys");
+// console.log(config); 키를 제대로 불러오는지 테스트하는 코드
 const projectId = config.googleProjectID;
 const sessionId = config.dialogFlowSessionID;
 const languageCode = config.dialogFlowSessionLanguageCode;
@@ -18,7 +20,9 @@ const languageCode = config.dialogFlowSessionLanguageCode;
 // });
 
 // 결국, 구글 인증 관련은 GOOGLE_APPLICATION_CREDENTIALS 환경변수를 설정하여 해결하자.
-const sessionClient = new dialogflow.SessionsClient();
+const sessionClient = new dialogflow.SessionsClient({
+  keyFilename: './server/config/vision-for-everyone-1c0e3846ddbb.json'
+});
 const sessionPath = sessionClient.sessionPath(projectId, sessionId);
 
 // Text Query Route

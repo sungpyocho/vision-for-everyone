@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import { makeStyles } from '@material-ui/core/styles';
 import Button from "@material-ui/core/Button";
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
@@ -7,10 +8,32 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 
+// 여기서부터는 메뉴, 이벤트 이쁘게 띄워주기 위해 불러온 컴포넌트
+import List from "@material-ui/core/List";
+import ListItem from '@material-ui/core/ListItem';
+import ListItemText from '@material-ui/core/ListItemText';
+import Collapse from '@material-ui/core/Collapse';
+import ExpandLess from '@material-ui/icons/ExpandLess'; // 세부메뉴 열기
+import ExpandMore from '@material-ui/icons/ExpandMore'; // 세부메뉴 닫기
+
 function OrderMenu() {
   const [openMenu, setOpenMenu] = React.useState(false);
   const [openEvent, setOpenEvent] = React.useState(false);
   const [openCall, setOpenCall] = React.useState(false);
+  const [openSubMenu, setOpenSubMenu] = React.useState(true);
+
+  const useStyles = makeStyles((theme)=> ({
+    root: {
+      width:'100%',
+      minWidth:'50%',
+      maxWidth: 720,
+    },
+    nested: {
+      paddingLeft: theme.spacing(4),
+    }
+  }));
+
+  const classes = useStyles();
 
   const handleOpenMenu = () => {
     setOpenMenu(true);
@@ -36,6 +59,10 @@ function OrderMenu() {
     setOpenCall(false);
   };
 
+  const handleOpenSubMenu = () => {
+    setOpenSubMenu(!openSubMenu);
+  }
+
   return (
     <MenuComponent >
       {/* 메뉴 버튼 */}
@@ -49,9 +76,34 @@ function OrderMenu() {
       >
         <DialogTitle id="menu-title">{"메뉴"}</DialogTitle>
         <DialogContent>
-          <DialogContentText id="menu-description">
+          {/* <DialogContentText id="menu-description">
             짜장면: 사천원, 짬뽕: 오천원, 탕수육: 만원
-          </DialogContentText>
+          </DialogContentText> */}
+          <List className={classes.root}>
+            <ListItem Button>
+              <ListItemText primary="육개장" secondary="2500원"/>
+            </ListItem>
+            <ListItem Button>
+              <ListItemText primary="탕수육인데 겁나 긴 탕수육" secondary="5000원"/>
+            </ListItem>
+            <ListItem Button onClick={handleOpenSubMenu}>
+              <ListItemText primary="버거류"/>
+              {openSubMenu ? <ExpandLess /> : <ExpandMore />}
+            </ListItem>
+            <Collapse in={openSubMenu} timeout="auto" unmountOnExit>
+              <List component="div" disablePadding>
+                <ListItem button>
+                  <ListItemText primary="와퍼" secondary="4800원" className={classes.nested}/>
+                </ListItem>
+                <ListItem button>
+                  <ListItemText primary="와퍼주니어" secondary="2900원" className={classes.nested}/>
+                </ListItem>
+                <ListItem button>
+                  <ListItemText primary="트리플치즈트러플베이컨와퍼" secondary="7900원" className={classes.nested}/>
+                </ListItem>
+              </List>
+            </Collapse>
+          </List>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleCloseMenu} color="primary" autoFocus>
