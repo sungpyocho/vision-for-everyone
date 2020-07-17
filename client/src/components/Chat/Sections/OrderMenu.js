@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
@@ -8,14 +8,24 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 
-// 여기서부터는 메뉴, 이벤트 이쁘게 띄워주기 위해 불러온 컴포넌트
+// 여기서부터는 메뉴, 이벤트 팝업을 이쁘게 띄워주기 위해 불러온 컴포넌트
+// 1. 메뉴 팝업용
 import List from "@material-ui/core/List";
-import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
-import Collapse from '@material-ui/core/Collapse';
-import ExpandLess from '@material-ui/icons/ExpandLess'; // 세부메뉴 열기
-import ExpandMore from '@material-ui/icons/ExpandMore'; // 세부메뉴 닫기
-import Divider from '@material-ui/core/Divider'; // 리스트 사이에 넣는 구분선
+import ListItem from "@material-ui/core/ListItem";
+import ListItemText from "@material-ui/core/ListItemText";
+import Collapse from "@material-ui/core/Collapse";
+import ExpandLess from "@material-ui/icons/ExpandLess"; // 세부메뉴 열기
+import ExpandMore from "@material-ui/icons/ExpandMore"; // 세부메뉴 닫기
+import Divider from "@material-ui/core/Divider"; // 리스트 사이에 넣는 구분선
+import Switch from '@material-ui/core/Switch';
+// 2. 이벤트 팝업용
+import Card from "@material-ui/core/Card";
+import CardActionArea from "@material-ui/core/CardActionArea";
+import CardActions from "@material-ui/core/CardActions";
+import CardContent from "@material-ui/core/CardContent";
+import CardMedia from "@material-ui/core/CardMedia";
+import Typography from '@material-ui/core/Typography';
+import CardBackground from "./kiwe-event.jpg"
 
 function OrderMenu() {
   const [openMenu, setOpenMenu] = React.useState(false);
@@ -23,15 +33,19 @@ function OrderMenu() {
   const [openCall, setOpenCall] = React.useState(false);
   const [openSubMenu, setOpenSubMenu] = React.useState(false);
   const [openSubMenu2, setOpenSubMenu2] = React.useState(false);
+  const [checked, setChecked] = React.useState(false);
 
-  const useStyles = makeStyles((theme)=> ({
+  const useStyles = makeStyles((theme) => ({
     root: {
-      minWidth: '50vw',
-      maxHeight: '80vh'
+      minWidth: "50vw",
+      maxHeight: "80vh",
     },
     nested: {
       paddingLeft: theme.spacing(4),
-    }
+    },
+    media: {
+      height: "200px"
+    },
   }));
 
   const classes = useStyles();
@@ -62,13 +76,18 @@ function OrderMenu() {
 
   const handleOpenSubMenu = () => {
     setOpenSubMenu(!openSubMenu);
-  }
+  };
+  
   const handleOpenSubMenu2 = () => {
     setOpenSubMenu2(!openSubMenu2);
-  }
+  };
+
+  const toggleChecked = () => {
+    setChecked((prev) => !prev);
+  };
 
   return (
-    <MenuComponent >
+    <MenuComponent>
       {/* 메뉴 버튼 */}
       <CustomButton onClick={handleOpenMenu}>메뉴</CustomButton>
       <Dialog
@@ -85,44 +104,72 @@ function OrderMenu() {
           </DialogContentText> */}
           <List className={classes.root}>
             <ListItem Button>
-              <ListItemText primary="육개장" secondary="2500원"/>
+              <ListItemText primary="육개장" secondary="2500원" />
             </ListItem>
             <ListItem Button>
-              <ListItemText primary="탕수육인데 겁나 긴 탕수육 너비 안 맞는 값 넣었을 때 어떻게 렌더링되나 알아보려고 일부러 마음에도 없는 메뉴를 넣었로렘입섬!" secondary="5000원"/>
+              <ListItemText
+                primary="탕수육인데 겁나 긴 탕수육 너비 안 맞는 값 넣었을 때 어떻게 렌더링되나 알아보려고 일부러 마음에도 없는 메뉴를 넣었로렘입섬!"
+                secondary="5000원"
+              />
             </ListItem>
             <Divider />
             <ListItem Button onClick={handleOpenSubMenu}>
-              <ListItemText primary="버거류"/>
+              <ListItemText primary="버거류" />
               {openSubMenu ? <ExpandLess /> : <ExpandMore />}
             </ListItem>
             <Collapse in={openSubMenu} timeout="auto" unmountOnExit>
               <List component="div" disablePadding>
                 <ListItem button>
-                  <ListItemText primary="와퍼" secondary="4800원" className={classes.nested}/>
+                  <ListItemText
+                    primary="와퍼"
+                    secondary="4800원"
+                    className={classes.nested}
+                  />
                 </ListItem>
                 <ListItem button>
-                  <ListItemText primary="와퍼주니어" secondary="2900원" className={classes.nested}/>
+                  <ListItemText
+                    primary="와퍼주니어"
+                    secondary="2900원"
+                    className={classes.nested}
+                  />
                 </ListItem>
                 <ListItem button>
-                  <ListItemText primary="트리플치즈트러플베이컨와퍼" secondary="7900원" className={classes.nested}/>
+                  <ListItemText
+                    primary="트리플치즈트러플베이컨와퍼"
+                    secondary="7900원"
+                    className={classes.nested}
+                  />
+                  <Switch size="small" checked={checked} onChange={toggleChecked}/>
                 </ListItem>
               </List>
             </Collapse>
             <Divider />
             <ListItem Button onClick={handleOpenSubMenu2}>
-              <ListItemText primary="음료/사이드"/>
+              <ListItemText primary="음료/사이드" />
               {openSubMenu2 ? <ExpandLess /> : <ExpandMore />}
             </ListItem>
             <Collapse in={openSubMenu2} timeout="auto" unmountOnExit>
               <List component="div" disablePadding>
                 <ListItem button>
-                  <ListItemText primary="콜라M" secondary="1700원" className={classes.nested}/>
+                  <ListItemText
+                    primary="콜라M"
+                    secondary="1700원"
+                    className={classes.nested}
+                  />
                 </ListItem>
                 <ListItem button>
-                  <ListItemText primary="감자튀김" secondary="1300원" className={classes.nested}/>
+                  <ListItemText
+                    primary="감자튀김"
+                    secondary="1300원"
+                    className={classes.nested}
+                  />
                 </ListItem>
                 <ListItem button>
-                  <ListItemText primary="소프트콘" secondary="700원" className={classes.nested}/>
+                  <ListItemText
+                    primary="소프트콘"
+                    secondary="700원"
+                    className={classes.nested}
+                  />
                 </ListItem>
               </List>
             </Collapse>
@@ -142,11 +189,28 @@ function OrderMenu() {
         aria-labelledby="event-title"
         aria-describedby="event-description"
       >
-        <DialogTitle id="event-title" >{"키위 오픈 기념 이벤트"}</DialogTitle>
-        <DialogContent >
-          <DialogContentText id="event-description" >
+        <DialogTitle id="event-title">{"오늘의 이벤트"}</DialogTitle>
+        <DialogContent>
+          {/* <DialogContentText id="event-description" >
             고려대학교 학식 키위로 결제시 5% 할인
-          </DialogContentText>
+          </DialogContentText> */}
+          <Card className={classes.root} variant="outlined">
+            <CardActionArea>
+              <CardMedia
+                className={classes.media}
+                image={CardBackground}
+                title="Kiwe Event"
+              />
+              <CardContent>
+                <Typography gutterBottom variant="h5" component="h2">
+                  키위 오픈 기념 통큰 이벤트
+                </Typography>
+                <Typography variant="body1" color="textPrimary" component="p">
+                  점심시간(11:30~13:30)에 키위로 고려대 학식을 결제하면 15% 할인혜택을 드려요!
+                </Typography>
+              </CardContent>
+            </CardActionArea>
+          </Card>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleCloseEvent} color="primary" autoFocus>
@@ -155,7 +219,7 @@ function OrderMenu() {
         </DialogActions>
       </Dialog>
       {/* 직원호출 버튼 */}
-      <CustomButton onClick={handleOpenCall} >직원호출</CustomButton>
+      <CustomButton onClick={handleOpenCall}>직원호출</CustomButton>
       <Dialog
         open={openCall}
         onClose={handleCloseCall}
