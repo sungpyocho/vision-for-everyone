@@ -15,18 +15,19 @@ import ListItemText from '@material-ui/core/ListItemText';
 import Collapse from '@material-ui/core/Collapse';
 import ExpandLess from '@material-ui/icons/ExpandLess'; // 세부메뉴 열기
 import ExpandMore from '@material-ui/icons/ExpandMore'; // 세부메뉴 닫기
+import Divider from '@material-ui/core/Divider'; // 리스트 사이에 넣는 구분선
 
 function OrderMenu() {
   const [openMenu, setOpenMenu] = React.useState(false);
   const [openEvent, setOpenEvent] = React.useState(false);
   const [openCall, setOpenCall] = React.useState(false);
-  const [openSubMenu, setOpenSubMenu] = React.useState(true);
+  const [openSubMenu, setOpenSubMenu] = React.useState(false);
+  const [openSubMenu2, setOpenSubMenu2] = React.useState(false);
 
   const useStyles = makeStyles((theme)=> ({
     root: {
-      width:'100%',
-      minWidth:'50%',
-      maxWidth: 720,
+      minWidth: '50vw',
+      maxHeight: '80vh'
     },
     nested: {
       paddingLeft: theme.spacing(4),
@@ -62,6 +63,9 @@ function OrderMenu() {
   const handleOpenSubMenu = () => {
     setOpenSubMenu(!openSubMenu);
   }
+  const handleOpenSubMenu2 = () => {
+    setOpenSubMenu2(!openSubMenu2);
+  }
 
   return (
     <MenuComponent >
@@ -84,8 +88,9 @@ function OrderMenu() {
               <ListItemText primary="육개장" secondary="2500원"/>
             </ListItem>
             <ListItem Button>
-              <ListItemText primary="탕수육인데 겁나 긴 탕수육" secondary="5000원"/>
+              <ListItemText primary="탕수육인데 겁나 긴 탕수육 너비 안 맞는 값 넣었을 때 어떻게 렌더링되나 알아보려고 일부러 마음에도 없는 메뉴를 넣었로렘입섬!" secondary="5000원"/>
             </ListItem>
+            <Divider />
             <ListItem Button onClick={handleOpenSubMenu}>
               <ListItemText primary="버거류"/>
               {openSubMenu ? <ExpandLess /> : <ExpandMore />}
@@ -100,6 +105,24 @@ function OrderMenu() {
                 </ListItem>
                 <ListItem button>
                   <ListItemText primary="트리플치즈트러플베이컨와퍼" secondary="7900원" className={classes.nested}/>
+                </ListItem>
+              </List>
+            </Collapse>
+            <Divider />
+            <ListItem Button onClick={handleOpenSubMenu2}>
+              <ListItemText primary="음료/사이드"/>
+              {openSubMenu2 ? <ExpandLess /> : <ExpandMore />}
+            </ListItem>
+            <Collapse in={openSubMenu2} timeout="auto" unmountOnExit>
+              <List component="div" disablePadding>
+                <ListItem button>
+                  <ListItemText primary="콜라M" secondary="1700원" className={classes.nested}/>
+                </ListItem>
+                <ListItem button>
+                  <ListItemText primary="감자튀김" secondary="1300원" className={classes.nested}/>
+                </ListItem>
+                <ListItem button>
+                  <ListItemText primary="소프트콘" secondary="700원" className={classes.nested}/>
                 </ListItem>
               </List>
             </Collapse>
