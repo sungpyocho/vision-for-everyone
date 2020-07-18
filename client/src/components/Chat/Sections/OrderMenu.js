@@ -25,7 +25,7 @@ import CardActions from "@material-ui/core/CardActions";
 import CardContent from "@material-ui/core/CardContent";
 import CardMedia from "@material-ui/core/CardMedia";
 import Typography from '@material-ui/core/Typography';
-import CardBackground from "./kiwe-event.jpg"
+import CardBackground from "../../../assets/kiwe-event.jpg"
 
 function OrderMenu() {
   const [openMenu, setOpenMenu] = React.useState(false);
@@ -77,7 +77,7 @@ function OrderMenu() {
   const handleOpenSubMenu = () => {
     setOpenSubMenu(!openSubMenu);
   };
-  
+
   const handleOpenSubMenu2 = () => {
     setOpenSubMenu2(!openSubMenu2);
   };
@@ -99,9 +99,6 @@ function OrderMenu() {
       >
         <DialogTitle id="menu-title">{"메뉴"}</DialogTitle>
         <DialogContent>
-          {/* <DialogContentText id="menu-description">
-            짜장면: 사천원, 짬뽕: 오천원, 탕수육: 만원
-          </DialogContentText> */}
           <List className={classes.root}>
             <ListItem Button>
               <ListItemText primary="육개장" secondary="2500원" />

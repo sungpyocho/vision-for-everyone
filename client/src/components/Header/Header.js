@@ -4,7 +4,16 @@ import { useDispatch } from "react-redux";
 import { auth } from "../../_actions/user_actions";
 import { withRouter } from "react-router-dom";
 
-import { AppBar, Button, Toolbar, Menu, MenuItem } from "@material-ui/core";
+import {AppBar,
+  Button,
+  Dialog,DialogActions,DialogTitle,
+  Switch,
+  Divider,
+  List,ListItem,ListItemText,
+  Toolbar,
+  Menu,MenuItem,
+} from "@material-ui/core";
+
 import { makeStyles } from "@material-ui/core/styles";
 import SettingsIcon from "@material-ui/icons/Settings";
 import AccountCircleIcon from "@material-ui/icons/AccountCircle";
@@ -21,9 +30,13 @@ const useStyles = makeStyles((theme) => ({
   title: {
     flexGrow: 1,
   },
-  settingsIcon: {
-    marginRight: theme.spacing(1),
+  settingsDialog: {
+    minWidth: "50vw",
+    height: "80vh",
   },
+  bold: {
+    fontWeight: "bolder",
+  }
 }));
 
 function Header(props) {
@@ -36,6 +49,12 @@ function Header(props) {
   // const [checked, setChecked] = useState(false);
   const openSettings = Boolean(anchorElSettings);
   const openMypage = Boolean(anchorElMypage);
+
+  // 접근성 설정 메뉴를 위한 변수
+  const [ openAccessibilitySettings, setOpenAccessibilitySettings] = React.useState(false);
+  const [fontSize, setFontSize] = React.useState(5);
+  const [highContrast, setHighContrast] = React.useState(false);
+  const [readMessage, setReadMessage] = React.useState(false);
 
   useEffect(() => {
     // 페이지 이동할때마다 dispatch가 작동해서 백엔드에 계속 요청
@@ -50,6 +69,28 @@ function Header(props) {
       }
     });
   }, [props.history.location.pathname]);
+
+  const handleOpenAccessibilitySettings = () => {
+    setOpenAccessibilitySettings(!openAccessibilitySettings);
+  };
+
+  const handleHighContrast = () => {
+    setHighContrast(!highContrast);
+  };
+
+  const handleFontLarger = () => {
+    if (fontSize < 10) {
+      setFontSize(fontSize + 1);
+    }
+  };
+  const handleFontSmaller = () => {
+    if (fontSize > 1) {
+      setFontSize(fontSize - 1);
+    }
+  };
+  const handleReadMessage = () => {
+    setReadMessage(!readMessage);
+  }
 
   const handleMenuSettings = (event) => {
     setAnchorElSettings(event.currentTarget);
@@ -69,7 +110,7 @@ function Header(props) {
 
   const redirectToEditPage = () => {
     props.history.push("/edit");
-  }
+  };
 
   const handleLogout = () => {
     axios.get("/api/users/logout").then((response) => {
@@ -88,9 +129,11 @@ function Header(props) {
   };
 
   return (
+    // 헤더 바 전체
     <div className={classes.root}>
       <AppBar position="static" className={classes.appBar}>
         <Toolbar>
+          {/* 1. 키위 로고 */}
           <a href="/" className={classes.title}>
             <img
               alt="키위 로고"
@@ -99,33 +142,53 @@ function Header(props) {
               style={{ height: "28px" }}
             />
           </a>
+          {/* 2. 편의성 설정 아이콘*/}
           <IconButton
             aria-label="편의성 설정"
             aria-haspopup="true"
             color="inherit"
-            onClick={handleMenuSettings}
+            onClick={handleOpenAccessibilitySettings}
           >
-            <SettingsIcon className={classes.settingsIcon} />
+            <SettingsIcon/>
           </IconButton>
-          <Menu
-            id="settings-appbar"
-            anchorEl={anchorElSettings}
-            anchorOrigin={{
-              vertical: "top",
-              horizontal: "right",
-            }}
-            keepMounted
-            transformOrigin={{
-              vertical: "top",
-              horizontal: "right",
-            }}
-            open={openSettings}
-            onClose={handleCloseSettings}
+          {/* 2-1. 아이콘 클릭시 뜨는 설정 페이지 */}
+          <Dialog
+            open={openAccessibilitySettings}
+            onClose={handleOpenAccessibilitySettings}
+            
           >
-            <MenuItem onClick={handleCloseSettings}>폰트</MenuItem>
-            <MenuItem onClick={handleCloseSettings}>고대비</MenuItem>
-          </Menu>
-          {/* // 로그인 한 상태일때는 회원 버튼을 표시 */}
+            <DialogTitle>편의성 설정</DialogTitle>
+            <List className={classes.settingsDialog}>
+              <ListItem>
+                <ListItemText classes={{root: classes.bold}} disableTypography>접근성</ListItemText>
+              </ListItem>
+              <ListItem Button>
+                <ListItemText primary="글자 크기" />
+                <ListItemText>{fontSize}</ListItemText>
+                <Button variant="outlined" onClick={handleFontSmaller} color="primary">글자 줄이기</Button>
+                <Button variant="outlined" onClick={handleFontLarger} color="secondary" >글자 키우기</Button>
+              </ListItem>
+              <ListItem Button>
+                <ListItemText primary="고대비 모드" />
+                <Switch size="small" checked={highContrast} onChange={handleHighContrast}></Switch>
+              </ListItem>
+              <ListItem Button>
+                <ListItemText primary="도착한 메시지 읽어주기" />
+                <Switch size="small" checked={readMessage} onChange={handleReadMessage}></Switch>
+              </ListItem>
+              <Divider></Divider>
+              <ListItem>
+                <ListItemText classes={{root: classes.bold}} disableTypography>나만의 테마</ListItemText>
+              </ListItem>
+              <ListItem><ListItemText primary="준비중입니다" /></ListItem>
+            </List>
+            <DialogActions>
+              <Button onClick={handleOpenAccessibilitySettings} color="primary" autoFocus>
+                닫기
+              </Button>
+            </DialogActions>
+          </Dialog>
+          {/* 3. 로그인: 로그인한 상태일때는 회원 버튼을 표시 */}
           {isLogin && (
             <div>
               <IconButton
