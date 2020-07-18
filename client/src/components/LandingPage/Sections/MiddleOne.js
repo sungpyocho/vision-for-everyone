@@ -52,7 +52,7 @@ function MiddleOne() {
       <div>
         <img src={kiweDetail} alt="키위 소개" aria-hidden="true" className="img" />
         <div className="sub-header">
-          <h3>함께하는 키오스크 키위가 질문합니다.</h3>
+          <h3>대화로 주문하는 키오스크: 키위</h3>
         </div>
       </div>
 
@@ -61,10 +61,10 @@ function MiddleOne() {
         <h4>당신의 키오스크는 친근한가요?</h4>
         <div className="list">
           <Filter1Icon className={classes.numIcon} />
-          키위봇과 대화해 보세요.
+          불편한 키오스크 대신 키위봇과 대화하며 주문해요
           <br />
           <Filter2Icon className={classes.numIcon} />
-          식당 점원처럼 원하는 메뉴, 수량을 알아듣고, 결제도 척척합니다.
+          원하는 식당과 메뉴를 알아듣고, 결제도 척척합니다
         </div>
       </div>
     </MiddleOneBlock>

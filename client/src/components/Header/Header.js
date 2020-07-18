@@ -46,7 +46,6 @@ function Header(props) {
   const [isLogin, setIsLogin] = useState(false);
   const [anchorElSettings, setAnchorElSettings] = useState(null);
   const [anchorElMypage, setAnchorElMypage] = useState(null);
-  // const [checked, setChecked] = useState(false);
   const openSettings = Boolean(anchorElSettings);
   const openMypage = Boolean(anchorElMypage);
 

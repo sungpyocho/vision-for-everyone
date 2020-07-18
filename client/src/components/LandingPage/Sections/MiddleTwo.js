@@ -45,11 +45,10 @@ const MiddleTwo = () => {
 
       <div className="list">
         <Filter1Icon className={classes.numIcon} />
-        자신만의 키오스크를 만들 수 있습니다.
+        키위는 나만의 키오스크를 만들 수 있는 다양한 옵션을 제공합니다
         <br />
         <Filter2Icon className={classes.numIcon} />
-        키오스크가 불편한 사용자들을 고려하여 글자크기, 고대비 옵션을 설정할 수
-        있습니다.
+        키오스크가 불편한 분들을 위해 접근성 설정도 가능해요
       </div>
     </MiddleTwoBlock>
   );

@@ -13,11 +13,17 @@ const useStyles = makeStyles((theme) => ({
     marginTop: "50px",
     textAlign: "center",
   },
-  button: {
+  register: {
     color: "#6ac48a",
     borderRadius: 5,
     boxShadow: "0 0 0.2rem rgba(0, 0, 0, .1)",
   },
+  order: {
+    backgroundColor: "#6ac46a",
+    color: "white",
+    borderRadius: 5,
+    boxShadow: "0 0 0.2rem rgba(0, 0, 0, .1)"
+  }
 }));
 
 const TopBlock = styled.div`
@@ -29,7 +35,9 @@ const TopBlock = styled.div`
     margin-top: 30px;
   }
   padding-top: 64px;
-
+  h2 {
+    color: gray
+  }
   h3 {
     font-weight: 500;
     margin: 0;
@@ -67,35 +75,37 @@ function Top(props) {
           <Grid item xs={12} sm={6} align="center">
             <div>
               <div className="title-block">
-                <h3 aria-label="키오스크 위">Kiosk + We: </h3>
-                <h3>함께하는 키오스크 키위.</h3>
-
+                <h2 aria-label="키오스크 위">Kiosk + We </h2>
+                <h3>누구나 쉽게,
+                  <br/> 
+                대화하며 주문해요</h3>
                 <div className="sub-title">
-                  키위와 함께라면 식당에서의 주문은 편리해집니다.
+                  키위와 함께라면 식당에서의 주문은 편리해집니다
                 </div>
               </div>
 
               <div className={classes.root}>
-                <Button
+                {/* <Button
                   variant="outlined"
                   className={classes.button}
                   onClick={toTutorialPage}
                 >
                   튜토리얼 페이지로
-                </Button>
+                </Button> */}
                 <Button
                   variant="outlined"
-                  className={classes.button}
+                  className={classes.register}
                   onClick={toRegisterPage}
                 >
-                  회원가입 페이지로
+                  키위 가입하기
                 </Button>
                 <Button
                   variant="outlined"
-                  className={classes.button}
+                  color="primary"
+                  className={classes.order}
                   onClick={toChatPage}
                 >
-                  챗봇 페이지로
+                  주문하러 가기
                 </Button>
               </div>
             </div>
