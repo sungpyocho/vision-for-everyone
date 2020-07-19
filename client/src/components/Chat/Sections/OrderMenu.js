@@ -105,7 +105,7 @@ function OrderMenu() {
             </ListItem>
             <ListItem Button>
               <ListItemText
-                primary="탕수육인데 겁나 긴 탕수육 너비 안 맞는 값 넣었을 때 어떻게 렌더링되나 알아보려고 일부러 마음에도 없는 메뉴를 넣었로렘입섬!"
+                primary="타이어보다 싼 탕수육"
                 secondary="5000원"
               />
             </ListItem>
@@ -264,7 +264,8 @@ const CustomButton = styled.div`
   width: 33%;
   flex-shrink: 1;
   cursor: pointer;
-  background-color: #f1f1f0;
+  color: #444444;
+  background-color: #e0ffe0;
   box-shadow: 0 0 4px #999;
   outline: none;
   transition: background 0.8s;

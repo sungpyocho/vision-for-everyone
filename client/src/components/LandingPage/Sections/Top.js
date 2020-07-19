@@ -32,9 +32,9 @@ const TopBlock = styled.div`
     height: auto;
   }
   .title-block {
-    margin-top: 30px;
+    margin-top: 10px;
   }
-  padding-top: 64px;
+  padding-top: 20px;
   h2 {
     color: gray
   }

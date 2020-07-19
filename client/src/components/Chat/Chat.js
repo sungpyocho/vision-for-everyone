@@ -244,7 +244,9 @@ const Wrapper = styled.div`
 
 const Messages = styled.div`
   overflow: auto;
-  background-color: #f1f0f0;
+  background-color: #f5fff5;
+  border: solid;
+  border-color: #bbdabb;
   border-top-left-radius: 10px;
   border-top-right-radius: 10px;
   bottom: 36px;
