@@ -61,10 +61,10 @@ function MiddleOne() {
         <h4>당신의 키오스크는 친근한가요?</h4>
         <div className="list">
           <Filter1Icon className={classes.numIcon} />
-          불편한 키오스크 대신 키위봇과 대화하며 주문해요
+          키오스크의 복잡한 화면, 끝없는 줄서기, 답답하지 않으셨나요?
           <br />
           <Filter2Icon className={classes.numIcon} />
-          원하는 식당과 메뉴를 알아듣고, 결제도 척척합니다
+          원하는 식당과 메뉴를 키위에게 말해보세요. 척 하면 알아듣고 결제까지 단숨입니다.
         </div>
       </div>
     </MiddleOneBlock>

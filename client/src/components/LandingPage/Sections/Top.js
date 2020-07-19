@@ -79,9 +79,6 @@ function Top(props) {
                 <h3>누구나 쉽게,
                   <br/> 
                 대화하며 주문해요</h3>
-                <div className="sub-title">
-                  키위와 함께라면 식당에서의 주문은 편리해집니다
-                </div>
               </div>
 
               <div className={classes.root}>
