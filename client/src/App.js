@@ -10,7 +10,7 @@ import Header from "./components/Header/Header";
 import TutorialPage from "./components/TutorialPage/TutorialPage";
 import ForgotPasswordPage from "./components/FindPasswordPage/ForgotPasswordPage";
 import ResetPasswordPage from "./components/FindPasswordPage/ResetPasswordPage";
-import EditProfilePage from './components/EditProfilePage/EditProfilePage'
+import EditProfilePage from "./components/EditProfilePage/EditProfilePage";
 
 // Higher Order Component로 일반 컴포넌트를 감싸주자.
 function App() {
@@ -26,7 +26,7 @@ function App() {
           <Route exact path="/chat" component={Auth(Chat, null)} />
           <Route exact path="/login" component={Auth(LoginPage, false)} />
           <Route exact path="/register" component={Auth(RegisterPage, false)} />
-          <Route exact path="/edit" component={Auth(EditProfilePage, false)} />
+          <Route exact path="/edit" component={Auth(EditProfilePage, true)} />
           <Route
             exact
             path="/forgot"
