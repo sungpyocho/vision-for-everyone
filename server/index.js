@@ -5,6 +5,7 @@ const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 const config = require("./config/keys");
 const app = express();
+const cors = require("cors");
 
 // Connect to MongoDB
 mongoose
