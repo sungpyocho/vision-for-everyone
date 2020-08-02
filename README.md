@@ -9,7 +9,7 @@ URL: https://www.kiwe.team/
 ## 특징
 
 - 시각장애인 분들을 위한 키오스크 대체 결제 시스템
-- 챗봇으로 간편하게 주문 가능(결제는 추후 추가 예정)
+- 챗봇으로 간편하게 주문 가능(테스트 결제까지만 지원)
 
 ## For Developers
 
@@ -28,6 +28,7 @@ module.exports = {
   mongoURI: "mongodb+srv://----YOUR-MONGODB-ATLAS-KEY----",
   emailAddress: "----YOUR-GMAIL-ADDRESS----",
   emailPassword: "----YOUR-MAIL-PASSWORD----",
+  kakaoAdminKey: "----YOUR-KAKAO-DEVELPER-ADMIN-KEY----"
 };
 ```
 
