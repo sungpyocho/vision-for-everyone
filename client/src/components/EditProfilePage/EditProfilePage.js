@@ -14,6 +14,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 import { useDispatch } from "react-redux";
 import { auth } from "../../_actions/user_actions";
+import { editProfile } from "../../_actions/user_actions";
 
 function Copyright() {
   return (
@@ -57,30 +58,29 @@ export default function RegisterPage(props) {
   const dispatch = useDispatch();
 
   const [Name, setName] = useState("");
-  const [Email, setEmail] = useState("");
   const [Address, setAddress] = useState("");
   const [Password, setPassword] = useState("");
+  const [Email, setEmail] = useState("");
   const [ConfirmPassword, setConfirmPassword] = useState("");
   const [arePasswordsSame, setArePasswordsSame] = useState(true); // 두 비번이 같은가?
 
   useEffect(() => {
-    
       dispatch(auth()).then((response) => {
         if (response) {
-          console.log('디스패치 속 ', response)
-          const pastImage = response.image
-          const pastEmail = response.email
-          const pastName = response.name
-          const pastAddress = response.address
+          console.log('디스패치 속 ', response.payload);
+          const pastImage = response.payload.image;
+          const pastName = response.payload.name;
+          const pastAddress = response.payload.address;
+          const email = response.payload.email;
+          setName(pastName);
+          setAddress(pastAddress);
+          setEmail(email);
       } else {
           props.history.push("/login");
         }
       });
-    }
-  )
-  const emailHandler = (event) => {
-    setEmail(event.currentTarget.value);
-  };
+    }, []) 
+  // useEffect()의 두 번째 인자로 빈 배열을 넣어줘야 마운트시만 호출된다 
 
   const nameHandler = (event) => {
     setName(event.currentTarget.value);
@@ -107,14 +107,27 @@ export default function RegisterPage(props) {
     }
 
     let body = {
-      email: Email,
       name: Name,
       password: Password,
       address: Address,
+      email: Email,
     };
-
+    var isEdit = window.confirm("사용자 정보를 변경합니다");
+    if (isEdit) {
+      dispatch(editProfile(body)).then((response) => {
+        if (response.payload.success) {
+          props.history.push("/chat");
+        }
+      })
+      .catch((err) => console.log(err));
+    }
 
   };
+
+  const handleClick = () => {
+    // DB 정보 수정
+    alert('클릭시 발동되는 알림')
+  } 
 
   return (
     <Container component="main" maxWidth="xs">
@@ -195,6 +208,7 @@ export default function RegisterPage(props) {
             fullWidth
             variant="contained"
             className={classes.submit}
+            onClick={handleClick}
           >
             수정
           </Button>
