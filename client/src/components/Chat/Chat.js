@@ -82,13 +82,30 @@ function Chat() {
         "/api/dialogflow/textQuery",
         textQueryVariables
       );
-      response.data.fulfillmentMessages.forEach((content) => {
+      // 주문 전 일반 대화
+      if (response.data.hasOwnProperty("action")) {
+        response.data.fulfillmentMessages.forEach((content) => {
+          conversation = {
+            who: "kiwe",
+            content: content,
+          };
+          dispatch(saveMessage(conversation));
+        });
+      } else {
+        // 마지막 주문 단계. 새 창에서 주문 창을 열고, 메세지 출력.
+        window.open(response.data.headers.Location);
         conversation = {
           who: "kiwe",
-          content: content,
+          content: {
+            message: "text",
+            platform: "PLATFORM_UNSPECIFIED",
+            text: {
+              text: ["카카오페이에서 결제를 완료하세요."],
+            },
+          },
         };
         dispatch(saveMessage(conversation));
-      });
+      }
       // chime 재생
       sound.play();
     } catch (error) {
@@ -202,10 +219,12 @@ function Chat() {
   return (
     <Wrapper>
       {/* Order Buttons */}
-      <OrderMenu aria-label="메뉴"/>
+      <OrderMenu aria-label="메뉴" />
       <div aria-label="키위봇과 대화하는 채팅창입니다">
         {/* Chat Messages */}
-        <Messages aria-live='polite'>{renderMessages(messagesFromRedux)}</Messages>
+        <Messages aria-live="polite">
+          {renderMessages(messagesFromRedux)}
+        </Messages>
         {/* Input Field and Button */}
         <Paper
           component="form"
@@ -220,7 +239,12 @@ function Chat() {
             value={Input}
             onChange={inputHandler}
           />
-          <Button variant="contained" className={classes.button} type="submit" aria-label="메시지 보내기">
+          <Button
+            variant="contained"
+            className={classes.button}
+            type="submit"
+            aria-label="메시지 보내기"
+          >
             <SendIcon />
           </Button>
         </Paper>
