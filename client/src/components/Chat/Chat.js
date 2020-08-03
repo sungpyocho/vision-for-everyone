@@ -93,7 +93,9 @@ function Chat() {
         });
       } else {
         // 마지막 주문 단계. 새 창에서 주문 창을 열고, 메세지 출력.
-        window.open(response.data.headers.Location);
+        let browserWindow = window.open();
+        browserWindow.location = response.data.headers.Location;
+
         conversation = {
           who: "kiwe",
           content: {
