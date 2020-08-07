@@ -82,8 +82,9 @@ function Chat() {
         "/api/dialogflow/textQuery",
         textQueryVariables
       );
-      // 주문 전 일반 대화
-      if (response.data.hasOwnProperty("action")) {
+      // 주문 전 일반 대화.
+      // headers는 카카오페이 주문창 URL을 포함하므로, 일반대화에서는 없을수밖에 없다.
+      if (!response.data.headers) {
         response.data.fulfillmentMessages.forEach((content) => {
           conversation = {
             who: "kiwe",
@@ -92,10 +93,7 @@ function Chat() {
           dispatch(saveMessage(conversation));
         });
       } else {
-        // 마지막 주문 단계. 새 창에서 주문 창을 열고, 메세지 출력.
-        let browserWindow = window.open();
-        browserWindow.location = response.data.headers.Location;
-
+        // 마지막 주문 단계. 메세지 출력.
         conversation = {
           who: "kiwe",
           content: {
@@ -107,6 +105,12 @@ function Chat() {
           },
         };
         dispatch(saveMessage(conversation));
+
+        // 1.5초 뒤에 새 창에서 주문 창을 염.
+        setTimeout(() => {
+          let browserWindow = window.open();
+          browserWindow.location = response.data.headers.Location;
+        }, 1500);
       }
       // chime 재생
       sound.play();
@@ -146,7 +150,9 @@ function Chat() {
         dispatch(saveMessage(conversation));
       });
       // chime 재생
-      sound.play();
+      // Chrome Autoplay 방지 정책으로 인해 주석을 지워도 소리가 나지 않지만
+      // 갑자기 소리나면 사람들이 annoyed활 수 있으니 소리를 나게 하지 않는다.
+      // sound.play();
     } catch (error) {
       // 에러 발생 시
       let conversation = {
