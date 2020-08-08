@@ -70,7 +70,6 @@ router.post("/edit", (req, res) => {
       return res.status(400).send(err);
     }
     user.name = req.body.name;
-    user.address = req.body.address;
     user.password = req.body.password;
     user.save((err, userInfo) => {
       // 실패 또는 성공시, 유저에게 JSON형식으로 전달
