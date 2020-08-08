@@ -29,9 +29,11 @@ app.use(cookieParser());
 // Router
 const dialogflowRouter = require("./routes/dialogflow");
 const userRouter = require("./routes/user");
+const restaurantRouter = require("./routes/restaurant");
 
 app.use("/api/dialogflow", dialogflowRouter);
 app.use("/api/users", userRouter);
+app.use("/api/restaurant", restaurantRouter);
 
 // Serve static assets if in production
 if (process.env.NODE_ENV === "production") {
