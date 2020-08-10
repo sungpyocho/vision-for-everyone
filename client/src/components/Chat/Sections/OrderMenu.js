@@ -1,11 +1,48 @@
 import React from "react";
 import styled from "styled-components";
+import Map from "../Sections/Map";
+
+import { withStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
-import DialogTitle from "@material-ui/core/DialogTitle";
+import MuiDialogTitle from "@material-ui/core/DialogTitle";
+import IconButton from "@material-ui/core/IconButton";
+import CloseIcon from "@material-ui/icons/Close";
+import Typography from "@material-ui/core/Typography";
+
+const styles = (theme) => ({
+  root: {
+    margin: 0,
+    padding: theme.spacing(2),
+  },
+  closeButton: {
+    position: "absolute",
+    right: theme.spacing(1),
+    top: theme.spacing(1),
+    color: theme.palette.grey[500],
+  },
+});
+
+const DialogTitle = withStyles(styles)((props) => {
+  const { children, classes, onClose, ...other } = props;
+  return (
+    <MuiDialogTitle disableTypography className={classes.root} {...other}>
+      <Typography variant="h6">{children}</Typography>
+      {onClose ? (
+        <IconButton
+          aria-label="close"
+          className={classes.closeButton}
+          onClick={onClose}
+        >
+          <CloseIcon />
+        </IconButton>
+      ) : null}
+    </MuiDialogTitle>
+  );
+});
 
 function OrderMenu() {
   const [openMenu, setOpenMenu] = React.useState(false);
@@ -16,7 +53,7 @@ function OrderMenu() {
     setOpenMenu(true);
   };
 
-  const handleOpenEvent = () => {
+  const handleOpenMap = () => {
     setOpenEvent(true);
   };
 
@@ -28,7 +65,7 @@ function OrderMenu() {
     setOpenMenu(false);
   };
 
-  const handleCloseEvent = () => {
+  const handleCloseMap = () => {
     setOpenEvent(false);
   };
 
@@ -37,7 +74,7 @@ function OrderMenu() {
   };
 
   return (
-    <MenuComponent >
+    <MenuComponent>
       {/* 메뉴 버튼 */}
       <CustomButton onClick={handleOpenMenu}>메뉴</CustomButton>
       <Dialog
@@ -59,28 +96,27 @@ function OrderMenu() {
           </Button>
         </DialogActions>
       </Dialog>
-      {/* 이벤트 버튼 */}
-      <CustomButton onClick={handleOpenEvent}>이벤트</CustomButton>
+      {/* 식당찾기 버튼 */}
+      <CustomButton onClick={handleOpenMap}>식당찾기</CustomButton>
       <Dialog
         open={openEvent}
-        onClose={handleCloseEvent}
-        aria-labelledby="event-title"
-        aria-describedby="event-description"
+        onClose={handleCloseMap}
+        aria-labelledby="map-title"
+        aria-describedby="map-description"
       >
-        <DialogTitle id="event-title" >{"키위 오픈 기념 이벤트"}</DialogTitle>
-        <DialogContent >
-          <DialogContentText id="event-description" >
+        <DialogTitle id="map-title" onClose={handleCloseMap}>
+          주변 식당찾기
+        </DialogTitle>
+        <DialogContent>
+          {/* <DialogContentText id="map-description">
             고려대학교 학식 키위로 결제시 5% 할인
-          </DialogContentText>
+          </DialogContentText> */}
+          <Map />
         </DialogContent>
-        <DialogActions>
-          <Button onClick={handleCloseEvent} color="primary" autoFocus>
-            닫기
-          </Button>
-        </DialogActions>
+        <DialogActions></DialogActions>
       </Dialog>
       {/* 직원호출 버튼 */}
-      <CustomButton onClick={handleOpenCall} >직원호출</CustomButton>
+      <CustomButton onClick={handleOpenCall}>직원호출</CustomButton>
       <Dialog
         open={openCall}
         onClose={handleCloseCall}
