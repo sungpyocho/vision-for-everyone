@@ -105,7 +105,7 @@ function OrderMenu() {
         aria-describedby="map-description"
       >
         <DialogTitle id="map-title" onClose={handleCloseMap}>
-          주변 식당찾기
+          내 주변 식당찾기
         </DialogTitle>
         <DialogContent>
           {/* <DialogContentText id="map-description">
