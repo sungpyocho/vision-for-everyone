@@ -33,4 +33,22 @@ router.post("/menu-register", (req, res) => {
   });
 });
 
+router.get("/closest-restaurant", (req, res) => {
+  // const data = await Restaurant.aggregate([
+  //   {
+  //     $match: {
+  //       "menuId.name": restaurantName,
+  //       "menuId.menuCategory.menuNamePrice.menuName": menuName,
+  //     },
+  //   },
+  //   {
+  //     $project: {
+  //       "menuId.menuCategory.menuNamePrice.menuName": 1,
+  //       "menuId.menuCategory.menuNamePrice.menuPrice": 1,
+  //     },
+  //   },
+  // ]);
+  console.log(data);
+});
+
 module.exports = router;
