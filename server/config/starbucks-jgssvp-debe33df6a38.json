@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "starbucks-jgssvp",
+  "private_key_id": "debe33df6a38706dd5d03320f54627b8ac0dae46",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCo1wxwjyScR9Os\nIpazjkba8ZE/4npT7Rj7Y4rnDDvSLwSypbQkpdZU0bshqrno9sXT8aMaQzuSzOW9\n2w6Vt3371elRF+JIF+rbsaoq4TmscQ8nmYBIpCkREeLGCbx4UQ2kQiib6FPRTvm3\nP0LxBuCAAlaov7UGQyTNTimUlds4IFza2P9XmMmMd4+4SKVsh2ny5+kfP0rnFaVq\nTrxCn4kFyanmPTDo18P9jPDMBUCd8/9xRf5J7914KLqVf3H12wnhlNUnIhrYNuRd\nZ3ZbA7fvy5s1iyfkwpmL9B/jtQkMVa4VRkul+jbYQpfke+n5qe2nrzIzN10uFnU8\nijX1AuETAgMBAAECggEAATWlL6s+2mXDVPDcfoXO6SOg5EHFmZNRwf9JD/Ws+gj/\nMh5wx3ButCXafte/xDT8XtPU1MvVgew42x7WIGlznBnAtaWDp/uP4aoIq4z4gk0/\nDAwT+LFAYBBuPPf14zDFdb9JljBYZV/49wCbhKmFczVRFJ1m+RgDC/t63ccjDmhd\n839WYu/PiuT/UQXH+s76ihlXtZGhk/vUv7P1XZvJ8203yACi/T+hvKaK5ngEWjVE\njoDJnJG+A/+73j9nh7xDv0MCttjv699+VvV8r0Z6jtuQ+LoyL0f4oKzWEJYQsVwA\nq8STCKa54xDSGJ5PCqOa7D3YGLIda5dVZnoUHN0kyQKBgQDl4SjPZ47RdWuDyHZU\nh4KPiree5ByAmIzZfX8JjL8Bycy7UcjxvoTCZ6u2yxIFowgripbxq/+zCG9Lk7jZ\nPPDFoddoq/phjI1vcg9Hh4o7qLqHlBQsu7pE+GofGZrNkmHbsRfTIPCQGffHAmCa\nOTbjh0UsWqHcmzH0iMtZl17cawKBgQC8Blgw4O/Oz5ib3/SqiodA36pCpUayhnkh\nPWWbgBWopn6XN83yWJr9EcY1XN8nOmDqG+6CeKrfDxO/K5y7ivPRdQj0meE9FF1G\n3uXfWPlwpMimax6yYWHNi2FAFQFFVQpvAaDPo247KvVk9Gy9pngvj4B3gtzePw5+\nFESsagq3+QKBgQCDs3L5GKCHOlmFn9TDavuPF29J1fDKcBvKAw9EPmG0OZRVAW85\nqOhQpKqJSGCj4BqvL3B5NwyA2uVAjHqL41EiOS27Z0REnQzu+47rcSjuMyXixSCl\n3EvEdfn+pWG+Qw5TmmtG54lLVcVSO/dyhDMBOh+UYLx5MmT1b2Xph0KuzwKBgFdf\nQ2ADRqx9v1a/rTwKf2tgBAhQMRgIcQVHOI4X6Pij1bODVQpGrk7nEYn+jBv4fsyL\nCjxKwmxA31Y4d+6WVVKB5hVz5Dyz19x0+7Db8Z2slSjwIiWWJxKSsDBNEngbWmvW\n/9k9Ap4wCjRNeLJwRu0i6/mdL/F+r8dat8a+yBhRAoGAVGHlg+zionWlFNYnhF6L\nDQlifL3hrMtgVgbGB+pFB/ECM5jaoghgjdQ0uh9J4EUqBiC3m25bFBmqvQnGoTEj\nZEYEL0P3SR9Otv6PpiMhQJkPRsa4SOMerIvM01xtf+elZJpU/h4ENCmNoRMVCHLK\nf3Y7+jW5Dq+nZzE4QeaBsHY=\n-----END PRIVATE KEY-----\n",
+  "client_email": "kiwe-frontend@starbucks-jgssvp.iam.gserviceaccount.com",
+  "client_id": "118049450664784605500",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/kiwe-frontend%40starbucks-jgssvp.iam.gserviceaccount.com"
+}

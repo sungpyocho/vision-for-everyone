@@ -1,13 +1,12 @@
 const express = require("express");
 const router = express.Router();
 const dialogflow = require("dialogflow");
-
-
 const config = require("../config/keys");
-// console.log(config); 키를 제대로 불러오는지 테스트하는 코드
+// console.log(config); //키를 제대로 불러오는지 테스트하는 코드
 const projectId = config.googleProjectID;
 const sessionId = config.dialogFlowSessionID;
 const languageCode = config.dialogFlowSessionLanguageCode;
+console.log(process.env.GOOGLE_APPLICATION_CREDENTIALS);
 // 아래 방법을 써보려고 했으나 전혀 말을 듣지 않았다...
 // const credentials = {
 //   client_email: config.googleClientEmail,
@@ -20,11 +19,12 @@ const languageCode = config.dialogFlowSessionLanguageCode;
 // });
 
 // 결국, 구글 인증 관련은 GOOGLE_APPLICATION_CREDENTIALS 환경변수를 설정하여 해결하자.
+// re: 현재의 구글 인증은 GOOGLE_APPLICATION_CREDENTIALS 환경변수와 무관한, sessionClient 변수의 keyFilename으로 이루어지는 중
 const sessionClient = new dialogflow.SessionsClient({
-  keyFilename: './server/config/vision-for-everyone-1c0e3846ddbb.json'
+  keyFilename: './server/config/master-kiwebot-bdvjmr-a0970ec47dd9.json'
 });
 const sessionPath = sessionClient.sessionPath(projectId, sessionId);
-
+console.log(projectId, sessionId);
 // Text Query Route
 router.post("/textQuery", async (req, res) => {
   // 클라이언트에서 온 정보를 Dialogflow API로 보내기

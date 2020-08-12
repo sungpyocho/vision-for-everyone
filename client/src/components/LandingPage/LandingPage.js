@@ -35,7 +35,7 @@ function LandingPage(props) {
     <LandingpageBlock>
       <div style={{ fontSize: "30px", textAlign: "center", fontWeight: "500" }}>
         <Top props={props} />
-        <MiddleOne />
+        <MiddleOne color="red"/>
         <MiddleTwo />
         <Bottom props={props} />
       </div>

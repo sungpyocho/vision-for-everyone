@@ -68,7 +68,7 @@ export default function RegisterPage(props) {
       dispatch(auth()).then((response) => {
         if (response) {
           console.log('디스패치 속 ', response.payload);
-          const pastImage = response.payload.image;
+          // const pastImage = response.payload.image;
           const pastName = response.payload.name;
           const pastAddress = response.payload.address;
           const email = response.payload.email;

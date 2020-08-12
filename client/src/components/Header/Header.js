@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { auth } from "../../_actions/user_actions";
+import { editConvenienceFontsize, editConvenienceHighcontrast, editConvenienceReadmessage, editConvenienceChime } from "../../_actions/accessibility_actions";
 import { withRouter } from "react-router-dom";
 
 import {AppBar,
@@ -39,7 +40,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-function Header(props) {
+const Header = (props) => {
   const classes = useStyles();
   const dispatch = useDispatch();
 
@@ -50,10 +51,15 @@ function Header(props) {
   const openMypage = Boolean(anchorElMypage);
 
   // 접근성 설정 메뉴를 위한 변수
-  const [ openAccessibilitySettings, setOpenAccessibilitySettings] = React.useState(false);
-  const [fontSize, setFontSize] = React.useState(5);
-  const [highContrast, setHighContrast] = React.useState(false);
-  const [readMessage, setReadMessage] = React.useState(false);
+  const [openAccessibilitySettings, setOpenAccessibilitySettings] = useState(false);
+
+  // global state에서 접근성 설정 관련 변수를 가져옴
+  const fontSize = useSelector(state => state.accessibility.fontSize);
+  const highContrast = useSelector(state => state.accessibility.highContrast);
+  const readMessage = useSelector(state => state.accessibility.readMessage);
+  const chime = useSelector(state => state.accessibility.chime);
+  
+  console.log(fontSize, highContrast, readMessage, chime);
 
   useEffect(() => {
     // 페이지 이동할때마다 dispatch가 작동해서 백엔드에 계속 요청
@@ -65,32 +71,38 @@ function Header(props) {
         // 로그인 한 상태일때는 회원 버튼을 표시
         // 마이페이지, 로그아웃의 두 메뉴를 가진 회원버튼
         setIsLogin(true);
+        // 로그인 한 상태라면 사용자 설정 정보를 가져온다
       }
     });
+    console.log(fontSize, highContrast, readMessage, chime)
   }, [props.history.location.pathname]);
 
   const handleOpenAccessibilitySettings = () => {
     setOpenAccessibilitySettings(!openAccessibilitySettings);
   };
 
+  // 팝업에 들어갈 편의성 설정값을 변경해 global store에 dispatch하는 함수들
   const handleHighContrast = () => {
-    setHighContrast(!highContrast);
+    dispatch(editConvenienceHighcontrast(!highContrast));
   };
 
   const handleFontLarger = () => {
-    if (fontSize < 10) {
-      setFontSize(fontSize + 1);
+    if (fontSize == "150px") {
+      dispatch(editConvenienceFontsize("300px"));
     }
   };
   const handleFontSmaller = () => {
-    if (fontSize > 1) {
-      setFontSize(fontSize - 1);
-    }
+
   };
   const handleReadMessage = () => {
-    setReadMessage(!readMessage);
-  }
+    dispatch(editConvenienceReadmessage(!readMessage));
+  };
 
+  const handleChime = () => {
+    dispatch(editConvenienceChime(!chime));
+  };
+
+  // 여기서부터는 ㅁㅁㅁ
   const handleMenuSettings = (event) => {
     setAnchorElSettings(event.currentTarget);
   };
@@ -154,7 +166,6 @@ function Header(props) {
           <Dialog
             open={openAccessibilitySettings}
             onClose={handleOpenAccessibilitySettings}
-            
           >
             <DialogTitle>편의성 설정</DialogTitle>
             <List className={classes.settingsDialog}>
@@ -177,9 +188,12 @@ function Header(props) {
               </ListItem>
               <Divider></Divider>
               <ListItem>
-                <ListItemText classes={{root: classes.bold}} disableTypography>나만의 테마</ListItemText>
+                <ListItemText classes={{root: classes.bold}} disableTypography>편의성</ListItemText>
               </ListItem>
-              <ListItem><ListItemText primary="준비중입니다" /></ListItem>
+              <ListItem Button>
+                <ListItemText primary="메시지 알림음" />
+                <Switch size="small" checked={chime} onChange={handleChime}></Switch>
+              </ListItem>
             </List>
             <DialogActions>
               <Button onClick={handleOpenAccessibilitySettings} color="primary" autoFocus>

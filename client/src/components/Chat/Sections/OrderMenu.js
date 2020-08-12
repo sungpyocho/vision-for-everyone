@@ -1,3 +1,4 @@
+// 메뉴, 이벤트, 직원호출 팝업을 다루는 바 전체입니다.
 import React from "react";
 import styled from "styled-components";
 import { makeStyles } from "@material-ui/core/styles";
@@ -33,7 +34,7 @@ function OrderMenu() {
   const [openCall, setOpenCall] = React.useState(false);
   const [openSubMenu, setOpenSubMenu] = React.useState(false);
   const [openSubMenu2, setOpenSubMenu2] = React.useState(false);
-  const [checked, setChecked] = React.useState(false);
+
 
   const useStyles = makeStyles((theme) => ({
     root: {
@@ -80,10 +81,6 @@ function OrderMenu() {
 
   const handleOpenSubMenu2 = () => {
     setOpenSubMenu2(!openSubMenu2);
-  };
-
-  const toggleChecked = () => {
-    setChecked((prev) => !prev);
   };
 
   return (

@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "master-kiwebot-bdvjmr",
+  "private_key_id": "b36232c1ba7f7f5a2963e274f62d8f5d2caab0f3",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQC2czKgxifCu934\n0NmaoP3HwR25K9q5BL3AghY898JxN2MzYkXx26NxAqBuuZCjhi9x0qOR8FtxuwVj\n0REmKCp6Q3njtB2qZH/Io0XxB4zD+lmdGvPttYWe0Lhu4OsCwun9gbA0CFiBsQ3p\nNo6PDskC68tGwTkFPBW22GlvB3y/J/stK8RyA1hFTv++0izpneDuE/FnNIZyYDOe\naOplIFedA85HHAGtzfA1xNNBtDTZB2SUQrsarI0FUB+e7G+qqTjNkeWIPazGjNyI\nmeF1aFTU5Wy5j3C5qz9hSP0No9Q77+7GIbSDi7WPmPYh9iJyoxQ9Vp/GkoluEow8\ncfnREiQ/AgMBAAECggEAAKiMw7jDVvgPloDGcEDpeYmQXmUynl1Og/3UL7cjK/5r\nrLlLkFJfFh7QzmV8CKMI08vTTEkGQ3RN0izkd3NIp/VLYM97FezT6zjvnS2OS/zA\nywjYXYC8sTSGndvQ7UsfxgrsRFvNWfZ2GuPYAtsmTYzlSGWVG5g6adUBGGX6BMSS\nGtEO4N5hZCfzmdEY0Gw0RL6/qw0pc11X2IH1o4p+l2M/SxoIY7H+FPRi7xOJCJdp\nEsNPVTNxvz0fBjwYmrOJP0yTUhOocbg8Aj4p1kZ4JZZrDyceCkVGzurEzFngmRqo\nlzs/bY7OGB+39ZSM/mDTrjmP590iMSwh8qQfyfDnkQKBgQDmogHlztTlU0nQcZxr\nsKj7Hwf99Rx6Ian5ohq9FKRfxNH+aghVdmWIzqwzx4AJ85sfCBecpOoQ7eN4txqd\nbqJJXeeduTNdScxWhfRVcvI+SUkBLo3ysRyly0E/KSwQoIgz7REKMRKjOtPKsRG0\n1N3iZ2fiiikXzftjZWBaFFFbrwKBgQDKhH4XARMbOixqi8cz8PQmRQPtKtYEKwyY\nUgeotqG18UQEhqs5xVY+U6V2YmxWDp3i21BcJeZDEIf4PtOefvy1KX9k3sJN/v6E\naUsTYe09/kfUdsoUEwnqBOXz4qdycXP3lZYs99X/dxHvCpbz6tGUSGjqPOkc3OXH\nH4PmBrEUcQKBgQC8Gq6JjKQ/VisCA2ecvb1U8/5Et0G+qu5DWF+Oj+Nw6MqNQlYB\nvksZxdbVdIWNmE6QhL0dWbQ+kofQ0Sa3+KAMTra2AXNPRv2OJDsf5lyFSKhuelXz\n91hyMNDKfv4doZD1KQmY0mVtFHHhA4J5hpRiMAyezCiv7aR3cRug3KluqQKBgBGw\nGMMxmNWb8x0rMC7dMLXW+UzRnPeoOuVi5MBbkyws8l/i0zmsfqfa7my0k/nANRIH\nTbF+renVm8qW0izZsoCwKyxIOHhPeTNfbus2dl4fw25PIb83GnqSCvOOLEnWluZc\n7kznKI2zfKGAL0cGj1+AI4mx4DphIMCPhBmnI/hBAoGAbXM6Jua8/GW/Y6diKH+W\nAySyccPcdCxfMN1rMmAOW3qq7EqSZOvNxPKUgLJUZHeji26r3n+XGTl4UbqUKE6n\n6tiV0kSU5y/5iRg8WoNakHCvlMufZS374UOcbRJ3rl7UN0ikGkJIL+FL+Poskjtz\nR7hIUs60hmdGaTFdmjQNyTU=\n-----END PRIVATE KEY-----\n",
+  "client_email": "kiwe-dev@master-kiwebot-bdvjmr.iam.gserviceaccount.com",
+  "client_id": "107171453611651990563",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/kiwe-dev%40master-kiwebot-bdvjmr.iam.gserviceaccount.com"
+}

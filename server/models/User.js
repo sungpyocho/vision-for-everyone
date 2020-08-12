@@ -43,6 +43,22 @@ const userSchema = mongoose.Schema({
   resetPwdExp: {
     type: Number,
   },
+  fontSize: {
+    type: Number,
+    default: 5,
+  },
+  highContrast: {
+    type: Boolean,
+    default: false,
+  },
+  readMessage: {
+    type: Boolean,
+    default: false,
+  },
+  chime: {
+    type: Boolean,
+    default: true
+  }
 });
 
 // pre()를 처리하고 index.js의 save()를 실행함. next() -> save()

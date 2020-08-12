@@ -1,4 +1,5 @@
 import React from "react";
+import { connect } from 'react-redux'; // redux store에 접근하기 위함
 import kiweDetail from "../../../assets/kiwe-detail.png";
 import { makeStyles } from "@material-ui/core/styles";
 import styled from "styled-components";
@@ -6,14 +7,19 @@ import PeopleIcon from "@material-ui/icons/People";
 import Filter1Icon from "@material-ui/icons/Filter1";
 import Filter2Icon from "@material-ui/icons/Filter2";
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   icon: {
-    fontSize: "200%",
+    fontSize: props => props.fontSize,
+    color: props => props.color,
   },
   numIcon: {
     marginRight: "15px",
   },
 }));
+
+const mapStateToProps = (state) => ({
+  fontSize: state.accessibility.fontSize
+})
 
 const MiddleOneBlock = styled.div`
   margin-top: 40px;
@@ -26,7 +32,6 @@ const MiddleOneBlock = styled.div`
     margin-bottom: 80px;
     width: 100%;
   }
-
   .detail {
     margin-top: 40px;
   }
@@ -45,8 +50,8 @@ const MiddleOneBlock = styled.div`
   }
 `;
 
-function MiddleOne() {
-  const classes = useStyles();
+function MiddleOne(props) {
+  const classes = useStyles(props);
   return (
     <MiddleOneBlock>
       <div>
@@ -71,4 +76,4 @@ function MiddleOne() {
   );
 }
 
-export default MiddleOne;
+export default connect(mapStateToProps)(MiddleOne);
