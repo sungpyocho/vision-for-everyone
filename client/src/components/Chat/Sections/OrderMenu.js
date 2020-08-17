@@ -73,7 +73,7 @@ function OrderMenu() {
   const useStyles = makeStyles((theme) => ({
     root: {
       minWidth: "50vw",
-      maxHeight: "80vh",
+      minHeight: "80vh",
     },
     nested: {
       paddingLeft: theme.spacing(4),
@@ -81,6 +81,9 @@ function OrderMenu() {
     media: {
       height: "200px",
     },
+    modal: {
+      minWidth: "100vw"
+    }
   }));
 
   const classes = useStyles();
@@ -216,11 +219,11 @@ function OrderMenu() {
         <DialogTitle id="map-title" onClose={handleCloseMap}>
           내 주변 식당찾기
         </DialogTitle>
-        <DialogContent>
+        <DialogContent >
           {/* <DialogContentText id="map-description">
             고려대학교 학식 키위로 결제시 5% 할인
           </DialogContentText> */}
-          <Map />
+          <Map className={classes.root}/>
         </DialogContent>
         <DialogActions></DialogActions>
       </Dialog>
