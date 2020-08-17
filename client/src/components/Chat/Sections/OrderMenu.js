@@ -211,6 +211,7 @@ function OrderMenu() {
       {/* 식당찾기 버튼 */}
       <CustomButton onClick={handleOpenMap}>식당찾기</CustomButton>
       <Dialog
+        style={{width:"100vw"}}
         open={openMap}
         onClose={handleCloseMap}
         aria-labelledby="map-title"
@@ -219,13 +220,10 @@ function OrderMenu() {
         <DialogTitle id="map-title" onClose={handleCloseMap}>
           내 주변 식당찾기
         </DialogTitle>
-        <DialogContent >
           {/* <DialogContentText id="map-description">
             고려대학교 학식 키위로 결제시 5% 할인
           </DialogContentText> */}
           <Map className={classes.root}/>
-        </DialogContent>
-        <DialogActions></DialogActions>
       </Dialog>
       {/* 직원호출 버튼 */}
       <CustomButton onClick={handleOpenCall}>직원호출</CustomButton>
