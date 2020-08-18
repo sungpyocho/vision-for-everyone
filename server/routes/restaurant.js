@@ -33,22 +33,23 @@ router.post("/menu-register", (req, res) => {
   });
 });
 
-router.get("/closest-restaurant", (req, res) => {
-  // const data = await Restaurant.aggregate([
-  //   {
-  //     $match: {
-  //       "menuId.name": restaurantName,
-  //       "menuId.menuCategory.menuNamePrice.menuName": menuName,
-  //     },
-  //   },
-  //   {
-  //     $project: {
-  //       "menuId.menuCategory.menuNamePrice.menuName": 1,
-  //       "menuId.menuCategory.menuNamePrice.menuPrice": 1,
-  //     },
-  //   },
-  // ]);
-  console.log(data);
+router.post("/closest-restaurant", (req, res) => {
+  const { long, lat } = req.body;
+
+  Restaurant.find({
+    location: {
+      $near: {
+        // $maxDistance: 1000,
+        $geometry: {
+          type: "Point",
+          coordinates: [long, lat],
+        },
+      },
+    },
+  }).find((error, results) => {
+    if (error) res.send(error);
+    res.status(200).json(results);
+  });
 });
 
 module.exports = router;

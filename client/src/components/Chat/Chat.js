@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { saveMessage } from "../../_actions/message_actions";
@@ -229,10 +229,15 @@ function Chat() {
     }
   };
 
+  //
+  const handleTextQuery = useCallback((text) => {
+    textQuery(text);
+  }, []);
+
   return (
     <Wrapper>
       {/* Order Buttons */}
-      <OrderMenu aria-label="메뉴" />
+      <OrderMenu aria-label="메뉴" handleTextQuery={handleTextQuery} />
       <div aria-label="키위봇과 대화하는 채팅창입니다">
         {/* Chat Messages */}
         <Messages aria-live="polite">

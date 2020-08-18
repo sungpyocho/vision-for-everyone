@@ -1,7 +1,14 @@
-import React, { useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
+import axios from "axios";
+
+import List from "@material-ui/core/List";
+import ListItem from "@material-ui/core/ListItem";
+import ListItemText from "@material-ui/core/ListItemText";
+
 const { kakao } = window;
 
-export default function Map() {
+export default function Map({ mapRestaurantClick }) {
+  const [restaurantList, setRestaurantList] = useState(null);
   // component가 mount되면 실행
   // useEffect를 써서 렌더링하면 이 컴포넌트에서 이거 해야해!라고 지시
   useEffect(() => {
@@ -90,56 +97,61 @@ export default function Map() {
 
   const displayMap = (userLat, userLng) => {
     let map = basicMapSettings(userLat, userLng);
-
     // 2. 마커 관련 설정
     // DB로부터 userLat, userLng과 가까운 10개 선정. API 만들기.
     // {title: "이름", latlng: new kakap maps.LatLng(위도, 경도)} 형식으로 갖고오기.
-    let positions = [
-      {
-        title: "카카오",
-        latlng: new kakao.maps.LatLng(33.450705, 126.570677),
-      },
-      {
-        title: "생태연못",
-        latlng: new kakao.maps.LatLng(33.450936, 126.569477),
-      },
-      {
-        title: "텃밭",
-        latlng: new kakao.maps.LatLng(33.450879, 126.56994),
-      },
-      {
-        title: "근린공원",
-        latlng: new kakao.maps.LatLng(33.451393, 126.570738),
-      },
-    ];
-    // 자신의 위치 추가.
-    positions.push({
-      title: "현재 위치",
-      latlng: new kakao.maps.LatLng(userLat, userLng),
-    });
+    axios
+      .post("/api/restaurant/closest-restaurant", {
+        long: userLng,
+        lat: userLat,
+      })
+      .then((rs) => {
+        let positions = [];
+        rs.forEach((r) => {
+          positions.push({
+            title: r.branchName,
+            latlng: new kakao.maps.LatLng(
+              r.location.coordinates[1],
+              r.location.coordinates[0]
+            ),
+          });
+        });
 
-    positions.forEach((p) => {
-      // (내 위치용) 마커 이미지의 이미지 주소
-      let imageSrc =
-        "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png";
+        // restaurantList를 rs로 업데이트
+        setRestaurantList(rs);
 
-      // (내 위치용) 마커 이미지의 이미지크기
-      let imageSize = new kakao.maps.Size(24, 35);
+        // 자신의 위치 추가.
+        positions.push({
+          title: "현재 위치",
+          latlng: new kakao.maps.LatLng(userLat, userLng),
+        });
 
-      // 마커 이미지를 생성. 나의 위치는 별표, 식당은 일반 마커(null)로 표시.
-      let markerImage =
-        p.title === "현재 위치"
-          ? new kakao.maps.MarkerImage(imageSrc, imageSize)
-          : null;
+        positions.forEach((p) => {
+          // (내 위치용) 마커 이미지의 이미지 주소
+          let imageSrc =
+            "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png";
 
-      // 마커를 생성
-      let marker = new kakao.maps.Marker({
-        map: map,
-        position: p.latlng, // 마커를 표시할 위치
-        title: p.title, // 마커의 타이틀, 마커에 마우스를 올리면 타이틀이 표시됩니다
-        image: markerImage,
+          // (내 위치용) 마커 이미지의 이미지크기
+          let imageSize = new kakao.maps.Size(24, 35);
+
+          // 마커 이미지를 생성. 나의 위치는 별표, 식당은 일반 마커(null)로 표시.
+          let markerImage =
+            p.title === "현재 위치"
+              ? new kakao.maps.MarkerImage(imageSrc, imageSize)
+              : null;
+
+          // 마커를 생성
+          let marker = new kakao.maps.Marker({
+            map: map,
+            position: p.latlng, // 마커를 표시할 위치
+            title: p.title, // 마커의 타이틀, 마커에 마우스를 올리면 타이틀이 표시됩니다
+            image: markerImage,
+          });
+        });
+      })
+      .catch((err) => {
+        console.log(err);
       });
-    });
   };
 
   const displayDefaultMap = () => {
@@ -149,33 +161,65 @@ export default function Map() {
     // 2. 마커 관련 설정
     // DB로부터 userLat, userLng과 가까운 10개 선정. API 만들기.
     // {title: "이름", latlng: new kakap maps.LatLng(위도, 경도)} 형식으로 갖고오기.
-    let positions = [
-      {
-        title: "카카오",
-        latlng: new kakao.maps.LatLng(33.450705, 126.570677),
-      },
-      {
-        title: "생태연못",
-        latlng: new kakao.maps.LatLng(33.450936, 126.569477),
-      },
-      {
-        title: "텃밭",
-        latlng: new kakao.maps.LatLng(33.450879, 126.56994),
-      },
-      {
-        title: "근린공원",
-        latlng: new kakao.maps.LatLng(33.451393, 126.570738),
-      },
-    ];
+    axios
+      .post("/api/restaurant/closest-restaurant", {
+        long: "126.9784147",
+        lat: "37.5666805",
+      })
+      .then((rs) => {
+        let positions = [];
+        rs.forEach((r) => {
+          positions.push({
+            title: r.branchName,
+            latlng: new kakao.maps.LatLng(
+              r.location.coordinates[1],
+              r.location.coordinates[0]
+            ),
+          });
+        });
 
-    positions.forEach((p) => {
-      // 마커를 생성
-      let marker = new kakao.maps.Marker({
-        map: map,
-        position: p.latlng, // 마커를 표시할 위치
-        title: p.title, // 마커의 타이틀, 마커에 마우스를 올리면 타이틀이 표시됩니다
+        positions.forEach((p) => {
+          // 마커를 생성
+          let marker = new kakao.maps.Marker({
+            map: map,
+            position: p.latlng, // 마커를 표시할 위치
+            title: p.title, // 마커의 타이틀, 마커에 마우스를 올리면 타이틀이 표시됩니다
+          });
+        });
+      })
+      .catch((err) => {
+        console.log(err);
       });
-    });
   };
-  return <div id="map" style={{ width: "99.999vw", height: "50vh" }}></div>; // 이 부분은 어차피 모달 사이즈에 맞춰서 변함
+
+  const handleMapRestaurantClick = (index) => {
+    console.log(index);
+    // 지금 restaurantList가 state로 관리되고 있다
+    // 사용자가 해당 listitem 클릭 했을 때, 그 listitem에 해당하는 index 번호에 따라 restaurantList에도 참조해주려고 한다.
+    // restaurantList[index].restaurantTitle을 mapRestaurantClick 함수의 파라미터로 보내려한다.
+    mapRestaurantClick(restaurantList[index].title);
+  };
+
+  return (
+    <>
+      <div id="map" style={{ width: "99.999vw", height: "50vh" }}></div>
+      <List component="nav">
+        {restaurantList &&
+          restaurantList.map((element, i) => {
+            <ListItem
+              key={i}
+              button
+              onClick={() => handleMapRestaurantClick(i)}
+            >
+              <ListItemText style={{ textAlign: "left" }}>
+                {element.title}
+              </ListItemText>
+              <ListItemText style={{ textAlign: "right" }}>
+                {element.latlng}
+              </ListItemText>
+            </ListItem>;
+          })}
+      </List>
+    </>
+  ); // 이 부분은 어차피 모달 사이즈에 맞춰서 변함
 }
