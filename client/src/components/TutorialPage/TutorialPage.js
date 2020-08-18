@@ -8,9 +8,9 @@ import { Button, Paper, InputBase } from "@material-ui/core";
 import SendIcon from "@material-ui/icons/Send";
 import styled from "styled-components";
 
-import OrderMenu from "./Sections/OrderMenu";
-import Message from "./Sections/Message";
-import CardMessage from "./Sections/CardMessage";
+import OrderMenu from "../Chat/Sections/OrderMenu";
+import Message from "../Chat/Sections/Message";
+import CardMessage from "../Chat/Sections/CardMessage";
 import chime from "../../assets/chime.mp3";
 
 const useStyles = makeStyles((theme) => ({
@@ -84,28 +84,28 @@ function TutorialPage() {
       );
       // 주문 전 일반 대화.
       // headers는 카카오페이 주문창 URL을 포함하므로, 일반대화에서는 없을수밖에 없다.
-    //   if (!response.data.headers) {
-        response.data.fulfillmentMessages.forEach((content) => {
-          conversation = {
-            who: "kiwe",
-            content: content,
-          };
-          dispatch(saveMessage(conversation));
-        });
-    //   } else {
-    //     // 마지막 주문 단계. 메세지 출력.
-    //     conversation = {
-    //       who: "kiwe",
-    //       content: {
-    //         message: "text",
-    //         platform: "PLATFORM_UNSPECIFIED",
-    //         text: {
-    //           text: ["카카오페이에서 결제를 완료하세요."],
-    //         },
-    //       },
-    //     };
-    //     dispatch(saveMessage(conversation));
-    //   }
+      //   if (!response.data.headers) {
+      response.data.fulfillmentMessages.forEach((content) => {
+        conversation = {
+          who: "kiwe",
+          content: content,
+        };
+        dispatch(saveMessage(conversation));
+      });
+      //   } else {
+      //     // 마지막 주문 단계. 메세지 출력.
+      //     conversation = {
+      //       who: "kiwe",
+      //       content: {
+      //         message: "text",
+      //         platform: "PLATFORM_UNSPECIFIED",
+      //         text: {
+      //           text: ["카카오페이에서 결제를 완료하세요."],
+      //         },
+      //       },
+      //     };
+      //     dispatch(saveMessage(conversation));
+      //   }
       // chime 재생
       sound.play();
     } catch (error) {
