@@ -23,7 +23,7 @@ const kakaoAdminKey = config.kakaoAdminKey;
 
 // 결국, 구글 인증 관련은 GOOGLE_APPLICATION_CREDENTIALS 환경변수를 설정하여 해결하자.
 const sessionClient = new dialogflow.SessionsClient();
-const sessionPath = sessionClient.sessionPath(projectId, "kiwe-session-1012");
+const sessionPath = sessionClient.sessionPath(projectId, "kiwe-session-1002");
 
 // Text Query Route
 router.post("/textQuery", async (req, res) => {
@@ -76,6 +76,8 @@ router.post("/textQuery", async (req, res) => {
       }
     });
   } else {
+    // if (restaurantName){result.restaurantName = restaurantName} ;
+    // console.log(result.restaurantName);
     res.send(result);
   }
 });

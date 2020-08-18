@@ -82,6 +82,7 @@ function Chat() {
         "/api/dialogflow/textQuery",
         textQueryVariables
       );
+      console.log(response);
       // 주문 전 일반 대화.
       // headers는 카카오페이 주문창 URL을 포함하므로, 일반대화에서는 없을수밖에 없다.
       if (!response.data.headers) {
@@ -90,6 +91,10 @@ function Chat() {
             who: "kiwe",
             content: content,
           };
+          // if (response.data.restaurantName) {
+          //   conversation.restaurantName = response.data.restaurantName;
+          //   console.log("레스토랑 받아옴!");
+          // }
           dispatch(saveMessage(conversation));
         });
       } else {
