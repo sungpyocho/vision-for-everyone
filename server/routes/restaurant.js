@@ -36,20 +36,18 @@ router.post("/menu-register", (req, res) => {
 router.post("/closest-restaurant", (req, res) => {
   const { long, lat } = req.body;
 
-  Restaurant.find({
-    location: {
-      $near: {
-        // $maxDistance: 1000,
-        $geometry: {
-          type: "Point",
-          coordinates: [long, lat],
-        },
-      },
-    },
-  }).find((error, results) => {
-    if (error) res.send(error);
-    res.status(200).json(results);
-  });
+  // 가까운 열곳을 거리와 함께 출력하는 함수.
+  const geoNear = async (limit) => {
+    const results = await Restaurant.aggregate()
+      .near({
+        near: { type: "Point", coordinates: [long, lat] },
+        distanceField: "distance", // meter
+      })
+      .limit(limit);
+    return res.status(200).json(results);
+  };
+
+  geoNear(10);
 });
 
 module.exports = router;
