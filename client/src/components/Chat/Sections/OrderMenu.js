@@ -4,15 +4,13 @@ import Map from "../Sections/Map";
 
 import { withStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
-import Dialog from "@material-ui/core/Dialog";
-import DialogActions from "@material-ui/core/DialogActions";
-import DialogContent from "@material-ui/core/DialogContent";
-import DialogContentText from "@material-ui/core/DialogContentText";
+import { Dialog, DialogActions, DialogContent, DialogContentText} from "@material-ui/core";
 import MuiDialogTitle from "@material-ui/core/DialogTitle";
 import IconButton from "@material-ui/core/IconButton";
 import CloseIcon from "@material-ui/icons/Close";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
+import Grid from '@material-ui/core'
 
 // 여기서부터는 메뉴, 이벤트 팝업을 이쁘게 띄워주기 위해 불러온 컴포넌트
 // 1. 메뉴 팝업용
@@ -226,6 +224,9 @@ function OrderMenu() {
             고려대학교 학식 키위로 결제시 5% 할인
           </DialogContentText> */}
           <Map/>
+          <ListItem><ListItemText >버거킹</ListItemText><ListItemText inset={true} >패스트푸드</ListItemText><ListItemText>4m</ListItemText></ListItem>
+          <ListItem><ListItemText >얼음곰 은산식탁</ListItemText><ListItemText inset={true} >연어/꿀</ListItemText><ListItemText>256m</ListItemText></ListItem>
+          <ListItem><ListItemText >핵맛없는 고대학식</ListItemText><ListItemText inset={true} >음식물쓰레기</ListItemText><ListItemText>666m</ListItemText></ListItem>
       </Dialog>
       {/* 직원호출 버튼 */}
       <CustomButton onClick={handleOpenCall}>직원호출</CustomButton>
