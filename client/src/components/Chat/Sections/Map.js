@@ -177,5 +177,5 @@ export default function Map() {
       });
     });
   };
-  return <div id="map" style={{ width: "70vw", height: "50vh" }}></div>;
+  return <div id="map" style={{ width: "100vw", height: "50vh" }}></div>; // 이 부분은 어차피 모달 사이즈에 맞춰서 변함
 }
