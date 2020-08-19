@@ -9,6 +9,7 @@ const { kakao } = window;
 
 export default function Map({ mapRestaurantClick }) {
   const [restaurantList, setRestaurantList] = useState(null);
+  // var restaurantList = null;
   // component가 mount되면 실행
   // useEffect를 써서 렌더링하면 이 컴포넌트에서 이거 해야해!라고 지시
   useEffect(() => {
@@ -95,11 +96,11 @@ export default function Map({ mapRestaurantClick }) {
     return map;
   };
 
+  // 2. 마커 관련 설정
+  // DB로부터 userLat, userLng과 가까운 10개 선정. API 만들기.
+  // {title: "이름", latlng: new kakap maps.LatLng(위도, 경도)} 형식으로 갖고오기.
   const displayMap = (userLat, userLng) => {
     let map = basicMapSettings(userLat, userLng);
-    // 2. 마커 관련 설정
-    // DB로부터 userLat, userLng과 가까운 10개 선정. API 만들기.
-    // {title: "이름", latlng: new kakap maps.LatLng(위도, 경도)} 형식으로 갖고오기.
     axios
       .post("/api/restaurant/closest-restaurant", {
         long: userLng,
@@ -107,10 +108,9 @@ export default function Map({ mapRestaurantClick }) {
       })
       .then((rs) => {
         rs=rs.data; // res로 온 패킷에 우리가 실어보낸 지도 정보는 rs.data에 있었습니다
+        setRestaurantList(rs); // 꼭 "렌더링 전에" 리스트를 업데이트해야 컴포넌트가 데이터값을 활용합니다. 안 그러고 useEffect에서 리스트값 변하는 걸 참조하면 무한렌더링루프 당첨!
         let positions = [];
-        console.log(rs);
         rs.forEach((r) => {
-          console.log("r:", r);
           positions.push({
             title: r.branchName,
             latlng: new kakao.maps.LatLng(
@@ -119,10 +119,6 @@ export default function Map({ mapRestaurantClick }) {
             ),
           });
         });
-
-        // restaurantList를 rs로 업데이트
-        setRestaurantList(rs);
-        console.log(restaurantList);
 
         // 자신의 위치 추가.
         positions.push({
@@ -216,10 +212,10 @@ export default function Map({ mapRestaurantClick }) {
               onClick={() => handleMapRestaurantClick(i)}
             >
               <ListItemText style={{ textAlign: "left" }}>
-                {element.title}
+                {element.branchName}
               </ListItemText>
               <ListItemText style={{ textAlign: "right" }}>
-                {element.latlng}
+                {`${parseInt(element.distance)} m`}
               </ListItemText>
             </ListItem>)
           })}
