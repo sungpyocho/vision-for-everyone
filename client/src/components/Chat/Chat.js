@@ -102,7 +102,7 @@ function Chat() {
             platform: "PLATFORM_UNSPECIFIED",
             text: {
               text: ["카카오페이에서 결제를 완료하세요."],
-            }
+            },
           },
         };
         dispatch(saveMessage(conversation));
@@ -216,7 +216,7 @@ function Chat() {
   const renderOneMessage = (message, i) => {
     // 영수증 메시지일 경우
     if (isRecieptMessage(message)) {
-      return (<RecieptMessage />);
+      return <RecieptMessage orderResult={message.orderResult} />;
     }
     // 일반 메세지일 경우
     else if (isNormalMessage(message)) {
@@ -231,7 +231,7 @@ function Chat() {
           {renderCards(message.content.payload.fields.card.listValue.values)}
         </div>
       );
-    } 
+    }
   };
 
   const renderMessages = (messagesFromRedux) => {
