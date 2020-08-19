@@ -7,31 +7,27 @@ const axios = require("axios");
 
 // 식당 이름과 메뉴 이름을 바탕으로, DB에서 메뉴가격만 찾아오는 함수.
 async function findMenuPrice(restaurantName, menuName) {
-  console.log("이름들", restaurantName, menuName);
-
   let menuPrice = 0;
   const data = await Menu.aggregate([
     {
       $match: {
-        "menuId.name": restaurantName,
-        "menuId.menuCategory.menuNamePrice.menuName": menuName,
+        menuId: restaurantName,
+        "menu.menuName": menuName,
       },
     },
     {
       $project: {
-        "menuId.menuCategory.menuNamePrice.menuName": 1,
-        "menuId.menuCategory.menuNamePrice.menuPrice": 1,
+        "menu.menuName": 1,
+        "menu.menuPrice": 1,
       },
     },
   ]);
 
-  menuNamePrices = data[0].menuId[0].menuCategory;
-  menuNamePrices.forEach((eachCategory) => {
-    eachCategory.menuNamePrice.forEach((eachMenu) => {
-      if (eachMenu.menuName === menuName) {
-        menuPrice = eachMenu.menuPrice;
-      }
-    });
+  menus = data[0].menu;
+  menus.forEach((menu) => {
+    if (menu.menuName === menuName) {
+      menuPrice = menu.menuPrice;
+    }
   });
   return menuPrice;
 }

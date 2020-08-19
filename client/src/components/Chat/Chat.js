@@ -216,7 +216,7 @@ function Chat() {
   const renderOneMessage = (message, i) => {
     // 영수증 메시지일 경우
     if (isRecieptMessage(message)) {
-      return <RecieptMessage orderResult={message.orderResult} />;
+      return <RecieptMessage key={i} orderResult={message.orderResult} />;
     }
     // 일반 메세지일 경우
     else if (isNormalMessage(message)) {
