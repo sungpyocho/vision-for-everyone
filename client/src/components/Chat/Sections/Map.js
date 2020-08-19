@@ -107,7 +107,7 @@ export default function Map({ mapRestaurantClick }) {
         lat: userLat,
       })
       .then((rs) => {
-        rs=rs.data; // res로 온 패킷에 우리가 실어보낸 지도 정보는 rs.data에 있었습니다
+        rs = rs.data; // res로 온 패킷에 우리가 실어보낸 지도 정보는 rs.data에 있었습니다
         setRestaurantList(rs); // 꼭 "렌더링 전에" 리스트를 업데이트해야 컴포넌트가 데이터값을 활용합니다. 안 그러고 useEffect에서 리스트값 변하는 걸 참조하면 무한렌더링루프 당첨!
         let positions = [];
         rs.forEach((r) => {
@@ -147,6 +147,25 @@ export default function Map({ mapRestaurantClick }) {
             title: p.title, // 마커의 타이틀, 마커에 마우스를 올리면 타이틀이 표시됩니다
             image: markerImage,
           });
+          // 마커에 커서가 오버됐을 때 마커 위에 표시할 인포윈도우를 생성합니다
+          var iwContent = `<div style="padding:5px;">${p.title}</div>`; // 인포윈도우에 표출될 내용으로 HTML 문자열이나 document element가 가능합니다
+
+          // 인포윈도우를 생성합니다
+          var infowindow = new kakao.maps.InfoWindow({
+            content: iwContent,
+          });
+
+          // 마커에 마우스오버 이벤트를 등록합니다
+          kakao.maps.event.addListener(marker, "mouseover", function () {
+            // 마커에 마우스오버 이벤트가 발생하면 인포윈도우를 마커위에 표시합니다
+            infowindow.open(map, marker);
+          });
+
+          // 마커에 마우스아웃 이벤트를 등록합니다
+          kakao.maps.event.addListener(marker, "mouseout", function () {
+            // 마커에 마우스아웃 이벤트가 발생하면 인포윈도우를 제거합니다
+            infowindow.close();
+          });
         });
       })
       .catch((err) => {
@@ -180,10 +199,29 @@ export default function Map({ mapRestaurantClick }) {
 
         positions.forEach((p) => {
           // 마커를 생성
-          let marker = new kakao.maps.Marker({
+          var marker = new kakao.maps.Marker({
             map: map,
             position: p.latlng, // 마커를 표시할 위치
             title: p.title, // 마커의 타이틀, 마커에 마우스를 올리면 타이틀이 표시됩니다
+          });
+          // 마커에 커서가 오버됐을 때 마커 위에 표시할 인포윈도우를 생성합니다
+          var iwContent = `<div style="padding:5px;">${p.title}</div>`; // 인포윈도우에 표출될 내용으로 HTML 문자열이나 document element가 가능합니다
+
+          // 인포윈도우를 생성합니다
+          var infowindow = new kakao.maps.InfoWindow({
+            content: iwContent,
+          });
+
+          // 마커에 마우스오버 이벤트를 등록합니다
+          kakao.maps.event.addListener(marker, "mouseover", function () {
+            // 마커에 마우스오버 이벤트가 발생하면 인포윈도우를 마커위에 표시합니다
+            infowindow.open(map, marker);
+          });
+
+          // 마커에 마우스아웃 이벤트를 등록합니다
+          kakao.maps.event.addListener(marker, "mouseout", function () {
+            // 마커에 마우스아웃 이벤트가 발생하면 인포윈도우를 제거합니다
+            infowindow.close();
           });
         });
       })
@@ -206,18 +244,20 @@ export default function Map({ mapRestaurantClick }) {
       <List component="nav">
         {restaurantList &&
           restaurantList.map((element, i) => {
-            return (<ListItem
-              key={i}
-              button
-              onClick={() => handleMapRestaurantClick(i)}
-            >
-              <ListItemText style={{ textAlign: "left" }}>
-                {element.branchName}
-              </ListItemText>
-              <ListItemText style={{ textAlign: "right" }}>
-                {`${parseInt(element.distance)} m`}
-              </ListItemText>
-            </ListItem>)
+            return (
+              <ListItem
+                key={i}
+                button
+                onClick={() => handleMapRestaurantClick(i)}
+              >
+                <ListItemText style={{ textAlign: "left"}}>
+                  {element.branchName}
+                </ListItemText>
+                <ListItemText style={{ textAlign: "right" }}>
+                  {`${parseInt(element.distance)} m`}
+                </ListItemText>
+              </ListItem>
+            );
           })}
       </List>
     </>
