@@ -10,19 +10,15 @@ const mongoose = require("mongoose");
 */
 
 const menuSchema = mongoose.Schema({
-  menuId: [{
-    name: {type: String, unique: true}, // 고려대학교_애기능
-    menuCategory: 
-      [{
-          name: {type: String, unique: true}, //중식
-          menuNamePrice: 
-            [{ 
-            menuName: {type: String, unique: true}, // 짜장면
-            menuPrice: Number // 5000
-            }]
-      }]
-  }]
-})
+  menuId: { type: String, unique: true, required: true }, // 고려대학교_애기능
+  menu: [
+    {
+      category: { type: String, required: true }, //중식
+      menuName: { type: String, unique: true, required: true }, // 짜장면
+      menuPrice: Number, // 5000
+    },
+  ],
+});
 
 // Schema를 model로 감싸야 한다.
 const Menu = mongoose.model("Menu", menuSchema);
