@@ -197,7 +197,7 @@ export default function Map({ mapRestaurantClick }) {
     // 지금 restaurantList가 state로 관리되고 있다
     // 사용자가 해당 listitem 클릭 했을 때, 그 listitem에 해당하는 index 번호에 따라 restaurantList에도 참조해주려고 한다.
     // restaurantList[index].restaurantTitle을 mapRestaurantClick 함수의 파라미터로 보내려한다.
-    mapRestaurantClick(restaurantList[index].title);
+    mapRestaurantClick(restaurantList[index].branchName);
   };
 
   return (
