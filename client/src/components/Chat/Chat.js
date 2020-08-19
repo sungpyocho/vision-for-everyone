@@ -11,6 +11,7 @@ import styled from "styled-components";
 import OrderMenu from "./Sections/OrderMenu";
 import Message from "./Sections/Message";
 import CardMessage from "./Sections/CardMessage";
+import RecieptMessage from "./Sections/RecieptMessage";
 import chime from "../../assets/chime.mp3";
 
 const useStyles = makeStyles((theme) => ({
@@ -82,7 +83,6 @@ function Chat() {
         "/api/dialogflow/textQuery",
         textQueryVariables
       );
-      console.log(response);
       // 주문 전 일반 대화.
       // headers는 카카오페이 주문창 URL을 포함하므로, 일반대화에서는 없을수밖에 없다.
       if (!response.data.headers) {
@@ -91,10 +91,6 @@ function Chat() {
             who: "kiwe",
             content: content,
           };
-          // if (response.data.restaurantName) {
-          //   conversation.restaurantName = response.data.restaurantName;
-          //   console.log("레스토랑 받아옴!");
-          // }
           dispatch(saveMessage(conversation));
         });
       } else {
@@ -106,7 +102,7 @@ function Chat() {
             platform: "PLATFORM_UNSPECIFIED",
             text: {
               text: ["카카오페이에서 결제를 완료하세요."],
-            },
+            }
           },
         };
         dispatch(saveMessage(conversation));
@@ -119,6 +115,17 @@ function Chat() {
       }
       // chime 재생
       sound.play();
+
+      // 마지막 주문 단계. 메세지 출력.
+      conversation = {
+        who: "kiwe",
+        orderResult: {
+          restaurantName: response.data.restaurantName,
+          menuName: response.data.menuName,
+          totalAmount: response.data.totalAmount,
+        },
+      };
+      dispatch(saveMessage(conversation));
     } catch (error) {
       // 에러 발생 시
       conversation = {
@@ -195,6 +202,10 @@ function Chat() {
     return message.content && message.content.payload.fields.card;
   };
 
+  const isRecieptMessage = (message) => {
+    return message.orderResult && message.orderResult.restaurantName;
+  };
+
   // Render functions
   const renderCards = (cards) => {
     return cards.map((card, i) => (
@@ -203,20 +214,24 @@ function Chat() {
   };
 
   const renderOneMessage = (message, i) => {
+    // 영수증 메시지일 경우
+    if (isRecieptMessage(message)) {
+      return (<RecieptMessage />);
+    }
     // 일반 메세지일 경우
-    if (isNormalMessage(message)) {
+    else if (isNormalMessage(message)) {
       return (
         <Message key={i} who={message.who} text={message.content.text.text} />
       );
-    } else if (isCardMessage(message)) {
+    }
+    // 카드 메세지일 경우
+    else if (isCardMessage(message)) {
       return (
         <div style={{ width: "100%", maxHeight: "350px", overflow: "auto" }}>
           {renderCards(message.content.payload.fields.card.listValue.values)}
         </div>
       );
-    }
-
-    // 카드 메세지일 경우
+    } 
   };
 
   const renderMessages = (messagesFromRedux) => {

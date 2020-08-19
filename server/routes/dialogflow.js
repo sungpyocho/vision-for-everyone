@@ -64,20 +64,21 @@ router.post("/textQuery", async (req, res) => {
       if (context.name.includes("finished_order_need_payment")) {
         let menuName = `${context.parameters.fields.coffee_menu.stringValue}(${context.parameters.fields.Size.stringValue})`; // '메뉴명(사이즈)'의 형식으로 DB에 저장된 메뉴 찾기
         let quantity = context.parameters.fields.number.numberValue;
-
+         // db에서 가격 찾음
         findMenuPrice(restaurantName, menuName).then((price) => {
-          console.log(price, quantity);
           let totalAmount = price * quantity; // 가격 x 수량 = 전체가격
 
           payment(restaurantName, totalAmount).then((result) => {
+            // 영수증 띄워주기 위해 식당명, 메뉴명, DB 정보 활용한 총 금액을 클라이언트단에 보냄
+            result.restaurantName = restaurantName;
+            result.menuName = menuName;
+            result.totalAmount = totalAmount;
             res.send(result);
           });
-        }); // db에서 가격 찾음
+        });
       }
     });
   } else {
-    // if (restaurantName){result.restaurantName = restaurantName} ;
-    // console.log(result.restaurantName);
     res.send(result);
   }
 });
