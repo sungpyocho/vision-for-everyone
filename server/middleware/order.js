@@ -35,52 +35,10 @@ async function findMenuPrice(restaurantName, menuName) {
   });
   return menuPrice;
 }
-// Menu.findOne(
-//   {
-//     $and: [
-//       {
-//         menuId: { $elemMatch: { name: restaurant } },
-//         "menuId.menuCategory.menuNamePrice": {
-//           $elemMatch: { menuName: menuName },
-//         },
-//       },
-//     ],
-//   },
-//   (err, result) => {
-//     if (err || !result) {
-//       return res.json({
-//         message: "에러나쪄",
-//       });
-//     } else {
-//       console.log(result);
-//       res.json(result);
-//     }
-//   }
-// );
-// Menu.menuId.findOne(
-//   {
-//     $elemMatch: {
-//       menuCategory: [
-//         { $elemMatch: { menuNamePrice: [{ menuName: menuName }] } },
-//       ],
-//     },
-//   },
-//   (err, selectedMenu) => {
-//     if (!selectedMenu) {
-//       return res.json({
-//         menuInDB: false,
-//         message: "해당 메뉴를 찾을 수 없습니다.",
-//       });
-//     } else {
-//       return res.send(selectedMenu.menuCategory.menuNamePrice.menuPrice);
-//     }
-//   }
-// );
 
 // 결제
 // 변수로는 식당 이름, 결제 총 금액 2개.
 async function payment(restaurantName, totalAmount) {
-  console.log("들어와쪄요", restaurantName, totalAmount);
   const item_name = `${restaurantName}(키위 결제)`; // 식당 이름 변수
   const quantity = 1; // 카카오페이 목업결제에서 형식적으로 요구.
   const total_amount = totalAmount; // 변수
@@ -133,7 +91,8 @@ async function payment(restaurantName, totalAmount) {
     };
     return response;
   } catch (err) {
-    console.error(err.message);
+    console.log(err);
+    console.error(err);
   }
 }
 
