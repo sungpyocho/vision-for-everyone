@@ -106,8 +106,11 @@ export default function Map({ mapRestaurantClick }) {
         lat: userLat,
       })
       .then((rs) => {
+        rs=rs.data; // res로 온 패킷에 우리가 실어보낸 지도 정보는 rs.data에 있었습니다
         let positions = [];
+        console.log(rs);
         rs.forEach((r) => {
+          console.log("r:", r);
           positions.push({
             title: r.branchName,
             latlng: new kakao.maps.LatLng(
@@ -119,6 +122,7 @@ export default function Map({ mapRestaurantClick }) {
 
         // restaurantList를 rs로 업데이트
         setRestaurantList(rs);
+        console.log(restaurantList);
 
         // 자신의 위치 추가.
         positions.push({
@@ -206,7 +210,7 @@ export default function Map({ mapRestaurantClick }) {
       <List component="nav">
         {restaurantList &&
           restaurantList.map((element, i) => {
-            <ListItem
+            return (<ListItem
               key={i}
               button
               onClick={() => handleMapRestaurantClick(i)}
@@ -217,9 +221,9 @@ export default function Map({ mapRestaurantClick }) {
               <ListItemText style={{ textAlign: "right" }}>
                 {element.latlng}
               </ListItemText>
-            </ListItem>;
+            </ListItem>)
           })}
       </List>
     </>
-  ); // 이 부분은 어차피 모달 사이즈에 맞춰서 변함
+  );
 }
