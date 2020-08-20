@@ -75,6 +75,9 @@ const RecieptMessage = (props) => {
               <ListItemText style={{ textAlign: "left" }}>
                 {props.orderResult.menuName}
               </ListItemText>
+              <ListItemText style={{ textAlign: "left" }}>
+                {props.orderResult.quantity}개
+              </ListItemText>
               <ListItemText style={{ textAlign: "right" }}>
                 {props.orderResult.totalAmount}원
               </ListItemText>

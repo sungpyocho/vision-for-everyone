@@ -123,6 +123,8 @@ function Chat() {
           restaurantName: response.data.restaurantName,
           menuName: response.data.menuName,
           totalAmount: response.data.totalAmount,
+          quantity: response.data.quantity,
+          price: response.data.price
         },
       };
       dispatch(saveMessage(conversation));
