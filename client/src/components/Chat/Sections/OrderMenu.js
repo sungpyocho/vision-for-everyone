@@ -1,6 +1,8 @@
-import React from "react";
+import React, { useEffect } from "react";
+import axios from "axios";
 import styled from "styled-components";
 import Map from "../Sections/Map";
+import Menu from "./Menu";
 
 import { withStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
@@ -18,14 +20,6 @@ import CloseIcon from "@material-ui/icons/Close";
 import Typography from "@material-ui/core/Typography";
 
 // 여기서부터는 메뉴, 이벤트 팝업을 이쁘게 띄워주기 위해 불러온 컴포넌트
-// 1. 메뉴 팝업용
-import List from "@material-ui/core/List";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemText from "@material-ui/core/ListItemText";
-import Collapse from "@material-ui/core/Collapse";
-import ExpandLess from "@material-ui/icons/ExpandLess"; // 세부메뉴 열기
-import ExpandMore from "@material-ui/icons/ExpandMore"; // 세부메뉴 닫기
-import Divider from "@material-ui/core/Divider"; // 리스트 사이에 넣는 구분선
 
 // 2. 이벤트 팝업용
 // import Card from "@material-ui/core/Card";
@@ -72,10 +66,12 @@ const MapDialog = withStyles(styles)((props) => {
 
 function OrderMenu({ handleTextQuery }) {
   const [openMenu, setOpenMenu] = React.useState(false);
-  const [openSubMenu, setOpenSubMenu] = React.useState(false);
-  const [openSubMenu2, setOpenSubMenu2] = React.useState(false);
+
   const [openMap, setopenMap] = React.useState(false);
   const [openCall, setOpenCall] = React.useState(false);
+  const [userSelectedRestaurant, setUserSelectedRestaurant] = React.useState(
+    null
+  );
 
   const useStyles = makeStyles((theme) => ({
     root: {
@@ -100,14 +96,6 @@ function OrderMenu({ handleTextQuery }) {
     setOpenMenu(false);
   };
 
-  const handleOpenSubMenu = () => {
-    setOpenSubMenu(!openSubMenu);
-  };
-
-  const handleOpenSubMenu2 = () => {
-    setOpenSubMenu2(!openSubMenu2);
-  };
-
   const handleOpenMap = () => {
     setopenMap(true);
   };
@@ -124,8 +112,13 @@ function OrderMenu({ handleTextQuery }) {
     setOpenCall(false);
   };
 
+  const handleUserSelectedRestaurant = (name) => {
+    setUserSelectedRestaurant(name);
+  };
+
   const mapRestaurantClick = (res) => {
     handleCloseMap();
+    handleUserSelectedRestaurant(res);
     handleTextQuery(res);
   };
 
@@ -140,83 +133,14 @@ function OrderMenu({ handleTextQuery }) {
         aria-labelledby="menu-title"
         aria-describedby="menu-description"
       >
-        <DialogTitle id="menu-title">{"메뉴"}</DialogTitle>
-        <DialogContent>
-          <List className={classes.root}>
-            <ListItem Button>
-              <ListItemText primary="육개장" secondary="2500원" />
-            </ListItem>
-            <ListItem Button>
-              <ListItemText primary="타이어보다 싼 탕수육" secondary="5000원" />
-            </ListItem>
-            <Divider />
-            <ListItem Button onClick={handleOpenSubMenu}>
-              <ListItemText primary="버거류" />
-              {openSubMenu ? <ExpandLess /> : <ExpandMore />}
-            </ListItem>
-            <Collapse in={openSubMenu} timeout="auto" unmountOnExit>
-              <List component="div" disablePadding>
-                <ListItem button>
-                  <ListItemText
-                    primary="와퍼"
-                    secondary="4800원"
-                    className={classes.nested}
-                  />
-                </ListItem>
-                <ListItem button>
-                  <ListItemText
-                    primary="와퍼주니어"
-                    secondary="2900원"
-                    className={classes.nested}
-                  />
-                </ListItem>
-                <ListItem button>
-                  <ListItemText
-                    primary="트리플치즈트러플베이컨와퍼"
-                    secondary="7900원"
-                    className={classes.nested}
-                  />
-                </ListItem>
-              </List>
-            </Collapse>
-            <Divider />
-            <ListItem Button onClick={handleOpenSubMenu2}>
-              <ListItemText primary="음료/사이드" />
-              {openSubMenu2 ? <ExpandLess /> : <ExpandMore />}
-            </ListItem>
-            <Collapse in={openSubMenu2} timeout="auto" unmountOnExit>
-              <List component="div" disablePadding>
-                <ListItem button>
-                  <ListItemText
-                    primary="콜라M"
-                    secondary="1700원"
-                    className={classes.nested}
-                  />
-                </ListItem>
-                <ListItem button>
-                  <ListItemText
-                    primary="감자튀김"
-                    secondary="1300원"
-                    className={classes.nested}
-                  />
-                </ListItem>
-                <ListItem button>
-                  <ListItemText
-                    primary="소프트콘"
-                    secondary="700원"
-                    className={classes.nested}
-                  />
-                </ListItem>
-              </List>
-            </Collapse>
-          </List>
-        </DialogContent>
+        <Menu selectedBranch={userSelectedRestaurant} />
         <DialogActions>
           <Button onClick={handleCloseMenu} color="primary" autoFocus>
             닫기
           </Button>
         </DialogActions>
       </Dialog>
+
       {/* 식당찾기 버튼 */}
       <CustomButton onClick={handleOpenMap}>식당찾기</CustomButton>
       <Dialog

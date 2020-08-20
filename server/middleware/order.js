@@ -12,23 +12,27 @@ async function findMenuPrice(restaurantName, menuName) {
     {
       $match: {
         menuId: restaurantName,
-        "menu.menuName": menuName,
+        "category.menu.menuName": menuName,
       },
     },
     {
       $project: {
-        "menu.menuName": 1,
-        "menu.menuPrice": 1,
+        "category.menu.menuName": 1,
+        "category.menu.menuPrice": 1,
       },
     },
   ]);
 
-  menus = data[0].menu;
-  menus.forEach((menu) => {
-    if (menu.menuName === menuName) {
-      menuPrice = menu.menuPrice;
-    }
+  categories = data[0].category;
+
+  categories.forEach((eachCategory) => {
+    eachCategory.menu.forEach((eachMenu) => {
+      if (eachMenu.menuName === menuName) {
+        menuPrice = eachMenu.menuPrice;
+      }
+    });
   });
+
   return menuPrice;
 }
 
