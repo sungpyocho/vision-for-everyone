@@ -231,7 +231,6 @@ export default function Map({ mapRestaurantClick }) {
   };
 
   const handleMapRestaurantClick = (index) => {
-    console.log(index);
     // 지금 restaurantList가 state로 관리되고 있다
     // 사용자가 해당 listitem 클릭 했을 때, 그 listitem에 해당하는 index 번호에 따라 restaurantList에도 참조해주려고 한다.
     // restaurantList[index].restaurantTitle을 mapRestaurantClick 함수의 파라미터로 보내려한다.
@@ -250,7 +249,7 @@ export default function Map({ mapRestaurantClick }) {
                 button
                 onClick={() => handleMapRestaurantClick(i)}
               >
-                <ListItemText style={{ textAlign: "left"}}>
+                <ListItemText style={{ textAlign: "left" }}>
                   {element.branchName}
                 </ListItemText>
                 <ListItemText style={{ textAlign: "right" }}>

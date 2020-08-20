@@ -11,11 +11,15 @@ const mongoose = require("mongoose");
 
 const menuSchema = mongoose.Schema({
   menuId: { type: String, unique: true, required: true }, // 고려대학교_애기능
-  menu: [
+  category: [
     {
-      category: { type: String, required: true }, //중식
-      menuName: { type: String, unique: true, required: true }, // 짜장면
-      menuPrice: Number, // 5000
+      name: { type: String, unique: true, required: true }, //중식
+      menu: [
+        {
+          menuName: { type: String, unique: true, required: true }, // 짜장면
+          menuPrice: Number, // 5000
+        },
+      ],
     },
   ],
 });
