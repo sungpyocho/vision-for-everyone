@@ -72,6 +72,8 @@ router.post("/textQuery", async (req, res) => {
             // 영수증 띄워주기 위해 식당명, 메뉴명, DB 정보 활용한 총 금액을 클라이언트단에 보냄
             result.restaurantName = restaurantName;
             result.menuName = menuName;
+            result.price = price;
+            result.quantity = quantity;
             result.totalAmount = totalAmount;
             res.send(result);
           });
