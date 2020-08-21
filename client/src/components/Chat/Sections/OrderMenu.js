@@ -116,6 +116,13 @@ function OrderMenu({ handleTextQuery }) {
     setUserSelectedRestaurant(name);
   };
 
+  // 메뉴리스트 클릭시 메시지를 보내는 함수. 메뉴판 컴포넌트에 넘겨줍니다
+  const menuListClick = (res) => {
+    handleCloseMenu();
+    handleTextQuery(res);
+  };
+
+  // 식당리스트 클릭시 메시지를 보내는 함수. 맵 컴포넌트에 넘겨줍니다
   const mapRestaurantClick = (res) => {
     handleCloseMap();
     handleUserSelectedRestaurant(res);
@@ -133,7 +140,7 @@ function OrderMenu({ handleTextQuery }) {
         aria-labelledby="menu-title"
         aria-describedby="menu-description"
       >
-        <Menu selectedBranch={userSelectedRestaurant} />
+        <Menu selectedBranch={userSelectedRestaurant} menuListClick={menuListClick}/>
         <DialogActions>
           <Button onClick={handleCloseMenu} color="primary" autoFocus>
             닫기
