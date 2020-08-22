@@ -45,6 +45,7 @@ router.post("/textQuery", async (req, res) => {
   // Dialogflow에서 받은 정보들을 처리하는 파트
   const responses = await sessionClient.detectIntent(request);
   console.log("Detected intent");
+  console.log(responses);
   const result = responses[0].queryResult;
   console.log(`  Query: ${result.queryText}`);
   console.log(`  Response: ${result.fulfillmentText}`);
@@ -54,6 +55,7 @@ router.post("/textQuery", async (req, res) => {
     const regExp = /\[([^\]]+)\]/;
     let matches = regExp.exec(result.fulfillmentText);
     restaurantName = matches[1];
+    result.step = "select restaurant"
   }
 
   // 프론트엔드로 정보 보내기

@@ -13,6 +13,7 @@ import Message from "../Chat/Sections/Message";
 import CardMessage from "../Chat/Sections/CardMessage";
 import RecieptMessage from "../Chat/Sections/RecieptMessage";
 import chime from "../../assets/chime.mp3";
+import ProgressBar from "../Chat/Sections/ProgressBar";
 
 const useStyles = makeStyles((theme) => ({
   inputForm: {
@@ -46,6 +47,7 @@ function Chat() {
 
   // Keyboard Input State
   const [Input, setInput] = useState("");
+  const [orderStep, setOrderStep] = useState(null);
   const inputHandler = (event) => {
     setInput(event.currentTarget.value);
   };
@@ -53,8 +55,10 @@ function Chat() {
   // component가 mount되면 실행
   // useEffect를 써서 렌더링하면 이 컴포넌트에서 이거 해야해!라고 지시
   useEffect(() => {
-    eventQuery("firstGreetings");
+    eventQuery("tutorial");
   }, []);
+
+
 
   // 클라이언트가 보낸 메세지 처리
   const textQuery = async (text) => {
@@ -160,6 +164,7 @@ function Chat() {
           content: content,
         };
         dispatch(saveMessage(conversation));
+        setOrderStep("select restaurant");
       });
       // chime 재생
       // Chrome Autoplay 방지 정책으로 인해 주석을 지워도 소리가 나지 않지만
@@ -251,6 +256,7 @@ function Chat() {
 
   return (
     <Wrapper>
+      <ProgressBar orderStep={orderStep} />
       {/* Order Buttons */}
       <OrderMenu aria-label="메뉴" handleTextQuery={handleTextQuery} />
       <div aria-label="키위봇과 대화하는 채팅창입니다">
@@ -306,7 +312,7 @@ const Messages = styled.div`
   border-top-right-radius: 10px;
   bottom: 36px;
   position: absolute;
-  height: calc(90% - 36px);
+  height: calc(90% - 86px);
   width: 100%;
 `;
 
