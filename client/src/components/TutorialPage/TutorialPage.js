@@ -3,6 +3,9 @@ import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { saveMessage } from "../../_actions/message_actions";
 
+import Cookies from "universal-cookie"; //set id to cookie
+import { v4 as uuid } from "uuid"; //generate unique id for sessions in visitors v4 for random id generation
+
 import { makeStyles } from "@material-ui/core/styles";
 import { Button, Paper, InputBase } from "@material-ui/core";
 import SendIcon from "@material-ui/icons/Send";
@@ -13,6 +16,8 @@ import Message from "../Chat/Sections/Message";
 import CardMessage from "../Chat/Sections/CardMessage";
 import RecieptMessage from "../Chat/Sections/RecieptMessage";
 import chime from "../../assets/chime.mp3";
+
+const cookies = new Cookies(); //creating cookie object
 
 const useStyles = makeStyles((theme) => ({
   inputForm: {
@@ -53,8 +58,18 @@ function Chat() {
   // component가 mount되면 실행
   // useEffect를 써서 렌더링하면 이 컴포넌트에서 이거 해야해!라고 지시
   useEffect(() => {
+    checkUserId();
     eventQuery("firstGreetings");
   }, []);
+
+  // 쿠키를 체크해서 UserId값이 없으면 추가
+  const checkUserId = () => {
+    if (cookies.get("userID") === undefined) {
+      //if cookie is already not present before then generate new cookie
+      cookies.set("userID", uuid(), { path: "/" }); //  '/' means that the cookie will be accessible for all pages i.e unique session for all pages
+    }
+  };
+
 
   // 클라이언트가 보낸 메세지 처리
   const textQuery = async (text) => {
@@ -74,7 +89,8 @@ function Chat() {
     dispatch(saveMessage(conversation));
     // 챗봇이 보낸 답변 처리
     const textQueryVariables = {
-      text,
+      text: text,
+      userID: cookies.get("userID"),
     };
 
     try {
@@ -146,7 +162,8 @@ function Chat() {
   const eventQuery = async (event) => {
     // 챗봇이 보낸 답변 처리
     const eventQueryVariables = {
-      event,
+      event: event,
+      userID: cookies.get("userID"),
     };
     try {
       // eventQuery 라우트로 리퀘스트 전송

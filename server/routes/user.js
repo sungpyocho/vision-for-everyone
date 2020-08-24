@@ -4,7 +4,7 @@ const { User } = require("../models/User");
 const { auth } = require("../middleware/auth");
 
 // 비밀번호 재설정 메일 발송 관련
-const config = require("../config/keys");
+require("dotenv").config();
 const crypto = require("crypto");
 const nodemailer = require("nodemailer");
 const moment = require("moment");
@@ -139,15 +139,15 @@ router.post("/forgot", (req, res) => {
         port: 465,
         secure: true,
         auth: {
-          user: `${config.emailAddress}`,
-          pass: `${config.emailPassword}`,
+          user: `${process.env.EMAIL_ADDRESS}`,
+          pass: `${process.env.EMAIL_PASSWORD}`,
         },
       });
 
       let tenMinsFromNow = moment().add(10, "minutes").format("LT");
 
       const message = {
-        from: `${config.emailAddress}`,
+        from: `${process.env.EMAIL_ADDRESS}`,
         to: `${user.email}`,
         bcc: "korra0501@gmail.com",
         subject: "[키위] 비밀번호 재설정 안내",

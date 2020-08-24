@@ -1,32 +1,33 @@
 const express = require("express");
 const router = express.Router();
-const axios = require("axios");
+
+// Dialogflow
 const dialogflow = require("dialogflow");
-var restaurantName = ""; // 전역변수
+require("dotenv").config();
+const projectId = process.env.GOOGLE_PROJECT_ID;
+const sessionId = process.env.DIALOGFLOW_SESSION_ID;
+const languageCode = process.env.DIALOGFLOW_LANGUAGE_CODE;
+const credentials = {
+  client_email: process.env.GOOGLE_CLIENT_EMAIL,
+  private_key: process.env.GOOGLE_PRIVATE_KEY,
+};
+const sessionClient = new dialogflow.SessionsClient({
+  projectId: projectId,
+  credentials: credentials,
+});
 
+// Middleware functions
 const { payment, findMenuPrice } = require("../middleware/order");
-const config = require("../config/keys");
-const projectId = config.googleProjectID;
-const sessionId = config.dialogFlowSessionID;
-const languageCode = config.dialogFlowSessionLanguageCode;
-const kakaoAdminKey = config.kakaoAdminKey;
-// 아래 방법을 써보려고 했으나 전혀 말을 듣지 않았다...
-// const credentials = {
-//   client_email: config.googleClientEmail,
-//   private_key: config.googlePrivateKey.replace(/\\n/g, "\n"),
-// };
-
-// const sessionClient = new dialogflow.SessionsClient({
-//   projectId: projectId,
-//   credentials: credentials,
-// });
-
-// 결국, 구글 인증 관련은 GOOGLE_APPLICATION_CREDENTIALS 환경변수를 설정하여 해결하자.
-const sessionClient = new dialogflow.SessionsClient();
-const sessionPath = sessionClient.sessionPath(projectId, "kiwe-session-1002");
+var restaurantName = ""; // 전역변수
 
 // Text Query Route
 router.post("/textQuery", async (req, res) => {
+  // 유저마다 다른 session path 설정
+  let sessionPath = sessionClient.sessionPath(
+    projectId,
+    sessionId + req.body.userID
+  );
+
   // 클라이언트에서 온 정보를 Dialogflow API로 보내기
   // text query request
   const request = {
@@ -64,7 +65,7 @@ router.post("/textQuery", async (req, res) => {
       if (context.name.includes("finished_order_need_payment")) {
         let menuName = `${context.parameters.fields.coffee_menu.stringValue}(${context.parameters.fields.Size.stringValue})`; // '메뉴명(사이즈)'의 형식으로 DB에 저장된 메뉴 찾기
         let quantity = context.parameters.fields.number.numberValue;
-         // db에서 가격 찾음
+        // db에서 가격 찾음
         findMenuPrice(restaurantName, menuName).then((price) => {
           let totalAmount = price * quantity; // 가격 x 수량 = 전체가격
 
@@ -87,6 +88,12 @@ router.post("/textQuery", async (req, res) => {
 
 // Event Query Route
 router.post("/eventQuery", async (req, res) => {
+  // 유저마다 다른 session path 설정
+  let sessionPath = sessionClient.sessionPath(
+    projectId,
+    sessionId + req.body.userID
+  );
+
   // The text query request.
   const request = {
     session: sessionPath,

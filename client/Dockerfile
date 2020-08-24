@@ -1,8 +1,17 @@
 FROM node:latest
 
-WORKDIR /client
-COPY package*.json /client/
-RUN npm install
+# Create App Directory
+RUN mkdir -p /usr/app/client
+WORKDIR /usr/app/client
+
+# Install Dependencies
+COPY package*.json ./
+RUN npm ci
+
+# 앱 소스 추가
 COPY . .
+
+# Exports
 EXPOSE 3000
+
 CMD ["npm", "start"]

@@ -1,8 +1,5 @@
-const { Restaurant } = require("../models/Restaurant");
+require("dotenv").config();
 const { Menu } = require("../models/Menu");
-const config = require("../config/keys");
-const kakaoAdminKey = config.kakaoAdminKey;
-
 const axios = require("axios");
 
 // 식당 이름과 메뉴 이름을 바탕으로, DB에서 메뉴가격만 찾아오는 함수.
@@ -71,7 +68,7 @@ async function payment(restaurantName, totalAmount) {
       data,
       {
         headers: {
-          Authorization: `KakaoAK ${kakaoAdminKey}`, // 'xxx...' = admin key
+          Authorization: `KakaoAK ${process.env.KAKAO_ADMIN_KEY}`, // 'xxx...' = admin key
           "Content-Type": "application/x-www-form-urlencoded",
         },
       }
