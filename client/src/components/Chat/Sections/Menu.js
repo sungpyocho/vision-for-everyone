@@ -24,7 +24,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function Menu({ selectedBranch }) {
+function Menu({ selectedBranch, menuListClick }) {
   const classes = useStyles();
   const [open, setOpen] = React.useState([0]);
 
@@ -83,7 +83,7 @@ function Menu({ selectedBranch }) {
                   >
                     <List component="div" disablePadding>
                       {category.menu.map((menu) => (
-                        <ListItem button key={menu._id}>
+                        <ListItem button key={menu._id} onClick={() => menuListClick(menu.menuName)}>
                           <ListItemText
                             primary={menu.menuName}
                             secondary={menu.menuPrice}
