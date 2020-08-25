@@ -1,5 +1,4 @@
-import React, { useEffect } from "react";
-import axios from "axios";
+import React from "react";
 import styled from "styled-components";
 import Map from "../Sections/Map";
 import Menu from "./Menu";
@@ -13,13 +12,10 @@ import {
   DialogContentText,
 } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
-import Grid from "@material-ui/core";
 import MuiDialogTitle from "@material-ui/core/DialogTitle";
 import IconButton from "@material-ui/core/IconButton";
 import CloseIcon from "@material-ui/icons/Close";
 import Typography from "@material-ui/core/Typography";
-
-// 여기서부터는 메뉴, 이벤트 팝업을 이쁘게 띄워주기 위해 불러온 컴포넌트
 
 // 2. 이벤트 팝업용
 // import Card from "@material-ui/core/Card";
@@ -140,7 +136,10 @@ function OrderMenu({ handleTextQuery }) {
         aria-labelledby="menu-title"
         aria-describedby="menu-description"
       >
-        <Menu selectedBranch={userSelectedRestaurant} menuListClick={menuListClick}/>
+        <Menu
+          selectedBranch={userSelectedRestaurant}
+          menuListClick={menuListClick}
+        />
         <DialogActions>
           <Button onClick={handleCloseMenu} color="primary" autoFocus>
             닫기

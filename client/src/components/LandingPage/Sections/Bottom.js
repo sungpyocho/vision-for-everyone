@@ -34,19 +34,8 @@ function Copyright() {
   );
 }
 
-function Bottom(props) {
+function Bottom() {
   const classes = useStyles();
-  const toTutorialPage = () => {
-    props.props.history.push("/tutorial");
-  };
-
-  const toRegisterPage = () => {
-    props.props.history.push("/register");
-  };
-
-  const toChatPage = () => {
-    props.props.history.push("/chat");
-  };
 
   return (
     <BottomBlock>

@@ -19,25 +19,13 @@ const LandingpageBlock = styled.div`
 `;
 
 function LandingPage(props) {
-  const toTutorialPage = () => {
-    props.history.push("/tutorial");
-  };
-
-  const toRegisterPage = () => {
-    props.history.push("/register");
-  };
-
-  const toChatPage = () => {
-    props.history.push("/chat");
-  };
-
   return (
     <LandingpageBlock>
       <div style={{ fontSize: "30px", textAlign: "center", fontWeight: "500" }}>
         <Top props={props} />
         <MiddleOne />
         <MiddleTwo />
-        <Bottom props={props} />
+        <Bottom />
       </div>
     </LandingpageBlock>
   );

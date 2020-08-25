@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { makeStyles } from "@material-ui/core/styles";
-import { DialogActions, DialogTitle, DialogContent } from "@material-ui/core";
+import { DialogTitle, DialogContent } from "@material-ui/core";
 
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
@@ -27,6 +27,7 @@ const useStyles = makeStyles((theme) => ({
 function Menu({ selectedBranch, menuListClick }) {
   const classes = useStyles();
   const [open, setOpen] = React.useState([0]);
+  const [menusFromDB, setMenusFromDB] = useState(null);
 
   // 여러개의 state를 관리할 때, Material UI에서 쓰는 로직.
   // 꼭 기억해두자.
@@ -42,18 +43,14 @@ function Menu({ selectedBranch, menuListClick }) {
     setOpen(newOpen);
   };
 
-  const [menusFromDB, setMenusFromDB] = useState(null);
-  const [numOfCategory, setNumOfCategory] = useState(null);
-
   useEffect(() => {
     if (!selectedBranch) return;
     const postBranchName = async (branchName) => {
       const response = await axios.post("/api/restaurant/get-menu", {
         branchName: branchName,
       });
-      const categories = response.data.category;
 
-      setNumOfCategory(categories.length);
+      const categories = response.data.category;
       setMenusFromDB(categories);
     };
     postBranchName(selectedBranch);
@@ -83,7 +80,11 @@ function Menu({ selectedBranch, menuListClick }) {
                   >
                     <List component="div" disablePadding>
                       {category.menu.map((menu) => (
-                        <ListItem button key={menu._id} onClick={() => menuListClick(menu.menuName)}>
+                        <ListItem
+                          button
+                          key={menu._id}
+                          onClick={() => menuListClick(menu.menuName)}
+                        >
                           <ListItemText
                             primary={menu.menuName}
                             secondary={menu.menuPrice}
