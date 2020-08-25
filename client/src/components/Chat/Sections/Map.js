@@ -4,23 +4,27 @@ import axios from "axios";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
-import CircularProgress from "@material-ui/core/CircularProgress";
 
 const { kakao } = window;
 
 export default function Map({ mapRestaurantClick }) {
   const [restaurantList, setRestaurantList] = useState(null);
+
   // var restaurantList = null;
   // component가 mount되면 실행
   // useEffect를 써서 렌더링하면 이 컴포넌트에서 이거 해야해!라고 지시
   useEffect(() => {
-    handleLocation()
-      .then(({ lat, lng }) => {
-        displayMap(lat, lng);
-      })
-      .catch((err) => {
-        displayDefaultMap();
-      });
+    if (window.location.pathname === "/tutorial") {
+      displayTutorialMap();
+    } else {
+      handleLocation()
+        .then(({ lat, lng }) => {
+          displayMap(lat, lng);
+        })
+        .catch((err) => {
+          displayDefaultMap();
+        });
+    }
   }, []);
 
   // Returns Promise
@@ -229,6 +233,64 @@ export default function Map({ mapRestaurantClick }) {
       .catch((err) => {
         console.log(err);
       });
+  };
+
+  const displayTutorialMap = () => {
+    // 유저 위치 정보를 얻을 수 없을때는, 지도의 기준점을 서울시청으로 설정
+    let map = basicMapSettings("37.5661805", "126.9800147");
+
+    let positions = [
+      {
+        title: "[튜토리얼] 스타벅스 시청점",
+        latlng: new kakao.maps.LatLng("37.5661805", "126.9800147"),
+      },
+    ];
+
+    setRestaurantList([
+      {
+        _id: "5f43e85c73b797002057f81d",
+        location: {
+          type: "Point",
+          coordinates: [126.979808, 37.56629],
+        },
+        categoryName: "프랜차이즈",
+        resName: "스타벅스",
+        branchName: "[튜토리얼] 스타벅스 시청점",
+        address: "서울특별시 중구 을지로 19, 삼성화재삼성빌딩 1층 (을지로1가)",
+        explanation: "대한민국의 중심 서울시청! 시청점입니다.",
+        menuId: "스타벅스",
+        __v: 0,
+        distance: 21.93686902491922,
+      },
+    ]);
+
+    positions.forEach((p) => {
+      // 마커를 생성
+      var marker = new kakao.maps.Marker({
+        map: map,
+        position: p.latlng, // 마커를 표시할 위치
+        title: p.title, // 마커의 타이틀, 마커에 마우스를 올리면 타이틀이 표시됩니다
+      });
+      // 마커에 커서가 오버됐을 때 마커 위에 표시할 인포윈도우를 생성합니다
+      var iwContent = `<div style="padding:5px;">${p.title}</div>`; // 인포윈도우에 표출될 내용으로 HTML 문자열이나 document element가 가능합니다
+
+      // 인포윈도우를 생성합니다
+      var infowindow = new kakao.maps.InfoWindow({
+        content: iwContent,
+      });
+
+      // 마커에 마우스오버 이벤트를 등록합니다
+      kakao.maps.event.addListener(marker, "mouseover", function () {
+        // 마커에 마우스오버 이벤트가 발생하면 인포윈도우를 마커위에 표시합니다
+        infowindow.open(map, marker);
+      });
+
+      // 마커에 마우스아웃 이벤트를 등록합니다
+      kakao.maps.event.addListener(marker, "mouseout", function () {
+        // 마커에 마우스아웃 이벤트가 발생하면 인포윈도우를 제거합니다
+        infowindow.close();
+      });
+    });
   };
 
   const handleMapRestaurantClick = (index) => {

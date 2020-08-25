@@ -88,7 +88,6 @@ async function payment(restaurantName, totalAmount) {
     };
     return response;
   } catch (err) {
-    console.log(err);
     console.error(err);
   }
 }

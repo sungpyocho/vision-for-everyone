@@ -11,6 +11,7 @@ import { Button, Paper, InputBase } from "@material-ui/core";
 import SendIcon from "@material-ui/icons/Send";
 import styled from "styled-components";
 
+import ProgressBar from "../Chat/Sections/ProgressBar";
 import OrderMenu from "../Chat/Sections/OrderMenu";
 import Message from "../Chat/Sections/Message";
 import CardMessage from "../Chat/Sections/CardMessage";
@@ -49,7 +50,8 @@ function Chat() {
   // chime mp3
   const sound = new Audio(chime);
 
-  // Keyboard Input State
+  // 주문 스텝을 받아오는 부분
+  const [orderStep, setOrderStep] = useState("select restaurant"); // Keyboard Input State
   const [Input, setInput] = useState("");
   const inputHandler = (event) => {
     setInput(event.currentTarget.value);
@@ -59,7 +61,7 @@ function Chat() {
   // useEffect를 써서 렌더링하면 이 컴포넌트에서 이거 해야해!라고 지시
   useEffect(() => {
     checkUserId();
-    eventQuery("firstGreetings");
+    eventQuery("tutorial");
   }, []);
 
   // 쿠키를 체크해서 UserId값이 없으면 추가
@@ -69,7 +71,6 @@ function Chat() {
       cookies.set("userID", uuid(), { path: "/" }); //  '/' means that the cookie will be accessible for all pages i.e unique session for all pages
     }
   };
-
 
   // 클라이언트가 보낸 메세지 처리
   const textQuery = async (text) => {
@@ -127,22 +128,30 @@ function Chat() {
         setTimeout(() => {
           let browserWindow = window.open();
           browserWindow.location = response.data.headers.Location;
+
+          conversation = {
+            who: "kiwe",
+            orderResult: {
+              restaurantName: response.data.restaurantName,
+              menuName: response.data.menuName,
+              totalAmount: response.data.totalAmount,
+              quantity: response.data.quantity,
+              price: response.data.price,
+            },
+          };
+          console.log(conversation);
+          dispatch(saveMessage(conversation));
         }, 1500);
+      }
+      console.log(response.data);
+      // orderStep 업데이트를 통해 progress bar 상태 변경하기
+      if (response.data.intent.displayName) {
+        setOrderStep(response.data.intent.displayName);
       }
       // chime 재생
       sound.play();
-
-      // 마지막 주문 단계. 메세지 출력.
-      conversation = {
-        who: "kiwe",
-        orderResult: {
-          restaurantName: response.data.restaurantName,
-          menuName: response.data.menuName,
-          totalAmount: response.data.totalAmount,
-        },
-      };
-      dispatch(saveMessage(conversation));
     } catch (error) {
+      console.log(error);
       // 에러 발생 시
       conversation = {
         who: "kiwe",
@@ -231,6 +240,7 @@ function Chat() {
   };
 
   const renderOneMessage = (message, i) => {
+    console.log(message);
     // 영수증 메시지일 경우
     if (isRecieptMessage(message)) {
       return <RecieptMessage key={i} orderResult={message.orderResult} />;
@@ -268,6 +278,7 @@ function Chat() {
 
   return (
     <Wrapper>
+      <ProgressBar orderStep={orderStep} />
       {/* Order Buttons */}
       <OrderMenu aria-label="메뉴" handleTextQuery={handleTextQuery} />
       <div aria-label="키위봇과 대화하는 채팅창입니다">
@@ -323,7 +334,7 @@ const Messages = styled.div`
   border-top-right-radius: 10px;
   bottom: 36px;
   position: absolute;
-  height: calc(90% - 36px);
+  height: calc(90% - 86px);
   width: 100%;
 `;
 

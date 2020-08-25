@@ -64,7 +64,6 @@ export default function RegisterPage(props) {
   useEffect(() => {
     dispatch(auth()).then((response) => {
       if (response) {
-        console.log("디스패치 속 ", response.payload);
         const pastImage = response.payload.image;
         const pastName = response.payload.name;
         const email = response.payload.email;
