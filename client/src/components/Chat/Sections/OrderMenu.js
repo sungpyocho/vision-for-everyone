@@ -62,7 +62,7 @@ const MapDialog = withStyles(styles)((props) => {
 
 function OrderMenu({ handleTextQuery }) {
   const [openMenu, setOpenMenu] = React.useState(false);
-
+  const [isDisabled, setIsDisabled] = React.useState(true);
   const [openMap, setopenMap] = React.useState(false);
   const [openCall, setOpenCall] = React.useState(false);
   const [userSelectedRestaurant, setUserSelectedRestaurant] = React.useState(
@@ -109,6 +109,7 @@ function OrderMenu({ handleTextQuery }) {
   };
 
   const handleUserSelectedRestaurant = (name) => {
+    setIsDisabled(false);
     setUserSelectedRestaurant(name);
   };
 
@@ -128,7 +129,9 @@ function OrderMenu({ handleTextQuery }) {
   return (
     <MenuComponent>
       {/* 메뉴판 버튼 */}
-      <CustomButton onClick={handleOpenMenu}>메뉴판</CustomButton>
+      <CustomButton disabled={isDisabled} onClick={handleOpenMenu}>
+        메뉴판
+      </CustomButton>
       <Dialog
         open={openMenu}
         onClose={handleCloseMenu}
@@ -166,7 +169,9 @@ function OrderMenu({ handleTextQuery }) {
         <Map mapRestaurantClick={mapRestaurantClick} />
       </Dialog>
       {/* 직원호출 버튼 */}
-      <CustomButton onClick={handleOpenCall}>직원호출</CustomButton>
+      <CustomButton disabled={isDisabled} onClick={handleOpenCall}>
+        직원호출
+      </CustomButton>
       <Dialog
         open={openCall}
         onClose={handleCloseCall}
@@ -201,7 +206,7 @@ const MenuComponent = styled.div`
   }
 `;
 
-const CustomButton = styled.div`
+const CustomButton = styled.button`
   border: none;
   overflow: hidden;
   position: relative;

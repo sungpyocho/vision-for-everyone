@@ -40,7 +40,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function Chat() {
+function TutorialPage() {
   const classes = useStyles(); // Customize Material-UI
 
   // redux 구조를 보면 state.message.messages가 메세지들의 배열이다.
@@ -338,4 +338,4 @@ const Messages = styled.div`
   width: 100%;
 `;
 
-export default Chat;
+export default TutorialPage;
