@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useCallback } from "react";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
-import { saveMessage } from "../../_actions/message_actions";
+import { saveMessage, clearMessage } from "../../_actions/message_actions";
 
 import Cookies from "universal-cookie"; //set id to cookie
 import { v4 as uuid } from "uuid"; //generate unique id for sessions in visitors v4 for random id generation
@@ -59,6 +59,7 @@ function Chat() {
   // useEffect를 써서 렌더링하면 이 컴포넌트에서 이거 해야해!라고 지시
   useEffect(() => {
     checkUserId();
+    dispatch(clearMessage());
     eventQuery("firstGreetings");
   }, []);
 
