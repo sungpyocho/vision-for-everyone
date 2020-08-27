@@ -140,7 +140,6 @@ function TutorialPage() {
               price: response.data.price,
             },
           };
-          console.log(conversation);
           dispatch(saveMessage(conversation));
         }, 1500);
       }
