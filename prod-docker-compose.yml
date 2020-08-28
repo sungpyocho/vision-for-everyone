@@ -2,6 +2,18 @@ version: "3"
 
 services:
   ##########################
+  ### SETUP CLIENT CONTAINER
+  ##########################
+  # client:
+  #   build:
+  #     context: ./client
+  #   ports:
+  #     - "80:80"
+  #   networks:
+  #     - client
+  #     - server
+
+  ##########################
   ### SETUP SERVER CONTAINER
   ##########################
   server:
@@ -9,33 +21,14 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
     env_file: ./server/.env
     environment:
-      - NODE_ENV: production
-    ports:
-      - 8080:8080
-    volumes:
-      - ./server:/usr/app/server
-    # depends_on:
-    #   - mongo
-    command: npm run start --prefix ../server
-  ##########################
-  ### SETUP CLIENT CONTAINER
-  ##########################
-  client:
-    container_name: kiwe-prod-client
-    build:
-      context: ./client
-    env_file: ./client/.env
-    ports:
-      - 80:80
-    depends_on:
-      - server
-  ##########################
-  ### SETUP DB CONTAINER
-  ##########################
-  # mongo:
-  #   image: mongo
-  #   container_name: kiwe-mongodb
-  #   ports:
-  #     - "27017:27017"
+      NODE_ENV: production
+#     networks:
+#       - server
+
+# networks:
+#   client:
+#   server:
