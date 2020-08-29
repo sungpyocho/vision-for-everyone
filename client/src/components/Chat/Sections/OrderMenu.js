@@ -198,6 +198,8 @@ const MenuComponent = styled.div`
   display: flex;
   top: 56px;
   height: 10%;
+  padding-left: 3%;
+  padding-right: 3%;
   text-align: center;
   align-items: center;
   justify-content: center;
@@ -210,7 +212,7 @@ const CustomButton = styled.button`
   border: none;
   overflow: hidden;
   position: relative;
-  border-radius: 5px;
+  border-radius: 25px;
   margin-left: 1%;
   margin-right: 1%;
   font-size: 16px;
@@ -219,7 +221,8 @@ const CustomButton = styled.button`
   width: 33%;
   flex-shrink: 1;
   cursor: pointer;
-  background-color: #f1f1f0;
+  color: #289C8E;
+  background-color: #ffffff;
   box-shadow: 0 0 4px #999;
   outline: none;
   transition: background 0.8s;

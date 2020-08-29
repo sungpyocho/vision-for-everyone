@@ -1,7 +1,8 @@
 import React, { useState } from "react";
+import styled from "styled-components";
 import Avatar from "@material-ui/core/Avatar";
 import Alert from "@material-ui/lab/Alert";
-import Button from "@material-ui/core/Button";
+import {Button, InputBase} from "@material-ui/core/";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import TextField from "@material-ui/core/TextField";
 // import FormControlLabel from "@material-ui/core/FormControlLabel";
@@ -27,10 +28,11 @@ function Copyright() {
 
 const useStyles = makeStyles((theme) => ({
   paper: {
-    marginTop: theme.spacing(8),
+    marginTop: theme.spacing(6),
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
+    color: "white"
   },
   avatar: {
     margin: theme.spacing(1),
@@ -40,10 +42,34 @@ const useStyles = makeStyles((theme) => ({
     width: "100%", // Fix IE 11 issue.
     marginTop: theme.spacing(1),
   },
+  inputText: {
+    backgroundColor: "white",
+    height: "50px",
+    borderRadius: "25px",
+    flex: 1,
+    paddingLeft: "15px",
+    paddingright: "15px",
+    marginTop: theme.spacing(2),
+  },
   submit: {
-    margin: theme.spacing(3, 0, 2),
-    backgroundColor: "#6ac48a",
-    color: "white",
+    backgroundColor: "white",
+    color: "black",
+    width: "70%",
+    height: "50px",
+    marginLeft: "15%",
+    marginRight: "15%",
+    marginTop: theme.spacing(4),
+    borderRadius: "25px"
+  },
+  register: {
+    margin: theme.spacing(2),
+    backgroundColor: "#ffc1c1",
+    color: "black",
+    width: "70%",
+    height: "50px",
+    marginLeft: "15%",
+    marginRight: "15%",
+    borderRadius: "25px"
   },
 }));
 
@@ -83,77 +109,99 @@ export default function LoginPage(props) {
   };
 
   return (
-    <Container component="main" maxWidth="xs">
-      <CssBaseline />
-      <div className={classes.paper}>
-        <Avatar className={classes.avatar}>
-          <LockOutlinedIcon />
-        </Avatar>
-        <Typography component="h1" variant="h5">
-          키위 로그인
-        </Typography>
-        <form className={classes.form} onSubmit={onSubmitHandler} noValidate>
-          <TextField
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            id="email"
-            label="이메일 주소"
-            name="email"
-            autoComplete="email"
-            autoFocus
-            value={Email}
-            onChange={emailHandler}
-          />
-          <TextField
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            name="password"
-            label="비밀번호"
-            type="password"
-            id="password"
-            autoComplete="current-password"
-            value={Password}
-            onChange={passwordHandler}
-          />
-          {/* <FormControlLabel
+    <Wrapper>
+      <Container component="main" maxWidth="xs">
+        <CssBaseline />
+        <div className={classes.paper}>
+          <Avatar className={classes.avatar}>
+            <LockOutlinedIcon />
+          </Avatar>
+          <Typography component="h1" variant="h5">
+            키위 로그인(로고 대체 예정)
+          </Typography>
+          <form className={classes.form} onSubmit={onSubmitHandler} noValidate>
+            <InputBase
+              variant="outlined"
+              margin="normal"
+              required
+              fullWidth
+              id="email"
+              label="이메일 주소"
+              name="email"
+              autoComplete="email"
+              placeholder="이메일 주소"
+              autoFocus
+              value={Email}
+              onChange={emailHandler}
+              className={classes.inputText}
+            />
+            <InputBase
+              variant="outlined"
+              margin="normal"
+              required
+              fullWidth
+              name="password"
+              label="비밀번호"
+              type="password"
+              id="password"
+              autoComplete="current-password"
+              placeholder="비밀번호"
+              value={Password}
+              onChange={passwordHandler}
+              className={classes.inputText}
+            />
+            {/* <FormControlLabel
             control={<Checkbox value="remember" color="primary" />}
             label="로그인 유지"
           /> */}
-          {loginError && (
-            <Alert severity="error">
-              로그인에 실패하였습니다. <br />
-              아이디 혹은 비밀번호를 다시 확인해주세요.
-            </Alert>
-          )}
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            className={classes.submit}
-          >
-            로그인
-          </Button>
-          <Grid container>
-            <Grid item xs>
-              <Link href="/forgot" variant="body2">
-                비밀번호 찾기
-              </Link>
+            {loginError && (
+              <Alert severity="error">
+                로그인에 실패하였습니다. <br />
+                아이디 혹은 비밀번호를 다시 확인해주세요.
+              </Alert>
+            )}
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              className={classes.submit}
+            >
+              로그인 하기
+            </Button>
+            <Button
+              fullWidth
+              variant="contained"
+              className={classes.register}
+              href="/register"
+            >
+              회원가입 하기
+            </Button>
+            <Grid container justify="center">
+              <Grid item >
+                <Link href="/forgot" variant="body2">
+                  비밀번호 찾기
+                </Link>
+              </Grid>
             </Grid>
-            <Grid item>
-              <Link href="/register" variant="body2">
-                {"회원가입"}
-              </Link>
-            </Grid>
-          </Grid>
-        </form>
-      </div>
-      <Box mt={8}>
-        <Copyright />
-      </Box>
-    </Container>
+          </form>
+        </div>
+        <Box mt={4}>
+          <Copyright />
+        </Box>
+      </Container>
+    </Wrapper>
   );
 }
+const Wrapper = styled.div`
+  height: calc(100% - 56px);
+  position: absolute;
+  width: 66.6%;
+  left: 16.7%;
+  right: 16.7%;
+  background-color: #2fc4b2;
+  @media (max-width: 768px) {
+    width: 100%;
+    left: 0%;
+    right: 0%;
+  }
+`;

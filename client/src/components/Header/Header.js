@@ -6,6 +6,7 @@ import { withRouter } from "react-router-dom";
 
 import { AppBar, Button, Toolbar, Menu, MenuItem } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
+import HomeIcon from "@material-ui/icons/Home";
 import SettingsIcon from "@material-ui/icons/Settings";
 import AccountCircleIcon from "@material-ui/icons/AccountCircle";
 import IconButton from "@material-ui/core/IconButton";
@@ -16,13 +17,21 @@ const useStyles = makeStyles((theme) => ({
     flexGrow: 1,
   },
   appBar: {
-    background: "linear-gradient(90deg, #faf796 20%,  #6ac48a 90%)",
+    backgroundColor: "#2FC4B2"
   },
   title: {
     flexGrow: 1,
   },
+  homeIconContainer: {
+    justifyContent: "left",
+    flexGrow: 1
+  },
+  homeIcon: {
+    marginLeft: theme.spacing(1),
+  },
   settingsIcon: {
     marginRight: theme.spacing(1),
+    float: "right"
   },
 }));
 
@@ -91,15 +100,25 @@ function Header(props) {
     <div className={classes.root}>
       <AppBar position="static" className={classes.appBar}>
         <Toolbar>
-          <a href="/" className={classes.title}>
+          {/* <a href="/" className={classes.title}>
             <img
               alt="키위 로고"
               aria-label="키위 홈으로"
               src={KiweHeaderIcon}
               style={{ height: "28px" }}
             />
-          </a>
+          </a> */}
           <IconButton
+            aria-label="home"
+            aria-haspopup="true"
+            color="inherit"
+            href="/"
+            // onClick={handleMenuSettings}
+            className={classes.homeIconContainer}
+          >
+            <HomeIcon className={classes.homeIcon} />
+          </IconButton>
+          <IconButton 
             aria-label="설정"
             aria-haspopup="true"
             color="inherit"

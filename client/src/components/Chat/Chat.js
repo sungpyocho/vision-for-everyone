@@ -27,20 +27,27 @@ const cookies = new Cookies(); //creating cookie object
 const useStyles = makeStyles((theme) => ({
   inputForm: {
     display: "flex",
-    borderRadius: 5,
+    borderRadius: 0,
+    backgroundColor: "#2FC4B2",
     borderTop: "1px solid lightgrey",
     bottom: 0,
     position: "absolute",
-    width: "100%",
+    width: "calc(100% - 20px)",
+    padding: "10px",
   },
   input: {
-    marginLeft: theme.spacing(1),
+    marginLeft: theme.spacing(0),
+    backgroundColor: "white",
+    borderRadius: "25px",
     flex: 1,
+    marginRight: "10px",
+    paddingLeft: "15px",
+    paddingRight: "15px"
   },
   button: {
-    backgroundColor: "#6ac48a",
+    backgroundColor: "#ffb5b5",
     color: "white",
-    borderRadius: 5,
+    borderRadius: 25,
   },
   dialog: {
     padding: 0,
@@ -366,7 +373,7 @@ function Chat() {
           <InputBase
             autoFocus
             className={classes.input}
-            placeholder="메세지를 입력하세요"
+            placeholder="메시지를 입력하세요"
             type="text"
             value={Input}
             onChange={inputHandler}
@@ -391,23 +398,24 @@ function Chat() {
 }
 
 const Wrapper = styled.div`
-  height: calc(100% - 64px);
+  height: calc(100% - 56px);
   position: absolute;
   width: 66.6%;
   left: 16.7%;
   right: 16.7%;
+  background-color: #2FC4B2;
   @media (max-width: 768px) {
-    width: 90%;
-    left: 5%;
-    right: 5%;
+    width: 100%;
+    left: 0%;
+    right: 0%;
   }
 `;
 
 const Messages = styled.div`
   overflow: auto;
-  background-color: #f1f0f0;
-  border-top-left-radius: 10px;
-  border-top-right-radius: 10px;
+  background-color: #ffffff;
+  border-top-left-radius: 25px;
+  border-top-right-radius: 25px;
   bottom: 36px;
   position: absolute;
   height: calc(90% - 36px);

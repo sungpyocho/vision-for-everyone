@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 
-function ProgressBar({ orderStep }) {
+function ProgressBar({orderStep}) {
   const [step, setStep] = useState(orderStep);
   useEffect(() => {
     setStep(orderStep);
@@ -24,6 +24,10 @@ function ProgressBar({ orderStep }) {
 
   const totalContainerStyles = {
     height: 50,
+    color: "white",
+    width: "90%",
+    marginLeft: "5%",
+    marginRight: "5%"
   };
 
   const barContainerStyles = {
@@ -38,7 +42,7 @@ function ProgressBar({ orderStep }) {
   const fillerStyles = {
     height: "100%",
     width: `${completed(step)[0]}%`,
-    backgroundColor: "limegreen",
+    backgroundColor: "pink",
     borderRadius: "inherit",
     textAlign: "right",
   };
@@ -46,7 +50,7 @@ function ProgressBar({ orderStep }) {
   const labelStyles = {
     height: 20,
     padding: 5,
-    color: "#222222",
+    color: "#ffffff",
     fontWeight: "bold",
     zIndex: 3,
   };
