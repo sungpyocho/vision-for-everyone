@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState, useCallback, useRef } from "react";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { saveMessage, clearMessage } from "../../_actions/message_actions";
@@ -10,6 +10,11 @@ import { makeStyles } from "@material-ui/core/styles";
 import { Button, Paper, InputBase } from "@material-ui/core";
 import SendIcon from "@material-ui/icons/Send";
 import styled from "styled-components";
+import {
+  Dialog,
+  DialogContent,
+  DialogActions,
+} from "@material-ui/core";
 
 import OrderMenu from "./Sections/OrderMenu";
 import Message from "./Sections/Message";
@@ -37,10 +42,44 @@ const useStyles = makeStyles((theme) => ({
     color: "white",
     borderRadius: 5,
   },
+  dialog: {
+    padding: 0,
+    paddingTop: 0,
+    height: '80rem',
+  },
+  iframe: {
+    width: "100%",
+    height: "500px"
+  }
 }));
 
+function getParameterByName(name, url) {
+  if (!url) url = window.location.href;
+  name = name.replace(/[\[\]]/g, '\\$&');
+  var regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),
+      results = regex.exec(url);
+  if (!results) return null;
+  if (!results[2]) return '';
+  return decodeURIComponent(results[2].replace(/\+/g, ' '));
+}
+
 function Chat() {
+  // useRef in iframe to check is src attribute has pg_token as querystring
+  const iframeRef = useRef(null);
+
   const classes = useStyles(); // Customize Material-UI
+
+  // Kakao Pay Link State for <iframe>
+  const [kakaoPayLink, setKakaoPayLink] = useState(null);
+
+  // kakao pay 모달창 상태
+  const [openCall, setOpenCall] = useState(true);
+
+  // 영수증 메시지 출력 관련
+  const [receipt, setReceipt] = useState(null)
+
+  // iframe에서 온 상태 메시지
+  const [kakaoPayResult, setKakaoPayResult] = useState(null)
 
   // redux 구조를 보면 state.message.messages가 메세지들의 배열이다.
   const messagesFromRedux = useSelector((state) => state.message.messages);
@@ -61,7 +100,38 @@ function Chat() {
     checkUserId();
     dispatch(clearMessage());
     eventQuery("firstGreetings");
+    // // 결제 성공시 영수증 띠워주기
+    // if (getParameterByName("pg_token")) {
+    //   alert("결제를 성공했습니다.")
+    //   // 정보를 어떻게 할지가 고민, 어떻게 리다이렉트된 페이지로 localStorage를 쎠야겠다.
+    // }
+    // else if (getParameterByName("fail")) {
+    //   alert("카카오페이 결제를 실패했습니다.")
+    // }
+    // else if (getParameterByName("cancel")) {
+    //   alert("카카오페이 결제가 취소되었습니다.")
+    // } 
+    // // 사용자가 처음 채팅 페이지로 들어올 때
+    // else {
+    //}
+
+    const handler = event => {
+      if (typeof event.data === 'string' || event.data instanceof String) {
+        const data = JSON.parse(event.data);
+        setKakaoPayResult(data.message);
+      }
+      else return;
+    }
+    window.addEventListener("message", handler);
+
+    return () => window.removeEventListener("message", handler);
   }, []);
+
+  useEffect(() => {
+    if (kakaoPayResult === "Success") {
+      dispatch(saveMessage(receipt));
+    }
+  }, [kakaoPayResult])
 
   // 쿠키를 체크해서 UserId값이 없으면 추가
   const checkUserId = () => {
@@ -123,10 +193,12 @@ function Chat() {
         };
         dispatch(saveMessage(conversation));
 
+        // 새 창이 아닌 지금 컴포넌트에서 띄워줄 수 있는가? 예) 모달창에서 띄워주기
         // 1.5초 뒤에 새 창에서 주문 창을 염.
         setTimeout(() => {
-          let browserWindow = window.open();
-          browserWindow.location = response.data.headers.Location;
+          // let browserWindow = window.open();
+          // browserWindow.location = response.data.headers.Location;
+        setKakaoPayLink(response.data.headers.Location);
         }, 1500);
       }
       // chime 재생
@@ -143,7 +215,11 @@ function Chat() {
           price: response.data.price,
         },
       };
-      dispatch(saveMessage(conversation));
+
+      // localStorage.setItem("")
+      // dispatch(saveMessage(conversation));
+      // 일단 state에다가 conversation 저장하고, 추후 iframe이 닫혔을 때, 영수증 메시지 출력하기
+      setReceipt(conversation);
     } catch (error) {
       // 에러 발생 시
       conversation = {
@@ -268,6 +344,10 @@ function Chat() {
     textQuery(text);
   }, []);
 
+  const handleCloseCall = () => {
+    setOpenCall(false);
+  };
+
   return (
     <Wrapper>
       {/* Order Buttons */}
@@ -301,6 +381,11 @@ function Chat() {
           </Button>
         </Paper>
       </div>
+      {kakaoPayLink && <Dialog open={openCall}><DialogContent className={classes.dialog}><iframe ref={iframeRef} className={classes.iframe} src={kakaoPayLink} title="KakaoPay Link"></iframe></DialogContent><DialogActions>
+          <Button onClick={handleCloseCall} color="primary" autoFocus>
+            닫기
+          </Button>
+        </DialogActions></Dialog>}
     </Wrapper>
   );
 }
