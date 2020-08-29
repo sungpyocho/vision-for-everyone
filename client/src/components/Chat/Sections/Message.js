@@ -62,12 +62,12 @@ const MessageBox = styled.div`
   display: inline-block;
   font-size: 16px;
   word-spacing: 0.3px;
-  background: ${(props) => (props.who === "kiwe" ? "white" : "#6ac48a")};
+  background: ${(props) => (props.who === "kiwe" ? "#efefef" : "#ffb5b5")};
   color: ${(props) => (props.who === "kiwe" ? "black" : "white")};
-  border-top-left-radius: ${(props) => (props.who === "kiwe" ? 0 : "10px")};
-  border-top-right-radius: ${(props) => (props.who === "kiwe" ? "10px" : 0)};
-  border-bottom-left-radius: 10px;
-  border-bottom-right-radius: 10px;
+  border-top-left-radius: ${(props) => (props.who === "kiwe" ? 0 : "30px")};
+  border-top-right-radius: 30px;
+  border-bottom-left-radius: 30px;
+  border-bottom-right-radius: ${(props) => (props.who === "kiwe" ? "30px" : 0)};
   text-align: start;
 `;
 
