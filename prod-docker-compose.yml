@@ -2,33 +2,30 @@ version: "3"
 
 services:
   ##########################
-  ### SETUP CLIENT CONTAINER
-  ##########################
-  # client:
-  #   build:
-  #     context: ./client
-  #   ports:
-  #     - "80:80"
-  #   networks:
-  #     - client
-  #     - server
-
-  ##########################
   ### SETUP SERVER CONTAINER
   ##########################
   server:
-    container_name: kiwe-prod-server
+    container_name: kiwe-server
     build:
-      context: .
-      dockerfile: Dockerfile
+      context: ./server
+      dockerfile: Dockerfile.prod
     ports:
       - "8080:8080"
     env_file: ./server/.env
     environment:
       NODE_ENV: production
-#     networks:
-#       - server
+    restart: always
 
-# networks:
-#   client:
-#   server:
+  ##########################
+  ### SETUP CLIENT(NGINX) CONTAINER
+  ##########################
+  client:
+    container_name: kiwe-nginx
+    build:
+      context: ./client
+      dockerfile: Dockerfile.prod
+    ports:
+      - "80:80"
+    links:
+      - server
+    restart: always

@@ -8,7 +8,7 @@ services:
     container_name: kiwe-node-express
     build:
       context: ./server
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.dev
     env_file: ./server/.env
     environment:
       NODE_ENV: development
@@ -27,7 +27,7 @@ services:
     container_name: kiwe-react-client
     build:
       context: ./client
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.dev
     env_file: ./client/.env
     ports:
       - 3000:3000
