@@ -1,7 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
-import { saveMessage } from "../../_actions/message_actions";
+import { saveMessage, clearMessage } from "../../_actions/message_actions";
+
+import Cookies from "universal-cookie"; //set id to cookie
+import { v4 as uuid } from "uuid"; //generate unique id for sessions in visitors v4 for random id generation
 
 import { makeStyles } from "@material-ui/core/styles";
 import { Button, Paper, InputBase } from "@material-ui/core";
@@ -11,7 +14,10 @@ import styled from "styled-components";
 import OrderMenu from "./Sections/OrderMenu";
 import Message from "./Sections/Message";
 import CardMessage from "./Sections/CardMessage";
+import RecieptMessage from "./Sections/RecieptMessage";
 import chime from "../../assets/chime.mp3";
+
+const cookies = new Cookies(); //creating cookie object
 
 const useStyles = makeStyles((theme) => ({
   inputForm: {
@@ -52,8 +58,18 @@ function Chat() {
   // component가 mount되면 실행
   // useEffect를 써서 렌더링하면 이 컴포넌트에서 이거 해야해!라고 지시
   useEffect(() => {
+    checkUserId();
+    dispatch(clearMessage());
     eventQuery("firstGreetings");
   }, []);
+
+  // 쿠키를 체크해서 UserId값이 없으면 추가
+  const checkUserId = () => {
+    if (cookies.get("userID") === undefined) {
+      //if cookie is already not present before then generate new cookie
+      cookies.set("userID", uuid(), { path: "/" }); //  '/' means that the cookie will be accessible for all pages i.e unique session for all pages
+    }
+  };
 
   // 클라이언트가 보낸 메세지 처리
   const textQuery = async (text) => {
@@ -73,7 +89,8 @@ function Chat() {
     dispatch(saveMessage(conversation));
     // 챗봇이 보낸 답변 처리
     const textQueryVariables = {
-      text,
+      text: text,
+      userID: cookies.get("userID"),
     };
 
     try {
@@ -82,15 +99,51 @@ function Chat() {
         "/api/dialogflow/textQuery",
         textQueryVariables
       );
-      response.data.fulfillmentMessages.forEach((content) => {
+      // 주문 전 일반 대화.
+      // headers는 카카오페이 주문창 URL을 포함하므로, 일반대화에서는 없을수밖에 없다.
+      if (!response.data.headers) {
+        response.data.fulfillmentMessages.forEach((content) => {
+          conversation = {
+            who: "kiwe",
+            content: content,
+          };
+          dispatch(saveMessage(conversation));
+        });
+      } else {
+        // 마지막 주문 단계. 메세지 출력.
         conversation = {
           who: "kiwe",
-          content: content,
+          content: {
+            message: "text",
+            platform: "PLATFORM_UNSPECIFIED",
+            text: {
+              text: ["카카오페이에서 결제를 완료하세요."],
+            },
+          },
         };
         dispatch(saveMessage(conversation));
-      });
+
+        // 1.5초 뒤에 새 창에서 주문 창을 염.
+        setTimeout(() => {
+          let browserWindow = window.open();
+          browserWindow.location = response.data.headers.Location;
+        }, 1500);
+      }
       // chime 재생
       sound.play();
+
+      // 마지막 주문 단계. 메세지 출력.
+      conversation = {
+        who: "kiwe",
+        orderResult: {
+          restaurantName: response.data.restaurantName,
+          menuName: response.data.menuName,
+          totalAmount: response.data.totalAmount,
+          quantity: response.data.quantity,
+          price: response.data.price,
+        },
+      };
+      dispatch(saveMessage(conversation));
     } catch (error) {
       // 에러 발생 시
       conversation = {
@@ -111,7 +164,8 @@ function Chat() {
   const eventQuery = async (event) => {
     // 챗봇이 보낸 답변 처리
     const eventQueryVariables = {
-      event,
+      event: event,
+      userID: cookies.get("userID"),
     };
     try {
       // eventQuery 라우트로 리퀘스트 전송
@@ -127,7 +181,9 @@ function Chat() {
         dispatch(saveMessage(conversation));
       });
       // chime 재생
-      sound.play();
+      // Chrome Autoplay 방지 정책으로 인해 주석을 지워도 소리가 나지 않지만
+      // 갑자기 소리나면 사람들이 annoyed활 수 있으니 소리를 나게 하지 않는다.
+      // sound.play();
     } catch (error) {
       // 에러 발생 시
       let conversation = {
@@ -165,6 +221,10 @@ function Chat() {
     return message.content && message.content.payload.fields.card;
   };
 
+  const isRecieptMessage = (message) => {
+    return message.orderResult && message.orderResult.restaurantName;
+  };
+
   // Render functions
   const renderCards = (cards) => {
     return cards.map((card, i) => (
@@ -173,20 +233,24 @@ function Chat() {
   };
 
   const renderOneMessage = (message, i) => {
+    // 영수증 메시지일 경우
+    if (isRecieptMessage(message)) {
+      return <RecieptMessage key={i} orderResult={message.orderResult} />;
+    }
     // 일반 메세지일 경우
-    if (isNormalMessage(message)) {
+    else if (isNormalMessage(message)) {
       return (
         <Message key={i} who={message.who} text={message.content.text.text} />
       );
-    } else if (isCardMessage(message)) {
+    }
+    // 카드 메세지일 경우
+    else if (isCardMessage(message)) {
       return (
         <div style={{ width: "100%", maxHeight: "350px", overflow: "auto" }}>
           {renderCards(message.content.payload.fields.card.listValue.values)}
         </div>
       );
     }
-
-    // 카드 메세지일 경우
   };
 
   const renderMessages = (messagesFromRedux) => {
@@ -199,13 +263,20 @@ function Chat() {
     }
   };
 
+  //
+  const handleTextQuery = useCallback((text) => {
+    textQuery(text);
+  }, []);
+
   return (
     <Wrapper>
       {/* Order Buttons */}
-      <OrderMenu aria-label="메뉴"/>
+      <OrderMenu aria-label="메뉴" handleTextQuery={handleTextQuery} />
       <div aria-label="키위봇과 대화하는 채팅창입니다">
         {/* Chat Messages */}
-        <Messages >{renderMessages(messagesFromRedux)}</Messages>
+        <Messages aria-live="polite">
+          {renderMessages(messagesFromRedux)}
+        </Messages>
         {/* Input Field and Button */}
         <Paper
           component="form"
@@ -220,7 +291,12 @@ function Chat() {
             value={Input}
             onChange={inputHandler}
           />
-          <Button variant="contained" className={classes.button} type="submit" aria-label="메시지 보내기">
+          <Button
+            variant="contained"
+            className={classes.button}
+            type="submit"
+            aria-label="메시지 보내기"
+          >
             <SendIcon />
           </Button>
         </Paper>

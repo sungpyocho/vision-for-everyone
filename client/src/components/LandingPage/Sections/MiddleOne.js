@@ -1,5 +1,4 @@
 import React from "react";
-import { connect } from 'react-redux'; // redux store에 접근하기 위함
 import kiweDetail from "../../../assets/kiwe-detail.png";
 import { makeStyles } from "@material-ui/core/styles";
 import styled from "styled-components";
@@ -7,19 +6,14 @@ import PeopleIcon from "@material-ui/icons/People";
 import Filter1Icon from "@material-ui/icons/Filter1";
 import Filter2Icon from "@material-ui/icons/Filter2";
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme) => ({
   icon: {
-    fontSize: props => props.fontSize,
-    color: props => props.color,
+    fontSize: "200%",
   },
   numIcon: {
     marginRight: "15px",
   },
 }));
-
-const mapStateToProps = (state) => ({
-  fontSize: state.accessibility.fontSize
-})
 
 const MiddleOneBlock = styled.div`
   margin-top: 40px;
@@ -50,14 +44,14 @@ const MiddleOneBlock = styled.div`
   }
 `;
 
-function MiddleOne(props) {
-  const classes = useStyles(props);
+function MiddleOne() {
+  const classes = useStyles();
   return (
     <MiddleOneBlock>
       <div>
         <img src={kiweDetail} alt="키위 소개" aria-hidden="true" className="img" />
         <div className="sub-header">
-          <h3>대화로 주문하는 키오스크: 키위</h3>
+          <h3>함께하는 키오스크 키위가 질문합니다.</h3>
         </div>
       </div>
 
@@ -66,14 +60,14 @@ function MiddleOne(props) {
         <h4>당신의 키오스크는 친근한가요?</h4>
         <div className="list">
           <Filter1Icon className={classes.numIcon} />
-          키오스크의 복잡한 화면, 끝없는 줄서기, 답답하지 않으셨나요?
+          키위봇과 대화해 보세요.
           <br />
           <Filter2Icon className={classes.numIcon} />
-          원하는 식당과 메뉴를 키위에게 말해보세요. 척 하면 알아듣고 결제까지 단숨입니다.
+          식당 점원처럼 원하는 메뉴, 수량을 알아듣고, 결제도 척척합니다.
         </div>
       </div>
     </MiddleOneBlock>
   );
 }
 
-export default connect(mapStateToProps)(MiddleOne);
+export default MiddleOne;

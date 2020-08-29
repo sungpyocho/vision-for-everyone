@@ -1,32 +1,35 @@
 const express = require("express");
 const router = express.Router();
+
+// Dialogflow
 const dialogflow = require("dialogflow");
-const config = require("../config/keys");
-// console.log(config); //키를 제대로 불러오는지 테스트하는 코드
-const projectId = config.googleProjectID;
-const sessionId = config.dialogFlowSessionID;
-const languageCode = config.dialogFlowSessionLanguageCode;
-console.log(process.env.GOOGLE_APPLICATION_CREDENTIALS);
-// 아래 방법을 써보려고 했으나 전혀 말을 듣지 않았다...
-// const credentials = {
-//   client_email: config.googleClientEmail,
-//   private_key: config.googlePrivateKey.replace(/\\n/g, "\n"),
-// };
-
-// const sessionClient = new dialogflow.SessionsClient({
-//   projectId: projectId,
-//   credentials: credentials,
-// });
-
-// 결국, 구글 인증 관련은 GOOGLE_APPLICATION_CREDENTIALS 환경변수를 설정하여 해결하자.
-// re: 현재의 구글 인증은 GOOGLE_APPLICATION_CREDENTIALS 환경변수와 무관한, sessionClient 변수의 keyFilename으로 이루어지는 중
+require("dotenv").config();
+const projectId = process.env.GOOGLE_PROJECT_ID;
+const sessionId = process.env.DIALOGFLOW_SESSION_ID;
+const languageCode = process.env.DIALOGFLOW_LANGUAGE_CODE;
+const credentials = {
+  client_email: process.env.GOOGLE_CLIENT_EMAIL,
+  private_key: process.env.GOOGLE_PRIVATE_KEY,
+};
 const sessionClient = new dialogflow.SessionsClient({
-  keyFilename: './server/config/master-kiwebot-bdvjmr-a0970ec47dd9.json'
+  projectId: projectId,
+  credentials: credentials,
 });
-const sessionPath = sessionClient.sessionPath(projectId, sessionId);
-console.log(projectId, sessionId);
+
+// Middleware functions
+const { payment, findMenuPrice } = require("../middleware/order");
+var restaurantName = ""; // 전역변수
+
 // Text Query Route
 router.post("/textQuery", async (req, res) => {
+  // 유저마다 다른 session path 설정
+  let sessionPath = sessionClient.sessionPath(
+    projectId,
+    sessionId + req.body.userID
+  );
+
+  console.log("현재 유저:", sessionId + req.body.userID);
+
   // 클라이언트에서 온 정보를 Dialogflow API로 보내기
   // text query request
   const request = {
@@ -49,12 +52,61 @@ router.post("/textQuery", async (req, res) => {
   console.log(`  Query: ${result.queryText}`);
   console.log(`  Response: ${result.fulfillmentText}`);
 
+  // 처음 대화 시작 시 식당 정보 저장해놓기
+  if (result.action == "input.welcome") {
+    const regExp = /\[([^\]]+)\]/;
+    let matches = regExp.exec(result.fulfillmentMessages[0].text.text);
+    restaurantName = matches[1];
+    console.log("레스토랑명은", restaurantName);
+    result.step = "select restaurant";
+  }
+
   // 프론트엔드로 정보 보내기
-  res.send(result);
+  // 만약 결제단계면, 카카오페이 결제창으로 redirect
+  if (result.fulfillmentText.includes("카카오페이")) {
+    let dialogflowResult = result;
+    result.outputContexts.forEach((context) => {
+      // Dialogflow 답변에서 선택한 메뉴 정보를 담은 context를 찾음
+      if (context.name.includes("finished_order_need_payment")) {
+        let menuName = `${context.parameters.fields.coffee_menu.stringValue}(${context.parameters.fields.Size.stringValue})`; // '메뉴명(사이즈)'의 형식으로 DB에 저장된 메뉴 찾기
+        let quantity = context.parameters.fields.number.numberValue;
+        console.log(
+          "메뉴명: ",
+          menuName,
+          "수량: ",
+          quantity,
+          "식당명: ",
+          restaurantName
+        );
+        // db에서 가격 찾음
+        findMenuPrice(restaurantName, menuName).then((price) => {
+          let totalAmount = price * quantity; // 가격 x 수량 = 전체가격
+
+          payment(restaurantName, totalAmount).then((kakaoResult) => {
+            // 영수증 띄워주기 위해 식당명, 메뉴명, DB 정보 활용한 총 금액을 클라이언트단에 보냄
+            kakaoResult.restaurantName = restaurantName;
+            kakaoResult.menuName = menuName;
+            kakaoResult.price = price;
+            kakaoResult.quantity = quantity;
+            kakaoResult.totalAmount = totalAmount;
+            res.send({ ...dialogflowResult, ...kakaoResult });
+          });
+        });
+      }
+    });
+  } else {
+    res.send(result);
+  }
 });
 
 // Event Query Route
 router.post("/eventQuery", async (req, res) => {
+  // 유저마다 다른 session path 설정
+  let sessionPath = sessionClient.sessionPath(
+    projectId,
+    sessionId + req.body.userID
+  );
+
   // The text query request.
   const request = {
     session: sessionPath,

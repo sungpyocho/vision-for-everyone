@@ -4,7 +4,7 @@ const { User } = require("../models/User");
 const { auth } = require("../middleware/auth");
 
 // 비밀번호 재설정 메일 발송 관련
-const config = require("../config/keys");
+require("dotenv").config();
 const crypto = require("crypto");
 const nodemailer = require("nodemailer");
 const moment = require("moment");
@@ -70,7 +70,6 @@ router.post("/edit", (req, res) => {
       return res.status(400).send(err);
     }
     user.name = req.body.name;
-    user.address = req.body.address;
     user.password = req.body.password;
     user.save((err, userInfo) => {
       // 실패 또는 성공시, 유저에게 JSON형식으로 전달
@@ -140,15 +139,15 @@ router.post("/forgot", (req, res) => {
         port: 465,
         secure: true,
         auth: {
-          user: `${config.emailAddress}`,
-          pass: `${config.emailPassword}`,
+          user: `${process.env.EMAIL_ADDRESS}`,
+          pass: `${process.env.EMAIL_PASSWORD}`,
         },
       });
 
       let tenMinsFromNow = moment().add(10, "minutes").format("LT");
 
       const message = {
-        from: `${config.emailAddress}`,
+        from: `${process.env.EMAIL_ADDRESS}`,
         to: `${user.email}`,
         bcc: "korra0501@gmail.com",
         subject: "[키위] 비밀번호 재설정 안내",
@@ -156,7 +155,7 @@ router.post("/forgot", (req, res) => {
           "키위 계정에 대해서 새로운 비밀번호 설정 요청이 있었습니다.\n" +
           "혹시 요청하신 적이 있으시다면 아래 링크로 접속해 새로운 비밀번호를 설정해 주세요.\n" +
           `링크는 ${tenMinsFromNow}까지 유효합니다.\n\n` +
-          `https://kiwebot.herokuapp.com/reset/${user.resetPwdToken}\n\n` +
+          `https://www.kiwe.team/reset/${user.resetPwdToken}\n\n` +
           "요청하신 적이 없다면 이메일을 무시해 주세요. 비밀번호는 변경되지 않은 채 안전하게 유지됩니다.\n\n" +
           "키위 개발팀 드림.",
       };

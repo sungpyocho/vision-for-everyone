@@ -29,7 +29,7 @@ const Message = (props) => {
         <AvatarName>{whoIsAvatar}</AvatarName>
       </div>
       <MessageBox who={props.who}>
-        <span>{props.text}</span>
+        <span tabIndex='0'>{props.text}</span>
       </MessageBox>
       {/* 자동 scroll을 위한 div */}
       <div

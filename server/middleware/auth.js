@@ -15,7 +15,12 @@ let auth = (req, res, next) => {
   // 쿠키에서 가져온 토큰이 이 유저의 토큰인가?
   User.findByToken(token, (err, user) => {
     if (err) throw err;
-    if (!user) return res.json({ isAuth: false, error: true });
+    if (!user)
+      return res.json({
+        isAuth: false,
+        error: true,
+        message: "유저를 찾을 수 없습니다.",
+      });
     if (isJWTExpired(user.tokenExp))
       return res.json({ isAuth: false, message: "JWT token has expired." });
 

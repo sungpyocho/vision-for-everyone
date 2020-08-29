@@ -1,297 +1,341 @@
-import React from "react";
+import React, { useEffect, useState, useCallback } from "react";
+import axios from "axios";
+import { useDispatch, useSelector } from "react-redux";
+import { saveMessage, clearMessage } from "../../_actions/message_actions";
+
+import Cookies from "universal-cookie"; //set id to cookie
+import { v4 as uuid } from "uuid"; //generate unique id for sessions in visitors v4 for random id generation
+
 import { makeStyles } from "@material-ui/core/styles";
-import Card from "@material-ui/core/Card";
-import CardActionArea from "@material-ui/core/CardActionArea";
-import CardActions from "@material-ui/core/CardActions";
-import CardContent from "@material-ui/core/CardContent";
-import CardMedia from "@material-ui/core/CardMedia";
-import Button from "@material-ui/core/Button";
-import Typography from "@material-ui/core/Typography";
-import Grid from "@material-ui/core/Grid";
-import chatImg from "../../assets/tutorial/tutorial-chat.jpg";
-import payImg from "../../assets/tutorial/tutorial-money.jpg";
-import restImg from "../../assets/tutorial/tutorial-restaurant.jpg";
-import byeImg from "../../assets/tutorial/tutorial-bye.jpg";
-import foodImg from "../../assets/tutorial/tutorial-food.jpg";
+import { Button, Paper, InputBase } from "@material-ui/core";
+import SendIcon from "@material-ui/icons/Send";
+import styled from "styled-components";
 
-const useStyles = makeStyles({
-  root: {
-    width: 300,
-    height: 360,
-    margin: "1rem",
+import ProgressBar from "../Chat/Sections/ProgressBar";
+import OrderMenu from "../Chat/Sections/OrderMenu";
+import Message from "../Chat/Sections/Message";
+import CardMessage from "../Chat/Sections/CardMessage";
+import RecieptMessage from "../Chat/Sections/RecieptMessage";
+import chime from "../../assets/chime.mp3";
+
+const cookies = new Cookies(); //creating cookie object
+
+const useStyles = makeStyles((theme) => ({
+  inputForm: {
+    display: "flex",
+    borderRadius: 5,
+    borderTop: "1px solid lightgrey",
+    bottom: 0,
+    position: "absolute",
+    width: "100%",
   },
-  title: {
-    fontSize: 14,
+  input: {
+    marginLeft: theme.spacing(1),
+    flex: 1,
   },
-});
+  button: {
+    backgroundColor: "#6ac48a",
+    color: "white",
+    borderRadius: 5,
+  },
+}));
 
-export default function TutorialPage(props) {
-  const classes = useStyles();
+function TutorialPage() {
+  const classes = useStyles(); // Customize Material-UI
 
-  const moveToChat = () => {
-    props.history.push("/chat");
+  // redux 구조를 보면 state.message.messages가 메세지들의 배열이다.
+  const messagesFromRedux = useSelector((state) => state.message.messages);
+  const dispatch = useDispatch();
+
+  // chime mp3
+  const sound = new Audio(chime);
+
+  // 주문 스텝을 받아오는 부분
+  const [orderStep, setOrderStep] = useState("select restaurant"); // Keyboard Input State
+  const [Input, setInput] = useState("");
+  const inputHandler = (event) => {
+    setInput(event.currentTarget.value);
   };
 
+  // component가 mount되면 실행
+  // useEffect를 써서 렌더링하면 이 컴포넌트에서 이거 해야해!라고 지시
+  useEffect(() => {
+    checkUserId();
+    dispatch(clearMessage());
+    eventQuery("tutorial");
+  }, []);
+
+  // 쿠키를 체크해서 UserId값이 없으면 추가
+  const checkUserId = () => {
+    if (cookies.get("userID") === undefined) {
+      //if cookie is already not present before then generate new cookie
+      cookies.set("userID", uuid(), { path: "/" }); //  '/' means that the cookie will be accessible for all pages i.e unique session for all pages
+    }
+  };
+
+  // 클라이언트가 보낸 메세지 처리
+  const textQuery = async (text) => {
+    // 보낸 메세지 처리
+    // conversation을 이렇게 만든 이유는
+    // dialogflow의 fulfillmentMessages의 형식과 같은 형식을 취하기 위해!
+    let conversation = {
+      who: "user",
+      content: {
+        text: {
+          text: text,
+        },
+      },
+    };
+
+    // 보낸 메세지 데이터를 리덕스 스토어에 저장
+    dispatch(saveMessage(conversation));
+    // 챗봇이 보낸 답변 처리
+    const textQueryVariables = {
+      text: text,
+      userID: cookies.get("userID"),
+    };
+
+    try {
+      // textQuery route로 리퀘스트 전송
+      const response = await axios.post(
+        "/api/dialogflow/textQuery",
+        textQueryVariables
+      );
+      // 주문 전 일반 대화.
+      // headers는 카카오페이 주문창 URL을 포함하므로, 일반대화에서는 없을수밖에 없다.
+      if (!response.data.headers) {
+        response.data.fulfillmentMessages.forEach((content) => {
+          conversation = {
+            who: "kiwe",
+            content: content,
+          };
+          dispatch(saveMessage(conversation));
+        });
+      } else {
+        // 마지막 주문 단계. 메세지 출력.
+        conversation = {
+          who: "kiwe",
+          content: {
+            message: "text",
+            platform: "PLATFORM_UNSPECIFIED",
+            text: {
+              text: ["카카오페이에서 결제를 완료하세요."],
+            },
+          },
+        };
+        dispatch(saveMessage(conversation));
+
+        // 1.5초 뒤에 새 창에서 주문 창을 염.
+        setTimeout(() => {
+          let browserWindow = window.open();
+          browserWindow.location = response.data.headers.Location;
+
+          conversation = {
+            who: "kiwe",
+            orderResult: {
+              restaurantName: response.data.restaurantName,
+              menuName: response.data.menuName,
+              totalAmount: response.data.totalAmount,
+              quantity: response.data.quantity,
+              price: response.data.price,
+            },
+          };
+          dispatch(saveMessage(conversation));
+        }, 1500);
+      }
+      console.log(response.data);
+      // orderStep 업데이트를 통해 progress bar 상태 변경하기
+      if (response.data.intent.displayName) {
+        setOrderStep(response.data.intent.displayName);
+      }
+      // chime 재생
+      sound.play();
+    } catch (error) {
+      console.log(error);
+      // 에러 발생 시
+      conversation = {
+        who: "kiwe",
+        content: {
+          text: {
+            text:
+              "챗봇의 답변 처리과정에서 에러가 발생했습니다. 페이지를 새로고침해주세요.",
+          },
+        },
+      };
+      dispatch(saveMessage(conversation));
+      sound.play(); // chime 재생
+    }
+  };
+
+  // 챗봇의 첫 인사 메세지 처리
+  const eventQuery = async (event) => {
+    // 챗봇이 보낸 답변 처리
+    const eventQueryVariables = {
+      event: event,
+      userID: cookies.get("userID"),
+    };
+    try {
+      // eventQuery 라우트로 리퀘스트 전송
+      const response = await axios.post(
+        "/api/dialogflow/eventQuery",
+        eventQueryVariables
+      );
+      response.data.fulfillmentMessages.forEach((content) => {
+        let conversation = {
+          who: "kiwe",
+          content: content,
+        };
+        dispatch(saveMessage(conversation));
+      });
+      // chime 재생
+      // Chrome Autoplay 방지 정책으로 인해 주석을 지워도 소리가 나지 않지만
+      // 갑자기 소리나면 사람들이 annoyed활 수 있으니 소리를 나게 하지 않는다.
+      // sound.play();
+    } catch (error) {
+      // 에러 발생 시
+      let conversation = {
+        who: "kiwe",
+        content: {
+          text: {
+            text:
+              "챗봇의 답변 처리과정에서 에러가 발생했습니다. 페이지를 새로고침해주세요.",
+          },
+        },
+      };
+      dispatch(saveMessage(conversation));
+      sound.play(); // chime 재생
+    }
+  };
+
+  // Functions about query input
+  const handleSubmit = (event) => {
+    if (event) event.preventDefault();
+
+    if (!Input) {
+      return alert("내용을 입력해주세요");
+    }
+    // request를 server의 text Query로 전송
+    textQuery(Input);
+    setInput("");
+  };
+
+  // Helper functions
+  const isNormalMessage = (message) => {
+    return message.content && message.content.text && message.content.text.text;
+  };
+
+  const isCardMessage = (message) => {
+    return message.content && message.content.payload.fields.card;
+  };
+
+  const isRecieptMessage = (message) => {
+    return message.orderResult && message.orderResult.restaurantName;
+  };
+
+  // Render functions
+  const renderCards = (cards) => {
+    return cards.map((card, i) => (
+      <CardMessage key={i} cardInfo={card.structValue} />
+    ));
+  };
+
+  const renderOneMessage = (message, i) => {
+    console.log(message);
+    // 영수증 메시지일 경우
+    if (isRecieptMessage(message)) {
+      return <RecieptMessage key={i} orderResult={message.orderResult} />;
+    }
+    // 일반 메세지일 경우
+    else if (isNormalMessage(message)) {
+      return (
+        <Message key={i} who={message.who} text={message.content.text.text} />
+      );
+    }
+    // 카드 메세지일 경우
+    else if (isCardMessage(message)) {
+      return (
+        <div style={{ width: "100%", maxHeight: "350px", overflow: "auto" }}>
+          {renderCards(message.content.payload.fields.card.listValue.values)}
+        </div>
+      );
+    }
+  };
+
+  const renderMessages = (messagesFromRedux) => {
+    if (messagesFromRedux) {
+      return messagesFromRedux.map((message, i) => {
+        return renderOneMessage(message, i);
+      });
+    } else {
+      return null;
+    }
+  };
+
+  //
+  const handleTextQuery = useCallback((text) => {
+    textQuery(text);
+  }, []);
+
   return (
-    <div style={{ backgroundColor: "#f1f0f0" }}>
-      <Grid container justify="center" spacing={0}>
-        <Grid item xs={12} sm={6} md={4} lg={3} xl={4} align="center">
-          <Card className={classes.root}>
-            <CardActionArea>
-              <CardMedia
-                component="img"
-                alt="첫번째 가이드."
-                height="130"
-                image={chatImg}
-                title="guide"
-              />
-              <CardContent>
-                <Typography
-                  className={classes.title}
-                  color="textSecondary"
-                  gutterBottom
-                  aria-hidden="true"
-                >
-                  시작 가이드 1
-                </Typography>
-                <Typography variant="h5" component="h2">
-                  키위는 세 개의 버튼 아래 채팅창이 있어요. 채팅 입력창을 통해
-                  키위와 손쉽게 소통하며 주문해보아요.
-                </Typography>
-              </CardContent>
-            </CardActionArea>
-            <CardActions>
-              <Button onClick={moveToChat} size="small" color="primary">
-                채팅창에서 확인해보기
-              </Button>
-            </CardActions>
-          </Card>
-        </Grid>
-        <Grid item xs={12} sm={6} md={4} lg={3} xl={4} align="center">
-          <Card className={classes.root}>
-            <CardActionArea>
-              <CardMedia
-                component="img"
-                alt="두번째 가이드."
-                height="130"
-                image={restImg}
-                title="guide"
-              />
-              <CardContent>
-                <Typography
-                  className={classes.title}
-                  color="textSecondary"
-                  gutterBottom
-                  aria-hidden="true"
-                >
-                  시작 가이드 2
-                </Typography>
-                <Typography variant="h5" component="h2">
-                  버튼은 메뉴, 이벤트, 직원호출 버튼이 있어요. 직원호출은 아직
-                  개발중이지만, 직원을 호출할 수 있어요.
-                </Typography>
-              </CardContent>
-            </CardActionArea>
-            <CardActions>
-              <Button onClick={moveToChat} size="small" color="primary">
-                채팅창에서 확인해보기
-              </Button>
-            </CardActions>
-          </Card>
-        </Grid>
-        <Grid item xs={12} sm={6} md={4} lg={3} xl={4} align="center">
-          <Card className={classes.root}>
-            <CardActionArea>
-              <CardMedia
-                component="img"
-                alt="세번째 가이드."
-                height="130"
-                image={foodImg}
-                title="guide"
-              />
-              <CardContent>
-                <Typography
-                  className={classes.title}
-                  color="textSecondary"
-                  gutterBottom
-                  aria-hidden="true"
-                >
-                  시작 가이드 3
-                </Typography>
-                <Typography variant="h5" component="h2">
-                  채팅창에서는 카톡처럼 대화하며 어디서 어떤 메뉴를 먹을지
-                  고르고, 결제까지 바로 할 수 있어요.
-                </Typography>
-              </CardContent>
-            </CardActionArea>
-            <CardActions>
-              <Button onClick={moveToChat} size="small" color="primary">
-                채팅창에서 확인해보기
-              </Button>
-            </CardActions>
-          </Card>
-        </Grid>
-        <Grid item xs={12} sm={6} md={4} lg={3} xl={4} align="center">
-          <Card className={classes.root}>
-            <CardActionArea>
-              <CardMedia
-                component="img"
-                alt="네번째 가이드."
-                height="130"
-                image={byeImg}
-                title="guide"
-              />
-              <CardContent>
-                <Typography
-                  className={classes.title}
-                  color="textSecondary"
-                  gutterBottom
-                  aria-hidden="true"
-                >
-                  시작 가이드 4
-                </Typography>
-                <Typography variant="h5" component="h2">
-                  키위와 대화를 시작하려면 안녕, 또는 ㅎㅇ처럼 초성을
-                  입력해주세요. 헬로, 하이같은 말도 물론 가능해요.
-                </Typography>
-              </CardContent>
-            </CardActionArea>
-            <CardActions>
-              <Button onClick={moveToChat} size="small" color="primary">
-                채팅창에서 확인해보기
-              </Button>
-            </CardActions>
-          </Card>
-        </Grid>
-        <Grid item xs={12} sm={6} md={4} lg={3} xl={4} align="center">
-          <Card className={classes.root}>
-            <CardActionArea>
-              <CardMedia
-                component="img"
-                alt="다섯번째 가이드."
-                height="130"
-                image={restImg}
-                title="guide"
-              />
-              <CardContent>
-                <Typography
-                  className={classes.title}
-                  color="textSecondary"
-                  gutterBottom
-                  aria-hidden="true"
-                >
-                  시작 가이드 5
-                </Typography>
-                <Typography variant="h5" component="h2">
-                  키위봇에게 식당을 알려주세요. 현재 고려대 학식, 스타벅스,
-                  버거킹 등의 식당을 테스트할 수 있어요.
-                </Typography>
-              </CardContent>
-            </CardActionArea>
-            <CardActions>
-              <Button onClick={moveToChat} size="small" color="primary">
-                채팅창에서 확인해보기
-              </Button>
-            </CardActions>
-          </Card>
-        </Grid>
-        <Grid item xs={12} sm={6} md={4} lg={3} xl={4} align="center">
-          <Card className={classes.root}>
-            <CardActionArea>
-              <CardMedia
-                component="img"
-                alt="여섯번째 가이드."
-                height="130"
-                image={chatImg}
-                title="guide"
-              />
-              <CardContent>
-                <Typography
-                  className={classes.title}
-                  color="textSecondary"
-                  gutterBottom
-                  aria-hidden="true"
-                >
-                  시작 가이드 6
-                </Typography>
-                <Typography variant="h5" component="h2">
-                  키위봇에게 주문할 메뉴의 이름과 수량을 말씀하세요. "짜장면 3",
-                  혹은 "ㅉㅈㅁ 3" 처럼요.
-                </Typography>
-              </CardContent>
-            </CardActionArea>
-            <CardActions>
-              <Button onClick={moveToChat} size="small" color="primary">
-                채팅창에서 확인해보기
-              </Button>
-            </CardActions>
-          </Card>
-        </Grid>
-        <Grid item xs={12} sm={6} md={4} lg={3} xl={4} align="center">
-          <Card className={classes.root}>
-            <CardActionArea>
-              <CardMedia
-                component="img"
-                alt="일곱번째 가이드."
-                height="130"
-                image={payImg}
-                title="guide"
-              />
-              <CardContent>
-                <Typography
-                  className={classes.title}
-                  color="textSecondary"
-                  gutterBottom
-                  aria-hidden="true"
-                >
-                  시작 가이드 7
-                </Typography>
-                <Typography variant="h5" component="h2">
-                  카카오페이, 삼성페이, 토스 등 결제방법을 선택해주세요.
-                  삼성페이, ㅋㅋㅇ처럼 말해주세요.
-                </Typography>
-              </CardContent>
-            </CardActionArea>
-            <CardActions>
-              <Button onClick={moveToChat} size="small" color="primary">
-                채팅창에서 확인해보기
-              </Button>
-            </CardActions>
-          </Card>
-        </Grid>
-        <Grid item xs={12} sm={6} md={4} lg={3} xl={4} align="center">
-          <Card className={classes.root}>
-            <CardActionArea>
-              <CardMedia
-                component="img"
-                alt="여덟번째 가이드."
-                height="130"
-                image={byeImg}
-                title="guide"
-              />
-              <CardContent>
-                <Typography
-                  className={classes.title}
-                  color="textSecondary"
-                  gutterBottom
-                  aria-hidden="true"
-                >
-                  시작 가이드 8
-                </Typography>
-                <Typography variant="h5" component="h2">
-                  결제모듈 연결이란 메시지가 나오면 대화가 끝나요. 처음으로
-                  돌아가려면 안녕을 입력해주세요.
-                </Typography>
-              </CardContent>
-            </CardActionArea>
-            <CardActions>
-              <Button onClick={moveToChat} size="small" color="primary">
-                채팅창에서 확인해보기
-              </Button>
-            </CardActions>
-          </Card>
-        </Grid>
-      </Grid>
-    </div>
+    <Wrapper>
+      <ProgressBar orderStep={orderStep} />
+      {/* Order Buttons */}
+      <OrderMenu aria-label="메뉴" handleTextQuery={handleTextQuery} />
+      <div aria-label="키위봇과 대화하는 채팅창입니다">
+        {/* Chat Messages */}
+        <Messages aria-live="polite">
+          {renderMessages(messagesFromRedux)}
+        </Messages>
+        {/* Input Field and Button */}
+        <Paper
+          component="form"
+          className={classes.inputForm}
+          onSubmit={handleSubmit}
+        >
+          <InputBase
+            autoFocus
+            className={classes.input}
+            placeholder="메세지를 입력하세요"
+            type="text"
+            value={Input}
+            onChange={inputHandler}
+          />
+          <Button
+            variant="contained"
+            className={classes.button}
+            type="submit"
+            aria-label="메시지 보내기"
+          >
+            <SendIcon />
+          </Button>
+        </Paper>
+      </div>
+    </Wrapper>
   );
 }
+
+const Wrapper = styled.div`
+  height: calc(100% - 64px);
+  position: absolute;
+  width: 66.6%;
+  left: 16.7%;
+  right: 16.7%;
+  @media (max-width: 768px) {
+    width: 90%;
+    left: 5%;
+    right: 5%;
+  }
+`;
+
+const Messages = styled.div`
+  overflow: auto;
+  background-color: #f1f0f0;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  bottom: 36px;
+  position: absolute;
+  height: calc(90% - 86px);
+  width: 100%;
+`;
+
+export default TutorialPage;

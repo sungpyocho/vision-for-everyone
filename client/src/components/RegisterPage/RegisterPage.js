@@ -6,9 +6,7 @@ import CssBaseline from "@material-ui/core/CssBaseline";
 import TextField from "@material-ui/core/TextField";
 // import FormControlLabel from "@material-ui/core/FormControlLabel";
 // import Checkbox from "@material-ui/core/Checkbox";
-import Link from "@material-ui/core/Link";
-import Grid from "@material-ui/core/Grid";
-import Box from "@material-ui/core/Box";
+import { Link, Grid, Box } from "@material-ui/core";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
@@ -53,7 +51,6 @@ export default function RegisterPage(props) {
 
   const [Name, setName] = useState("");
   const [Email, setEmail] = useState("");
-  const [Address, setAddress] = useState("");
   const [Password, setPassword] = useState("");
   const [ConfirmPassword, setConfirmPassword] = useState("");
   const [arePasswordsSame, setArePasswordsSame] = useState(true); // 두 비번이 같은가?
@@ -65,10 +62,6 @@ export default function RegisterPage(props) {
 
   const nameHandler = (event) => {
     setName(event.currentTarget.value);
-  };
-
-  const addressHandler = (event) => {
-    setAddress(event.currentTarget.value);
   };
 
   const passwordHandler = (event) => {
@@ -92,7 +85,6 @@ export default function RegisterPage(props) {
       email: Email,
       name: Name,
       password: Password,
-      address: Address,
     };
 
     dispatch(registerUser(body)).then((response) => {
@@ -178,18 +170,6 @@ export default function RegisterPage(props) {
                 </Alert>
               </Grid>
             )}
-            <Grid item xs={12}>
-              <TextField
-                variant="outlined"
-                required
-                fullWidth
-                id="address"
-                label="주소"
-                name="address"
-                value={Address}
-                onChange={addressHandler}
-              />
-            </Grid>
             {/* <Grid item xs={12}>
               <FormControlLabel
                 control={<Checkbox value="allowExtraEmails" color="primary" />}

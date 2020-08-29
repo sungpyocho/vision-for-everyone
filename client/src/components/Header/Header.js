@@ -121,7 +121,7 @@ const Header = (props) => {
 
   const redirectToEditPage = () => {
     props.history.push("/edit");
-  };
+  }
 
   const handleLogout = () => {
     axios.get("/api/users/logout").then((response) => {

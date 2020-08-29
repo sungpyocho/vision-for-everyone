@@ -21,11 +21,6 @@ const userSchema = mongoose.Schema({
     minlength: 8,
     required: true,
   },
-  address: {
-    type: String,
-    maxlength: 100,
-    required: true,
-  },
   role: {
     type: Number,
     default: 0, // 0: 일반회원, 1: 관리자
@@ -43,22 +38,6 @@ const userSchema = mongoose.Schema({
   resetPwdExp: {
     type: Number,
   },
-  fontSize: {
-    type: Number,
-    default: 5,
-  },
-  highContrast: {
-    type: Boolean,
-    default: false,
-  },
-  readMessage: {
-    type: Boolean,
-    default: false,
-  },
-  chime: {
-    type: Boolean,
-    default: true
-  }
 });
 
 // pre()를 처리하고 index.js의 save()를 실행함. next() -> save()
