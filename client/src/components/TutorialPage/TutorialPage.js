@@ -10,6 +10,9 @@ import { makeStyles } from "@material-ui/core/styles";
 import { Button, Paper, InputBase } from "@material-ui/core";
 import SendIcon from "@material-ui/icons/Send";
 import styled from "styled-components";
+import {
+  Dialog,
+} from "@material-ui/core";
 
 import ProgressBar from "../Chat/Sections/ProgressBar";
 import OrderMenu from "../Chat/Sections/OrderMenu";
@@ -45,10 +48,55 @@ const useStyles = makeStyles((theme) => ({
     color: "white",
     borderRadius: 25,
   },
+  dialog: {
+    position: 'fixed', 
+    top: 0, 
+    left: 0,
+    bottom: 0,
+    right: 0,
+    width: '100%',
+    height: '100%',
+    border: 'none', 
+    margin: 0,
+    padding: 0,
+  },
+  iframe: {
+    top: 0, 
+    left: 0,
+    bottom: 0,
+    right: 0,
+    width: '100%',
+    height: '100%',
+    border: 'none', 
+    margin: 0,
+    padding: 0,
+    position: 'fixed',
+    backgroundColor: 'white',
+  },
+  closeButton: {
+    position: 'fixed',
+    bottom: '5%',
+    right: '5%',
+  }
 }));
 
 function TutorialPage() {
   const classes = useStyles(); // Customize Material-UI
+
+  // Kakao Pay Link State for <iframe>
+  const [kakaoPayLink, setKakaoPayLink] = useState(null);
+
+  // kakao pay 모달창 상태
+  const [openCall, setOpenCall] = useState(true);
+
+  // 영수증 메시지 출력 관련
+  const [receipt, setReceipt] = useState(null)
+
+  // iframe에서 온 상태 메시지
+  const [kakaoPayResult, setKakaoPayResult] = useState(null)
+
+  // showCloseButton = iframe 창에서 맨 마지막 리디렉트 이후 버튼을 보여주시 위해 상태를 생성함.
+  const [showCloseButton, setShowCloseButton] = useState(false);
 
   // redux 구조를 보면 state.message.messages가 메세지들의 배열이다.
   const messagesFromRedux = useSelector((state) => state.message.messages);
@@ -70,7 +118,29 @@ function TutorialPage() {
     checkUserId();
     dispatch(clearMessage());
     eventQuery("tutorial");
+
+    const handler = event => {
+      if (typeof event.data === 'string' || event.data instanceof String) {
+        const data = JSON.parse(event.data);
+        setKakaoPayResult(data.message);
+      }
+      else return;
+    }
+    window.addEventListener("message", handler);
+
+    return () => window.removeEventListener("message", handler);
   }, []);
+
+  useEffect(() => {
+    if (kakaoPayResult === "Success") {
+      setOrderStep("Confirm_After_Payment");
+      setShowCloseButton(true);
+      dispatch(saveMessage(receipt));
+    }
+    else if (kakaoPayResult === "Fail" || kakaoPayResult === "Cancel") {
+      setShowCloseButton(true);
+    }
+  }, [kakaoPayResult])
 
   // 쿠키를 체크해서 UserId값이 없으면 추가
   const checkUserId = () => {
@@ -134,29 +204,28 @@ function TutorialPage() {
 
         // 1.5초 뒤에 새 창에서 주문 창을 염.
         setTimeout(() => {
-          let browserWindow = window.open();
-          browserWindow.location = response.data.headers.Location;
-
-          conversation = {
-            who: "kiwe",
-            orderResult: {
-              restaurantName: response.data.restaurantName,
-              menuName: response.data.menuName,
-              totalAmount: response.data.totalAmount,
-              quantity: response.data.quantity,
-              price: response.data.price,
-            },
-          };
-          dispatch(saveMessage(conversation));
+          setKakaoPayLink(response.data.headers.Location);
         }, 1500);
       }
-      console.log(response.data);
       // orderStep 업데이트를 통해 progress bar 상태 변경하기
       if (response.data.intent.displayName) {
         setOrderStep(response.data.intent.displayName);
       }
       // chime 재생
       sound.play();
+
+      conversation = {
+        who: "kiwe",
+        orderResult: {
+          restaurantName: response.data.restaurantName,
+          menuName: response.data.menuName,
+          totalAmount: response.data.totalAmount,
+          quantity: response.data.quantity,
+          price: response.data.price,
+        },
+      };
+      // 일단 state에다가 conversation 저장하고, 추후 iframe이 닫혔을 때, 영수증 메시지 출력하기
+      setReceipt(conversation);
     } catch (error) {
       console.log(error);
       // 에러 발생 시
@@ -247,7 +316,6 @@ function TutorialPage() {
   };
 
   const renderOneMessage = (message, i) => {
-    console.log(message);
     // 영수증 메시지일 경우
     if (isRecieptMessage(message)) {
       return <RecieptMessage key={i} orderResult={message.orderResult} />;
@@ -278,10 +346,20 @@ function TutorialPage() {
     }
   };
 
-  //
   const handleTextQuery = useCallback((text) => {
     textQuery(text);
   }, []);
+
+  const handleCloseCall = () => {
+    if (kakaoPayResult === "Fail" || kakaoPayResult === "Cancel") {
+      // 결제 실패, 결제 취소 시 /chat 페이지 리로드
+      window.location.reload(false);
+    }
+    // 사용자에게 이미 로드된 채팅 보이지 않기 위해 setTimeout 함수 적용
+    setTimeout(() => {
+      setOpenCall(false);
+    }, 500);
+  };
 
   return (
     <Wrapper>
@@ -317,6 +395,13 @@ function TutorialPage() {
           </Button>
         </Paper>
       </div>
+      {kakaoPayLink && 
+      (<Dialog className={classes.dialog} open={openCall}>
+           <iframe className={classes.iframe} src={kakaoPayLink} title="KakaoPay Link"></iframe>
+           {showCloseButton && <Button className={classes.closeButton} onClick={handleCloseCall} color="primary" autoFocus>
+            닫기
+           </Button>}
+       </Dialog>)}
     </Wrapper>
   );
 }
