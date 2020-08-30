@@ -69,7 +69,8 @@ const useStyles = makeStyles((theme) => ({
     border: 'none', 
     margin: 0,
     padding: 0,
-    position: 'fixed'
+    position: 'fixed',
+    backgroundColor: 'white',
   },
   closeButton: {
     position: 'fixed',
@@ -96,6 +97,8 @@ function Chat() {
   // iframe에서 온 상태 메시지
   const [kakaoPayResult, setKakaoPayResult] = useState(null)
 
+  // showCloseButton = iframe 창에서 맨 마지막 리디렉트 이후 버튼을 보여주시 위해 상태를 생성함.
+  const [showCloseButton, setShowCloseButton] = useState(false);
   // redux 구조를 보면 state.message.messages가 메세지들의 배열이다.
   const messagesFromRedux = useSelector((state) => state.message.messages);
   const dispatch = useDispatch();
@@ -129,6 +132,7 @@ function Chat() {
 
   useEffect(() => {
     if (kakaoPayResult === "Success") {
+      setShowCloseButton(true);
       dispatch(saveMessage(receipt));
     }
   }, [kakaoPayResult])
@@ -380,9 +384,9 @@ function Chat() {
       {kakaoPayLink && 
       (<Dialog className={classes.dialog} open={openCall}>
            <iframe ref={iframeRef} className={classes.iframe} src={kakaoPayLink} title="KakaoPay Link"></iframe>
-           <Button className={classes.closeButton} onClick={handleCloseCall} color="primary" autoFocus>
+           {showCloseButton && <Button className={classes.closeButton} onClick={handleCloseCall} color="primary" autoFocus>
             닫기
-           </Button>
+           </Button>}
        </Dialog>)}
     </Wrapper>
   );
