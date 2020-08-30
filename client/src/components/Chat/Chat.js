@@ -80,9 +80,6 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function Chat() {
-  // useRef in iframe to check is src attribute has pg_token as querystring
-  const iframeRef = useRef(null);
-
   const classes = useStyles(); // Customize Material-UI
 
   // Kakao Pay Link State for <iframe>
@@ -134,6 +131,9 @@ function Chat() {
     if (kakaoPayResult === "Success") {
       setShowCloseButton(true);
       dispatch(saveMessage(receipt));
+    }
+    else if (kakaoPayResult === "Fail" || kakaoPayResult === "Cancel") {
+      setShowCloseButton(true);
     }
   }, [kakaoPayResult])
 
@@ -197,7 +197,6 @@ function Chat() {
         };
         dispatch(saveMessage(conversation));
 
-        // 새 창이 아닌 지금 컴포넌트에서 띄워줄 수 있는가? 예) 모달창에서 띄워주기
         // 1.5초 뒤에 새 창에서 주문 창을 염.
         setTimeout(() => {
           setKakaoPayLink(response.data.headers.Location);
@@ -339,13 +338,19 @@ function Chat() {
     }
   };
 
-  //
   const handleTextQuery = useCallback((text) => {
     textQuery(text);
   }, []);
 
-  const handleCloseCall = () => {
-    setOpenCall(false);
+  const handleCloseCall = () => { 
+    if (kakaoPayResult === "Fail" || kakaoPayResult === "Cancel") {
+      // 결제 실패, 결제 취소 시 /chat 페이지 리로드
+      window.location.reload(false);
+    }
+    // 사용자에게 이미 로드된 채팅 보이지 않기 위해 setTimeout 함수 적용
+    setTimeout(() => {
+      setOpenCall(false);
+    }, 500);
   };
 
   return (
@@ -383,7 +388,7 @@ function Chat() {
       </div>
       {kakaoPayLink && 
       (<Dialog className={classes.dialog} open={openCall}>
-           <iframe ref={iframeRef} className={classes.iframe} src={kakaoPayLink} title="KakaoPay Link"></iframe>
+           <iframe className={classes.iframe} src={kakaoPayLink} title="KakaoPay Link"></iframe>
            {showCloseButton && <Button className={classes.closeButton} onClick={handleCloseCall} color="primary" autoFocus>
             닫기
            </Button>}
@@ -391,17 +396,6 @@ function Chat() {
     </Wrapper>
   );
 }
-
-// (<Dialog className={classes.dialog} open={openCall}>
-//   <DialogContent className={classes.dialogContent}>
-//     <iframe ref={iframeRef} className={classes.iframe} src={kakaoPayLink} title="KakaoPay Link"></iframe>
-//   </DialogContent>
-//   <DialogActions>
-//     <Button onClick={handleCloseCall} color="primary" autoFocus>
-//      닫기
-//     </Button>
-//   </DialogActions>
-// </Dialog>)}
 
 const Wrapper = styled.div`
   height: calc(100% - 56px);
