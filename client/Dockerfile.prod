@@ -15,9 +15,28 @@ COPY . .
 # Build
 RUN npm run build
 
+
 # Stage 2: Build Nginx Server
 FROM nginx:latest
 
+# 2-1. HTTPS 설정
+# https://swiftcoding.org/nginx-lets-encrypt 참고
+
+# 2-1-1. certbot-auto의 webroot 경로 폴더 준비 및 경로를 알려주는 파일 생성 
+# Let's Encrypt 인증서 발급 시 webroot플러그인이 
+# .well-known/acme-challenge이라는 폴더를 필요로 함
+# RUN -p /var/www/letsencrypt/.well-known/acme-challenge
+# # webroot 폴더 경로를 알려주는 letsencrypt.conf파일 복사
+# COPY nginx/letsencrypt.conf /etc/nginx/snippets/letsencrypt.conf
+
+# 2-1-2. 인증서 발급프로그램 CERTBOT 설치, 및 발급
+# https://certbot.eff.org/lets-encrypt/ubuntubionic-nginx 참고
+# https://anomie7.tistory.com/59 참고
+# 도커 컨테이너가 아닌, AWS Instance에서 직접 실행할 것.
+
+
+
+# 2-2. 기본 NGINX 설정
 # React app의 build 결과물을 nginx가 serve할 수 있도록 copy
 COPY --from=builder /usr/app/client/build /usr/share/nginx/html
 
@@ -30,4 +49,4 @@ RUN chown nginx.nginx /usr/share/nginx/html/ -R
 
 # 80포트 오픈하고 nginx 실행
 EXPOSE 80
-CMD ["nginx", "-g", "daemon off;"]
+# CMD ["nginx", "-g", "daemon off;"]
