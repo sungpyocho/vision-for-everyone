@@ -27,6 +27,7 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: "#2FC4B2",
     borderTop: "1px solid lightgrey",
     bottom: 0,
+    height: "50px",
     position: "absolute",
     width: "calc(100% - 20px)",
     padding: "10px",
@@ -38,7 +39,7 @@ const useStyles = makeStyles((theme) => ({
     flex: 1,
     marginRight: "10px",
     paddingLeft: "15px",
-    paddingRight: "15px"
+    paddingRight: "15px",
   },
   button: {
     backgroundColor: "#ffb5b5",
@@ -284,50 +285,52 @@ function TutorialPage() {
   }, []);
 
   return (
-    <Wrapper>
-      <ProgressBar orderStep={orderStep} />
-      {/* Order Buttons */}
-      <OrderMenu aria-label="메뉴" handleTextQuery={handleTextQuery} />
-      <div aria-label="키위봇과 대화하는 채팅창입니다">
-        {/* Chat Messages */}
-        <Messages aria-live="polite">
-          {renderMessages(messagesFromRedux)}
-        </Messages>
-        {/* Input Field and Button */}
-        <Paper
-          component="form"
-          className={classes.inputForm}
-          onSubmit={handleSubmit}
-        >
-          <InputBase
-            autoFocus
-            className={classes.input}
-            placeholder="메세지를 입력하세요"
-            type="text"
-            value={Input}
-            onChange={inputHandler}
-          />
-          <Button
-            variant="contained"
-            className={classes.button}
-            type="submit"
-            aria-label="메시지 보내기"
+    <Bg>
+      <Wrapper>
+        <ProgressBar orderStep={orderStep} />
+        {/* Order Buttons */}
+        <OrderMenu aria-label="메뉴" handleTextQuery={handleTextQuery} />
+        <div aria-label="키위봇과 대화하는 채팅창입니다">
+          {/* Chat Messages */}
+          <Messages aria-live="polite">
+            {renderMessages(messagesFromRedux)}
+          </Messages>
+          {/* Input Field and Button */}
+          <Paper
+            component="form"
+            className={classes.inputForm}
+            onSubmit={handleSubmit}
           >
-            <SendIcon />
-          </Button>
-        </Paper>
-      </div>
-    </Wrapper>
+            <InputBase
+              autoFocus
+              className={classes.input}
+              placeholder="메세지를 입력하세요"
+              type="text"
+              value={Input}
+              onChange={inputHandler}
+            />
+            <Button
+              variant="contained"
+              className={classes.button}
+              type="submit"
+              aria-label="메시지 보내기"
+            >
+              <SendIcon />
+            </Button>
+          </Paper>
+        </div>
+      </Wrapper>
+    </Bg>
   );
 }
 
 const Wrapper = styled.div`
-  height: calc(100% - 56px);
+  height: 100%;
   position: absolute;
   width: 66.6%;
   left: 16.7%;
   right: 16.7%;
-  background-color: #2FC4B2;
+  background-color: #2fc4b2;
   @media (max-width: 768px) {
     width: 100%;
     left: 0%;
@@ -340,10 +343,18 @@ const Messages = styled.div`
   background-color: #ffffff;
   border-top-left-radius: 25px;
   border-top-right-radius: 25px;
-  bottom: 36px;
+  bottom: 70px;
   position: absolute;
   height: calc(90% - 86px);
   width: 100%;
+`;
+
+const Bg = styled.div`
+  height: calc(100% - 56px);
+  position: absolute;
+  width: 100%;
+  padding: 0px;
+  background-color: #2fc4b2;
 `;
 
 export default TutorialPage;

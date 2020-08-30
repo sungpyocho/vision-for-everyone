@@ -10,11 +10,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import { Button, Paper, InputBase } from "@material-ui/core";
 import SendIcon from "@material-ui/icons/Send";
 import styled from "styled-components";
-import {
-  Dialog,
-  DialogContent,
-  DialogActions,
-} from "@material-ui/core";
+import { Dialog, DialogContent, DialogActions } from "@material-ui/core";
 
 import OrderMenu from "./Sections/OrderMenu";
 import Message from "./Sections/Message";
@@ -30,6 +26,7 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: 0,
     backgroundColor: "#2FC4B2",
     borderTop: "1px solid lightgrey",
+    height: "50px",
     bottom: 0,
     position: "absolute",
     width: "calc(100% - 20px)",
@@ -42,7 +39,7 @@ const useStyles = makeStyles((theme) => ({
     flex: 1,
     marginRight: "10px",
     paddingLeft: "15px",
-    paddingRight: "15px"
+    paddingRight: "15px",
   },
   button: {
     backgroundColor: "#ffb5b5",
@@ -52,22 +49,22 @@ const useStyles = makeStyles((theme) => ({
   dialog: {
     padding: 0,
     paddingTop: 0,
-    height: '80rem',
+    height: "80rem",
   },
   iframe: {
     width: "100%",
-    height: "500px"
-  }
+    height: "500px",
+  },
 }));
 
 function getParameterByName(name, url) {
   if (!url) url = window.location.href;
-  name = name.replace(/[\[\]]/g, '\\$&');
-  var regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),
-      results = regex.exec(url);
+  name = name.replace(/[\[\]]/g, "\\$&");
+  var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+    results = regex.exec(url);
   if (!results) return null;
-  if (!results[2]) return '';
-  return decodeURIComponent(results[2].replace(/\+/g, ' '));
+  if (!results[2]) return "";
+  return decodeURIComponent(results[2].replace(/\+/g, " "));
 }
 
 function Chat() {
@@ -83,10 +80,10 @@ function Chat() {
   const [openCall, setOpenCall] = useState(true);
 
   // 영수증 메시지 출력 관련
-  const [receipt, setReceipt] = useState(null)
+  const [receipt, setReceipt] = useState(null);
 
   // iframe에서 온 상태 메시지
-  const [kakaoPayResult, setKakaoPayResult] = useState(null)
+  const [kakaoPayResult, setKakaoPayResult] = useState(null);
 
   // redux 구조를 보면 state.message.messages가 메세지들의 배열이다.
   const messagesFromRedux = useSelector((state) => state.message.messages);
@@ -117,18 +114,17 @@ function Chat() {
     // }
     // else if (getParameterByName("cancel")) {
     //   alert("카카오페이 결제가 취소되었습니다.")
-    // } 
+    // }
     // // 사용자가 처음 채팅 페이지로 들어올 때
     // else {
     //}
 
-    const handler = event => {
-      if (typeof event.data === 'string' || event.data instanceof String) {
+    const handler = (event) => {
+      if (typeof event.data === "string" || event.data instanceof String) {
         const data = JSON.parse(event.data);
         setKakaoPayResult(data.message);
-      }
-      else return;
-    }
+      } else return;
+    };
     window.addEventListener("message", handler);
 
     return () => window.removeEventListener("message", handler);
@@ -138,7 +134,7 @@ function Chat() {
     if (kakaoPayResult === "Success") {
       dispatch(saveMessage(receipt));
     }
-  }, [kakaoPayResult])
+  }, [kakaoPayResult]);
 
   // 쿠키를 체크해서 UserId값이 없으면 추가
   const checkUserId = () => {
@@ -205,7 +201,7 @@ function Chat() {
         setTimeout(() => {
           // let browserWindow = window.open();
           // browserWindow.location = response.data.headers.Location;
-        setKakaoPayLink(response.data.headers.Location);
+          setKakaoPayLink(response.data.headers.Location);
         }, 1500);
       }
       // chime 재생
@@ -356,54 +352,68 @@ function Chat() {
   };
 
   return (
-    <Wrapper>
-      {/* Order Buttons */}
-      <OrderMenu aria-label="메뉴" handleTextQuery={handleTextQuery} />
-      <div aria-label="키위봇과 대화하는 채팅창입니다">
-        {/* Chat Messages */}
-        <Messages aria-live="polite">
-          {renderMessages(messagesFromRedux)}
-        </Messages>
-        {/* Input Field and Button */}
-        <Paper
-          component="form"
-          className={classes.inputForm}
-          onSubmit={handleSubmit}
-        >
-          <InputBase
-            autoFocus
-            className={classes.input}
-            placeholder="메시지를 입력하세요"
-            type="text"
-            value={Input}
-            onChange={inputHandler}
-          />
-          <Button
-            variant="contained"
-            className={classes.button}
-            type="submit"
-            aria-label="메시지 보내기"
+    <Bg>
+      <Wrapper>
+        {/* Order Buttons */}
+        <OrderMenu aria-label="메뉴" handleTextQuery={handleTextQuery} />
+        <div aria-label="키위봇과 대화하는 채팅창입니다">
+          {/* Chat Messages */}
+          <Messages aria-live="polite">
+            {renderMessages(messagesFromRedux)}
+          </Messages>
+          {/* Input Field and Button */}
+          <Paper
+            component="form"
+            className={classes.inputForm}
+            onSubmit={handleSubmit}
           >
-            <SendIcon />
-          </Button>
-        </Paper>
-      </div>
-      {kakaoPayLink && <Dialog open={openCall}><DialogContent className={classes.dialog}><iframe ref={iframeRef} className={classes.iframe} src={kakaoPayLink} title="KakaoPay Link"></iframe></DialogContent><DialogActions>
-          <Button onClick={handleCloseCall} color="primary" autoFocus>
-            닫기
-          </Button>
-        </DialogActions></Dialog>}
-    </Wrapper>
+            <InputBase
+              autoFocus
+              className={classes.input}
+              placeholder="메시지를 입력하세요"
+              type="text"
+              value={Input}
+              onChange={inputHandler}
+            />
+            <Button
+              variant="contained"
+              className={classes.button}
+              type="submit"
+              aria-label="메시지 보내기"
+            >
+              <SendIcon />
+            </Button>
+          </Paper>
+        </div>
+        {kakaoPayLink && (
+          <Dialog open={openCall}>
+            <DialogContent className={classes.dialog}>
+              <iframe
+                ref={iframeRef}
+                className={classes.iframe}
+                src={kakaoPayLink}
+                title="KakaoPay Link"
+              ></iframe>
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={handleCloseCall} color="primary" autoFocus>
+                닫기
+              </Button>
+            </DialogActions>
+          </Dialog>
+        )}
+      </Wrapper>
+    </Bg>
   );
 }
 
 const Wrapper = styled.div`
-  height: calc(100% - 56px);
+  height: 100%;
   position: absolute;
   width: 66.6%;
   left: 16.7%;
   right: 16.7%;
-  background-color: #2FC4B2;
+  background-color: #2fc4b2;
   @media (max-width: 768px) {
     width: 100%;
     left: 0%;
@@ -416,10 +426,17 @@ const Messages = styled.div`
   background-color: #ffffff;
   border-top-left-radius: 25px;
   border-top-right-radius: 25px;
-  bottom: 36px;
+  bottom: 70px;
   position: absolute;
-  height: calc(90% - 36px);
+  height: calc(90% - 70px);
   width: 100%;
 `;
 
+const Bg = styled.div`
+  height: calc(100% - 56px);
+  position: absolute;
+  width: 100%;
+  padding: 0px;
+  background-color: #2fc4b2;
+`;
 export default Chat;
