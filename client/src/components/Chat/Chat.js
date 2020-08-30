@@ -12,8 +12,6 @@ import SendIcon from "@material-ui/icons/Send";
 import styled from "styled-components";
 import {
   Dialog,
-  DialogContent,
-  DialogActions,
 } from "@material-ui/core";
 
 import OrderMenu from "./Sections/OrderMenu";
@@ -50,13 +48,33 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: 25,
   },
   dialog: {
+    position: 'fixed', 
+    top: 0, 
+    left: 0,
+    bottom: 0,
+    right: 0,
+    width: '100%',
+    height: '100%',
+    border: 'none', 
+    margin: 0,
     padding: 0,
-    paddingTop: 0,
-    height: '80rem',
   },
   iframe: {
-    width: "100%",
-    height: "500px"
+    top: 0, 
+    left: 0,
+    bottom: 0,
+    right: 0,
+    width: '100%',
+    height: '100%',
+    border: 'none', 
+    margin: 0,
+    padding: 0,
+    position: 'fixed'
+  },
+  closeButton: {
+    position: 'fixed',
+    bottom: '5%',
+    right: '5%',
   }
 }));
 
@@ -359,14 +377,27 @@ function Chat() {
           </Button>
         </Paper>
       </div>
-      {kakaoPayLink && <Dialog open={openCall}><DialogContent className={classes.dialog}><iframe ref={iframeRef} className={classes.iframe} src={kakaoPayLink} title="KakaoPay Link"></iframe></DialogContent><DialogActions>
-          <Button onClick={handleCloseCall} color="primary" autoFocus>
+      {kakaoPayLink && 
+      (<Dialog className={classes.dialog} open={openCall}>
+           <iframe ref={iframeRef} className={classes.iframe} src={kakaoPayLink} title="KakaoPay Link"></iframe>
+           <Button className={classes.closeButton} onClick={handleCloseCall} color="primary" autoFocus>
             닫기
-          </Button>
-        </DialogActions></Dialog>}
+           </Button>
+       </Dialog>)}
     </Wrapper>
   );
 }
+
+// (<Dialog className={classes.dialog} open={openCall}>
+//   <DialogContent className={classes.dialogContent}>
+//     <iframe ref={iframeRef} className={classes.iframe} src={kakaoPayLink} title="KakaoPay Link"></iframe>
+//   </DialogContent>
+//   <DialogActions>
+//     <Button onClick={handleCloseCall} color="primary" autoFocus>
+//      닫기
+//     </Button>
+//   </DialogActions>
+// </Dialog>)}
 
 const Wrapper = styled.div`
   height: calc(100% - 56px);
