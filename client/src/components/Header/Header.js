@@ -23,16 +23,17 @@ const useStyles = makeStyles((theme) => ({
     flexGrow: 1,
   },
   homeIconContainer: {
-    justifyContent: "left",
-    flexGrow: 1
+    marginLeft: theme.spacing(0),
   },
   homeIcon: {
-    marginLeft: theme.spacing(1),
+    
   },
   settingsIcon: {
-    marginRight: theme.spacing(1),
-    float: "right"
+    marginRight: theme.spacing(0),
   },
+  dummy: {
+    flexGrow: 1
+  }
 }));
 
 function Header(props) {
@@ -100,24 +101,18 @@ function Header(props) {
     <div className={classes.root}>
       <AppBar position="static" className={classes.appBar}>
         <Toolbar>
-          {/* <a href="/" className={classes.title}>
-            <img
-              alt="키위 로고"
-              aria-label="키위 홈으로"
-              src={KiweHeaderIcon}
-              style={{ height: "28px" }}
-            />
-          </a> */}
           <IconButton
             aria-label="home"
             aria-haspopup="true"
             color="inherit"
             href="/"
+            edge="start"
             // onClick={handleMenuSettings}
             className={classes.homeIconContainer}
           >
-            <HomeIcon className={classes.homeIcon} />
+            <HomeIcon />
           </IconButton>
+          <div className={classes.dummy} />
           <IconButton 
             aria-label="설정"
             aria-haspopup="true"
