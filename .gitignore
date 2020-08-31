@@ -31,3 +31,6 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+# Let's Encrypt - Certbot
+/certbot
