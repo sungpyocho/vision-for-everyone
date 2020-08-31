@@ -222,7 +222,11 @@ export default function RegisterPage(props) {
               </Button>
               <Grid container justify="center">
                 <Grid item>
-                  <Link href="/login" variant="body2">
+                  <Link
+                    href="/login"
+                    variant="body2"
+                    style={{ color: "white" }}
+                  >
                     이미 계정이 있으신가요? 로그인
                   </Link>
                 </Grid>

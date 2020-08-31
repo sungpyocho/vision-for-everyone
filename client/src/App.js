@@ -39,9 +39,18 @@ function App() {
             path="/reset/:token"
             component={Auth(ResetPasswordPage, false)}
           />
-          <Route path="/kakaopay/success" component={Auth(KakaopaySuccessPage, false)} />
-          <Route path="/kakaopay/fail" component={Auth(KakaopayFailPage, false)} />
-          <Route path="/kakaopay/cancel" component={Auth(KakaopayCancelPage, false)} />
+          <Route
+            path="/kakaopay/success"
+            component={Auth(KakaopaySuccessPage, null)}
+          />
+          <Route
+            path="/kakaopay/fail"
+            component={Auth(KakaopayFailPage, null)}
+          />
+          <Route
+            path="/kakaopay/cancel"
+            component={Auth(KakaopayCancelPage, null)}
+          />
         </Switch>
       </div>
     </Router>

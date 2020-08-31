@@ -118,7 +118,7 @@ export default function LoginPage(props) {
               <LockOutlinedIcon />
             </Avatar>
             <Typography component="h1" variant="h5">
-              키위 로그인(로고 대체 예정)
+              키위 로그인
             </Typography>
             <form
               className={classes.form}
@@ -127,7 +127,6 @@ export default function LoginPage(props) {
             >
               <InputBase
                 variant="outlined"
-                margin="normal"
                 required
                 fullWidth
                 id="email"
@@ -142,7 +141,6 @@ export default function LoginPage(props) {
               />
               <InputBase
                 variant="outlined"
-                margin="normal"
                 required
                 fullWidth
                 name="password"
@@ -183,7 +181,11 @@ export default function LoginPage(props) {
               </Button>
               <Grid container justify="center">
                 <Grid item>
-                  <Link href="/forgot" variant="body2">
+                  <Link
+                    href="/forgot"
+                    variant="body2"
+                    style={{ color: "white" }}
+                  >
                     비밀번호 찾기
                   </Link>
                 </Grid>

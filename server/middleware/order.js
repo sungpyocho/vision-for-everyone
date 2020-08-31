@@ -42,9 +42,10 @@ async function payment(restaurantName, totalAmount) {
   const vat_amount = Math.floor(total_amount / 11); // 사용자 총 결제금액 기준 부가세
   const tax_free_amount = 0;
 
-  const approval_url = "http://localhost:3000/kakaopay/success"; // 성공시, 성공 페이지로 리다이렉트. 성공 페이지 만들어줘야함.
-  const fail_url = "http://localhost:3000/kakaopay/fail"; // 실패시, 실패 페이지로 리다이렉트. 실패 페이지 필요.
-  const cancel_url = "http://localhost:3000/kakaopay/cancel"; // 취소시, 취소페이지로 리다이렉트. 취소페이지 구현필요.
+  // 개발시 https://kiwe.team 을 http://localhost:3000 로 변경 후 실행.
+  const approval_url = "https://kiwe.team/kakaopay/success"; // 성공시, 성공 페이지로 리다이렉트. 성공 페이지 만들어줘야함.
+  const fail_url = "https://kiwe.team/kakaopay/fail"; // 실패시, 실패 페이지로 리다이렉트. 실패 페이지 필요.
+  const cancel_url = "https://kiwe.team/kakaopay/cancel"; // 취소시, 취소페이지로 리다이렉트. 취소페이지 구현필요.
 
   // set data
   const data = [
@@ -73,9 +74,9 @@ async function payment(restaurantName, totalAmount) {
         },
       }
     );
-    const mobile_url = req.data.next_redirect_mobile_url; // get mobile url
 
-    // 맥에서 테스트를 위해 pc url을 가져온다
+    // 배포시: mobile_url, 맥/윈도우에서 테스트시: pc_url
+    const mobile_url = req.data.next_redirect_mobile_url;
     const pc_url = req.data.next_redirect_pc_url;
 
     const response = {
@@ -84,8 +85,8 @@ async function payment(restaurantName, totalAmount) {
         "Cache-Control": "no-cache, no-store, must-revalidate",
         Pragma: "no-cache",
         Expires: "0",
-        // Location: mobile_url,  
-        Location: pc_url,
+        Location: mobile_url,
+        // Location: pc_url,
       },
       body: "",
     };
