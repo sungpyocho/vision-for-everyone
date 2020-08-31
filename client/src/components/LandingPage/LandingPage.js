@@ -2,8 +2,9 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import { makeStyles } from "@material-ui/core/styles";
 import { Button } from "@material-ui/core";
+import kiwe_motion_1 from "../../assets/kiwe_motion_1.mp4";
 
-const motionArray = []; // 모션을 값에 따라 불러오기 위해 저장해두는 배열
+const motionArray = [kiwe_motion_1, kiwe_motion_1]; // 모션을 값에 따라 불러오기 위해 저장해두는 배열
 
 const LandingpageBlock = styled.div`
   height: calc(100% - 56px);
@@ -26,8 +27,8 @@ const MessageBox = styled.div`
 `;
 
 const MotionBox = styled.video`
-  height: 50%;
-  width: 50%;
+  height: 70%;
+  width: 100%;
   src: "naver.com";
 `;
 
@@ -69,7 +70,7 @@ function LandingPage(props) {
       ></div>
       <MotionContainer onClick={motionNumHandler}>
         <MessageBox>안녕하세요, 저는 {motionNum} </MessageBox>
-        <MotionBox src={motionArray[motionNum]}>
+        <MotionBox src={motionArray[motionNum]} key={motionNum} autoPlay muted>
         </MotionBox>
       </MotionContainer>
       <Button href="/login" className={classes.button}>건너뛸래요</Button>
