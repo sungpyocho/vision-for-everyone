@@ -17,10 +17,6 @@ function Fail() {
         message: "Fail"
     }))
 
-    useEffect(() => {
-        document.querySelector(".makeStyles-root-1").style.display = 'none';
-    }, [])
-
     return (
         <FailBlock>
           <h3>
