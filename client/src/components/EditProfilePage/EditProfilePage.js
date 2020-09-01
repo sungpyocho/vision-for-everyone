@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import styled from "styled-components";
 import Alert from "@material-ui/lab/Alert";
 import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
@@ -39,9 +40,14 @@ const useStyles = makeStyles((theme) => ({
     marginTop: theme.spacing(3),
   },
   submit: {
-    margin: theme.spacing(3, 0, 2),
-    backgroundColor: "#6ac48a",
-    color: "white",
+    backgroundColor: "pink",
+    color: "black",
+    width: "70%",
+    height: "50px",
+    marginLeft: "15%",
+    marginRight: "15%",
+    marginTop: theme.spacing(4),
+    borderRadius: "25px",
   },
 }));
 
@@ -119,81 +125,113 @@ export default function RegisterPage(props) {
   };
 
   return (
-    <Container component="main" maxWidth="xs">
-      <CssBaseline />
-      <div className={classes.paper}>
-        <Avatar className={classes.avatar}>
-          <Settings />
-        </Avatar>
-        <Typography component="h1" variant="h5">
-          회원정보 수정
-        </Typography>
-        <form className={classes.form} onSubmit={submitHandler} noValidate>
-          <Grid container spacing={2}>
-            <Grid item xs={12}>
-              <TextField
-                autoComplete="name"
-                name="name"
-                variant="outlined"
-                required
-                fullWidth
-                id="name"
-                label="이름"
-                autoFocus
-                value={Name}
-                onChange={nameHandler}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                variant="outlined"
-                required
-                fullWidth
-                name="password"
-                label="비밀번호(8자 이상)"
-                type="password"
-                id="password"
-                autoComplete="current-password"
-                value={Password}
-                onChange={passwordHandler}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <TextField
-                variant="outlined"
-                required
-                fullWidth
-                name="confirmPassword"
-                label="비밀번호 확인"
-                type="password"
-                id="confirmPassword"
-                autoComplete="current-password"
-                value={ConfirmPassword}
-                onChange={confirmPasswordHandler}
-              />
-            </Grid>
-            {!arePasswordsSame && (
-              <Grid item xs={12}>
-                <Alert severity="error">
-                  비밀번호를 동일하게 입력해주세요.
-                </Alert>
+    <Bg>
+      <Wrapper>
+        <Container component="main" maxWidth="xs">
+          <CssBaseline />
+          <div className={classes.paper}>
+            <Avatar className={classes.avatar}>
+              <Settings />
+            </Avatar>
+            <Typography component="h1" variant="h5">
+              마이페이지
+            </Typography>
+            <form className={classes.form} onSubmit={submitHandler} noValidate>
+              <Grid container spacing={2}>
+                <Grid item xs={3}>
+                  <h4>이름</h4>
+                </Grid>
+                <Grid item xs={9}>
+                  <TextField
+                    autoComplete="name"
+                    name="name"
+                    variant="outlined"
+                    required
+                    fullWidth
+                    id="name"
+                    autoFocus
+                    value={Name}
+                    onChange={nameHandler}
+                  />
+                </Grid>
+                <Grid item xs={3}>
+                  <h4>비밀번호</h4>
+                </Grid>
+                <Grid item xs={9}>
+                  <TextField
+                    variant="outlined"
+                    required
+                    fullWidth
+                    name="password"
+                    placeholder="비밀번호(8자 이상)"
+                    type="password"
+                    id="password"
+                    autoComplete="current-password"
+                    value={Password}
+                    onChange={passwordHandler}
+                  />
+                </Grid>
+                <Grid item xs={3}></Grid>
+                <Grid item xs={9}>
+                  <TextField
+                    variant="outlined"
+                    required
+                    fullWidth
+                    name="confirmPassword"
+                    placeholder="비밀번호 확인"
+                    type="password"
+                    id="confirmPassword"
+                    autoComplete="current-password"
+                    value={ConfirmPassword}
+                    onChange={confirmPasswordHandler}
+                  />
+                </Grid>
+                {!arePasswordsSame && (
+                  <Grid item xs={12}>
+                    <Alert severity="error">
+                      비밀번호를 동일하게 입력해주세요.
+                    </Alert>
+                  </Grid>
+                )}
               </Grid>
-            )}
-          </Grid>
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            className={classes.submit}
-            onClick={handleClick}
-          >
-            수정
-          </Button>
-        </form>
-      </div>
-      <Box mt={5}>
-        <Copyright />
-      </Box>
-    </Container>
+              <Button
+                type="submit"
+                fullWidth
+                variant="contained"
+                className={classes.submit}
+                onClick={handleClick}
+              >
+                수정
+              </Button>
+            </form>
+          </div>
+          <Box mt={5}>
+            <Copyright />
+          </Box>
+        </Container>
+      </Wrapper>
+    </Bg>
   );
 }
+const Wrapper = styled.div`
+  height: 100%;
+  position: absolute;
+  width: 66.6%;
+  left: 16.7%;
+  right: 16.7%;
+  background-color: white;
+  border-radius: 30px 30px 0px 0px;
+  @media (max-width: 768px) {
+    width: 100%;
+    left: 0%;
+    right: 0%;
+  }
+`;
+
+const Bg = styled.div`
+  height: calc(100% - 56px);
+  position: absolute;
+  width: 100%;
+  padding: 0px;
+  background-color: #2fc4b2;
+`;

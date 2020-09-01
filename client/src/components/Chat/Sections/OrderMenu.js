@@ -71,8 +71,10 @@ function OrderMenu({ handleTextQuery }) {
 
   const useStyles = makeStyles((theme) => ({
     root: {
-      minWidth: "50vw",
-      minHeight: "80vh",
+      top: "20vh",
+      width: "100vw",
+      height: "100vh",
+      borderRadius: "25px",
     },
     nested: {
       paddingLeft: theme.spacing(4),
@@ -158,9 +160,14 @@ function OrderMenu({ handleTextQuery }) {
         onClose={handleCloseMap}
         aria-labelledby="map-title"
         aria-describedby="map-description"
-        fullScreen={true}
+        maxWidth={false}
+        fullWidth={true}
       >
-        <DialogTitle id="map-title" onClose={handleCloseMap}>
+        <DialogTitle
+          id="map-title"
+          style={{ textAlign: "center" }}
+          onClose={handleCloseMap}
+        >
           내 주변 식당찾기
         </DialogTitle>
         {/* <DialogContentText id="map-description">
@@ -178,7 +185,9 @@ function OrderMenu({ handleTextQuery }) {
         aria-labelledby="call-title"
         aria-describedby="call-description"
       >
-        <DialogTitle id="call-title">{"직원호출"}</DialogTitle>
+        <DialogTitle id="call-title" style={{ textAlign: "center" }}>
+          {"직원호출"}
+        </DialogTitle>
         <DialogContent>
           <DialogContentText id="call-description">
             직원호출 기능은 추후 점주와 협의하여 제공할 계획입니다.
@@ -221,8 +230,8 @@ const CustomButton = styled.button`
   width: 33%;
   flex-shrink: 1;
   cursor: pointer;
-  color: #289C8E;
-  background-color: #ffffff;
+  color: ${(props) => (props.disabled ? "#ffffff" : "#289cb2")};
+  background-color: ${(props) => (props.disabled ? "#aaaaaa" : "#ffffff")};
   box-shadow: 0 0 4px #999;
   outline: none;
   transition: background 0.8s;

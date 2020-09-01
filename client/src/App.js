@@ -17,10 +17,12 @@ import KakaopayCancelPage from "./components/KakaoPayPage/Cancel";
 
 // Higher Order Component로 일반 컴포넌트를 감싸주자.
 function App() {
+  const isKakaoPay = window.location.pathname.split('/');
+
   return (
     <Router>
       <div>
-        <Header />
+        {isKakaoPay === 'kakaopay' ? null : <Header />}
         {/* A <Switch> looks through its children <Route>s and
           renders the first one that matches the current URL. */}
         <Switch>
@@ -39,9 +41,18 @@ function App() {
             path="/reset/:token"
             component={Auth(ResetPasswordPage, false)}
           />
-          <Route path="/kakaopay/success" component={Auth(KakaopaySuccessPage, false)} />
-          <Route path="/kakaopay/fail" component={Auth(KakaopayFailPage, false)} />
-          <Route path="/kakaopay/cancel" component={Auth(KakaopayCancelPage, false)} />
+          <Route
+            path="/kakaopay/success"
+            component={Auth(KakaopaySuccessPage, null)}
+          />
+          <Route
+            path="/kakaopay/fail"
+            component={Auth(KakaopayFailPage, null)}
+          />
+          <Route
+            path="/kakaopay/cancel"
+            component={Auth(KakaopayCancelPage, null)}
+          />
         </Switch>
       </div>
     </Router>

@@ -13,14 +13,11 @@ import Divider from "@material-ui/core/Divider"; // 리스트 사이에 넣는 �
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    minWidth: "50vw",
-    minHeight: "80vh",
+    width: "70vw",
+    height: "50vh",
   },
   nested: {
     paddingLeft: theme.spacing(4),
-  },
-  media: {
-    height: "200px",
   },
 }));
 
@@ -58,7 +55,9 @@ function Menu({ selectedBranch, menuListClick }) {
 
   return (
     <>
-      <DialogTitle id="menu-title">{"메뉴"}</DialogTitle>
+      <DialogTitle id="menu-title" style={{ textAlign: "center" }}>
+        {"메뉴"}
+      </DialogTitle>
       <DialogContent>
         <List className={classes.root}>
           {menusFromDB &&

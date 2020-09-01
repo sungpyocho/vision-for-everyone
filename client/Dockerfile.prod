@@ -24,6 +24,8 @@ FROM nginx:latest
 # https://swiftcoding.org/nginx-lets-encrypt 참고
 
 # 2-1-1. certbot-auto의 webroot 경로 폴더 준비 및 경로를 알려주는 파일 생성 
+RUN mkdir -p /usr/share/nginx/html/.well-known/acme-challenge
+
 # 2-1-2. 인증서 발급프로그램 CERTBOT 설치, 및 발급
 # https://certbot.eff.org/lets-encrypt/ubuntubionic-nginx 참고
 # https://anomie7.tistory.com/59 참고

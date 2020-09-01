@@ -302,7 +302,7 @@ export default function Map({ mapRestaurantClick }) {
 
   return (
     <>
-      <div id="map" style={{ width: "99.999vw", height: "50vh" }}></div>
+      <div id="map" style={{ width: "99.999%", height: "50vh" }}></div>
       <List component="nav">
         {restaurantList &&
           restaurantList.map((element, i) => {

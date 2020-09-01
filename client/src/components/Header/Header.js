@@ -10,14 +10,13 @@ import HomeIcon from "@material-ui/icons/Home";
 import SettingsIcon from "@material-ui/icons/Settings";
 import AccountCircleIcon from "@material-ui/icons/AccountCircle";
 import IconButton from "@material-ui/core/IconButton";
-import KiweHeaderIcon from "../../assets/kiwe-header.jpg";
 
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
   },
   appBar: {
-    backgroundColor: "#2FC4B2"
+    backgroundColor: "#2FC4B2",
   },
   title: {
     flexGrow: 1,
@@ -25,15 +24,13 @@ const useStyles = makeStyles((theme) => ({
   homeIconContainer: {
     marginLeft: theme.spacing(0),
   },
-  homeIcon: {
-    
-  },
+  homeIcon: {},
   settingsIcon: {
     marginRight: theme.spacing(0),
   },
   dummy: {
-    flexGrow: 1
-  }
+    flexGrow: 1,
+  },
 }));
 
 function Header(props) {
@@ -79,7 +76,7 @@ function Header(props) {
 
   const redirectToEditPage = () => {
     props.history.push("/edit");
-  }
+  };
 
   const handleLogout = () => {
     axios.get("/api/users/logout").then((response) => {
@@ -113,7 +110,7 @@ function Header(props) {
             <HomeIcon />
           </IconButton>
           <div className={classes.dummy} />
-          <IconButton 
+          <IconButton
             aria-label="설정"
             aria-haspopup="true"
             color="inherit"
