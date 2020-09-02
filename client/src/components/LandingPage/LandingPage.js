@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import styled from "styled-components";
 import { makeStyles } from "@material-ui/core/styles";
 import { Button } from "@material-ui/core";
 import kiwe_motion_1 from "../../assets/kiwe_motion_1.mp4";
 import kiwe_motion_2 from "../../assets/kiwe_motion_2.mp4";
+import createBreakpoints from "@material-ui/core/styles/createBreakpoints";
 
 const LandingpageBlock = styled.div`
   height: calc(100% - 56px);
@@ -57,6 +58,12 @@ const useStyles = makeStyles((theme) => ({
 function LandingPage(props) {
   const classes = useStyles();
   const [motionNum, setMotionNum] = useState(0);
+  const [firstClick, setFirstClick] = useState(false); // 배터리 절약 모드시 자동재생 불가 우회 위해 첫 클릭 여부를 저장
+  const motionReference = React.useRef();
+
+  // useEffect(() => {
+  //   motionReference.current.play();
+  // }, []);
 
   // 모션을 값에 따라 불러오기 위해 저장해두는 배열
   const motionArray = [kiwe_motion_1, kiwe_motion_2, kiwe_motion_1];
@@ -68,25 +75,32 @@ function LandingPage(props) {
   ];
 
   const motionNumHandler = () => {
-    if (motionNum < 2) {
+    // 배터리 절약 모드에서 모션이 자동재생 불가하니, 첫 클릭은 모션을 갈아끼우지 않도록 분기
+    if (firstClick && motionNum < 2) {
       setMotionNum(motionNum + 1);
-    } else {
+    } else if (!firstClick) {
+      setFirstClick(true); // 첫 클릭이 이뤄졌음을 state에 저장
+    }
+    else {
       props.history.push("/tutorial");
     }
   };
 
   return (
-    <LandingpageBlock>
+    <LandingpageBlock id="landing_page">
       <div
         style={{ fontSize: "30px", textAlign: "center", fontWeight: "500" }}
       ></div>
-      <MotionContainer onClick={motionNumHandler}>
+      <MotionContainer id="motion_container" onClick={motionNumHandler}>
         <MessageBox>{motionTextArray[motionNum]}</MessageBox>
         <MotionBox
+          ref={motionReference}
           src={motionArray[motionNum]}
           key={motionNum}
           autoPlay
           muted
+          preLoad="auto"
+          playsInline
         ></MotionBox>
       </MotionContainer>
       <Button href="/login" className={classes.button}>
