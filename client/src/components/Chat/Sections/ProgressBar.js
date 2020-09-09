@@ -18,7 +18,7 @@ function ProgressBar({orderStep}) {
       case "Confirm_After_Payment":
         return [100, "Step 5: 주문이 완료되었습니다!"];
       default:
-        return [0, "통신이 불안정해요 :( 페이지를 새로고침해주세요"];
+        return [0, "다시 입력하거나 새로고침해주세요 :("];
     }
   };
 

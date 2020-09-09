@@ -17,16 +17,15 @@ const LandingpageBlock = styled.div`
 const MessageBox = styled.div`
   position: relative;
   top: 5%;
-  left: 35%;
-  width: 60%;
+  left: 15%;
+  width: 75%;
   line-height: 130%;
   background-color: white;
   color: #232323;
   border-radius: 45px;
-  /* border-bottom-left-radius: 0px; */
   word-break: keep-all;
   text-align: center;
-  padding: 10px;
+  padding: 15px 10px 15px 10px;
   overflow: hidden;
   font-size: 16px;
   font-weight: 500;
@@ -52,6 +51,10 @@ const MotionContainer = styled.div`
   background-color: #2fc4b2;
 `;
 
+const MessageParagraph = styled.p`
+  margin: 4px;
+`
+
 const useStyles = makeStyles((theme) => ({
   button: {
     position: "absolute",
@@ -59,9 +62,11 @@ const useStyles = makeStyles((theme) => ({
     right: "5%",
     height: "45px",
     width: "160px",
-    borderRadius: "25px",
+    borderRadius: "30px",
     backgroundColor: "pink",
+    fontSize: "20px",
     padding: "5px",
+    boxShadow: "2px 4px 4px rgba(74, 74, 74, 0.25)"
   },
 }));
 
@@ -81,10 +86,10 @@ function LandingPage(props) {
   ];
   // 모션 메시지를 담는 배열
   const motionTextArray = [
-    "안녕하세요! 저는 키위라고 해요!",
+    "안녕하세요! \n저는 키위라고 해요!",
     "키위가 주문을 도와드릴게요!",
-    "더 쉽고 즐겁게 주문하려면 키오스크 대신 저를 찾아주세요!",
-    "채팅으로 말을 걸면, 제가 점원이 되어 주문을 도와드릴게요.",
+    "더 쉽고 즐겁게 주문하려면\n 키오스크 대신 저를 찾아주세요!",
+    "채팅으로 말을 걸면, 제가 \n점원이 되어 주문을 도와드릴게요.",
     "어때요, 저랑 친구하실래요?",
   ];
 
@@ -105,7 +110,10 @@ function LandingPage(props) {
         style={{ fontSize: "30px", textAlign: "center", fontWeight: "500" }}
       ></div>
       <MotionContainer id="motion_container" onClick={motionNumHandler}>
-        <MessageBox>{motionTextArray[motionNum]}</MessageBox>
+        {/* 개행 문자를 인식케 하기 위함 */}
+        <MessageBox>{motionTextArray[motionNum].split('\n').map((item, i) => {
+          return <MessageParagraph key={i}>{item}</MessageParagraph>
+        })}</MessageBox> 
         {motionNum < 3 ? (
           <MotionBox
             ref={motionReference}
@@ -121,7 +129,7 @@ function LandingPage(props) {
         )}
       </MotionContainer>
       <Button href="/tutorial" className={classes.button}>
-        건너뛸래요
+        {(motionNum<4) ? "건너뛸래요": "키위 시작하기"}
       </Button>
     </LandingpageBlock>
   );
