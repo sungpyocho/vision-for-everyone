@@ -13,12 +13,17 @@ import Divider from "@material-ui/core/Divider"; // 리스트 사이에 넣는 �
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    width: "70vw",
+    width: "100%",
     height: "50vh",
+    fontWeight: "500",
   },
   nested: {
     paddingLeft: theme.spacing(4),
   },
+  category: {
+    fontSize: "16px",
+    fontWeight: "500",
+  }
 }));
 
 function Menu({ selectedBranch, menuListClick }) {
@@ -55,8 +60,8 @@ function Menu({ selectedBranch, menuListClick }) {
 
   return (
     <>
-      <DialogTitle id="menu-title" style={{ textAlign: "center" }}>
-        {"메뉴"}
+      <DialogTitle id="menu-title" style={{ textAlign: "center", color: "#289C8E" }}>
+        {"메뉴판"}
       </DialogTitle>
       <DialogContent>
         <List className={classes.root}>
@@ -65,12 +70,12 @@ function Menu({ selectedBranch, menuListClick }) {
               return (
                 <div key={category._id}>
                   <ListItem button onClick={handleOpen(category)}>
-                    <ListItemText primary={category.name} />
-                    {open.indexOf(category) !== -1 ? (
+                    <ListItemText className={classes.category} disableTypography={true}> {category.name} </ListItemText>
+                    {/* {open.indexOf(category) !== -1 ? (
                       <ExpandLess />
                     ) : (
                       <ExpandMore />
-                    )}
+                    )} 디자인안에서 빠져서 확장축소버튼은 일단 뺌*/}
                   </ListItem>
                   <Collapse
                     in={open.indexOf(category) !== -1}

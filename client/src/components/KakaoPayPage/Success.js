@@ -19,10 +19,6 @@ function Success() {
     })
   );
 
-  useEffect(() => {
-    document.querySelector(".makeStyles-root-1").style.display = "none";
-  }, []);
-
   return (
     <SuccessBlock>
       <h3>결제 성공했습니다!</h3>

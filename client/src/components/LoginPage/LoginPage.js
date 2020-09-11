@@ -53,23 +53,29 @@ const useStyles = makeStyles((theme) => ({
   },
   submit: {
     backgroundColor: "white",
-    color: "black",
+    color: "#232323",
+    fontSize: "18px",
     width: "70%",
     height: "50px",
     marginLeft: "15%",
     marginRight: "15%",
     marginTop: theme.spacing(4),
     borderRadius: "25px",
+    boxShadow: "2px 4px 4px rgba(74, 74, 74, 0.25)",
+    border: "1px solid #FFFFFF",
   },
   register: {
     margin: theme.spacing(2),
     backgroundColor: "#ffc1c1",
-    color: "black",
+    fontSize: "18px",
+    color: "#232323",
     width: "70%",
     height: "50px",
     marginLeft: "15%",
     marginRight: "15%",
     borderRadius: "25px",
+    boxShadow: "2px 4px 4px rgba(74, 74, 74, 0.25)",
+    border: "1px solid #FFFFFF"
   },
 }));
 

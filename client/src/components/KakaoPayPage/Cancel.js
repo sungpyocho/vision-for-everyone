@@ -17,10 +17,6 @@ function Cancel() {
     window.top.postMessage(JSON.stringify({
         message: "Cancel"
     }))
-
-    useEffect(() => {
-        document.querySelector(".makeStyles-root-1").style.display = 'none';
-    }, [])
     
     return (
         <CancelBlock>

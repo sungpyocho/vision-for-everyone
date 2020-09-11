@@ -25,7 +25,7 @@ const Message = (props) => {
   return (
     <MessageComponent who={props.who}>
       <div>
-        <Avatar alt="" src={srcOfAvatar} className={classes.avatar} />
+        {whoIsAvatar && (<Avatar alt="" src={srcOfAvatar} className={classes.avatar} />) }
         <AvatarName>{whoIsAvatar}</AvatarName>
       </div>
       <MessageBox who={props.who}>
@@ -63,7 +63,7 @@ const MessageBox = styled.div`
   font-size: 16px;
   word-spacing: 0.3px;
   background: ${(props) => (props.who === "kiwe" ? "#efefef" : "#ffb5b5")};
-  color: ${(props) => (props.who === "kiwe" ? "black" : "white")};
+  color: ${(props) => (props.who === "kiwe" ? "#232323" : "#232323")};
   border-top-left-radius: ${(props) => (props.who === "kiwe" ? 0 : "30px")};
   border-top-right-radius: 30px;
   border-bottom-left-radius: 30px;
