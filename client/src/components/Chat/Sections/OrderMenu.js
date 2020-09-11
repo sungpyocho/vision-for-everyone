@@ -2,6 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import Map from "../Sections/Map";
 import Menu from "./Menu";
+import PropTypes from "prop-types";
 
 import { withStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
@@ -82,6 +83,34 @@ function OrderMenu({ handleTextQuery }) {
     media: {
       height: "200px",
     },
+    menuDialogPaper: {
+      minWidth: "90vw",
+      maxWidth: "90vw",
+      margin: "0px",
+      minHeight: "70vh",
+      maxHeight: "70vh",
+      borderRadius: "25px",
+    },
+    mapDialogPaper: {
+      minWidth: "100vw",
+      maxWidth: "100vw",
+      margin: "0px",
+      height: "calc(100% - 32px)",
+      top: "32px",
+      borderRadius: "25px 25px 0px 0px",
+      overflow: "auto"
+    },
+    staffDialogPaper: {
+      borderRadius: "25px",
+    },
+    menuCloseButton: {
+      color: "#232323",
+      backgroundColor: "#FFB5B5",
+      borderRadius: "20px",
+      right: "5px",
+      bottom: "5px",
+      boxShadow: "1px 2px 2px rgba(74, 74, 74, 0.25)",
+    },
   }));
 
   const classes = useStyles();
@@ -130,11 +159,12 @@ function OrderMenu({ handleTextQuery }) {
 
   return (
     <MenuComponent>
-      {/* 메뉴판 버튼 */}
+      {/* 1. 메뉴판 버튼 */}
       <CustomButton disabled={isDisabled} onClick={handleOpenMenu}>
         메뉴판
       </CustomButton>
       <Dialog
+        classes={{ paper: classes.menuDialogPaper }}
         open={openMenu}
         onClose={handleCloseMenu}
         aria-label="메뉴버튼 바입니다"
@@ -146,26 +176,28 @@ function OrderMenu({ handleTextQuery }) {
           menuListClick={menuListClick}
         />
         <DialogActions>
-          <Button onClick={handleCloseMenu} color="primary" autoFocus>
+          <Button
+            className={classes.menuCloseButton}
+            onClick={handleCloseMenu}
+            autoFocus
+          >
             닫기
           </Button>
         </DialogActions>
       </Dialog>
 
-      {/* 식당찾기 버튼 */}
+      {/* 2. 식당찾기 버튼 */}
       <CustomButton onClick={handleOpenMap}>식당찾기</CustomButton>
       <Dialog
-        className={classes.root}
+        classes={{ paper: classes.mapDialogPaper }}
         open={openMap}
         onClose={handleCloseMap}
         aria-labelledby="map-title"
         aria-describedby="map-description"
-        maxWidth={false}
-        fullWidth={true}
       >
         <DialogTitle
           id="map-title"
-          style={{ textAlign: "center" }}
+          style={{ textAlign: "left" }}
           onClose={handleCloseMap}
         >
           내 주변 식당찾기
@@ -175,11 +207,13 @@ function OrderMenu({ handleTextQuery }) {
           </DialogContentText> */}
         <Map mapRestaurantClick={mapRestaurantClick} />
       </Dialog>
-      {/* 직원호출 버튼 */}
+
+      {/* 3. 직원호출 버튼 */}
       <CustomButton disabled={isDisabled} onClick={handleOpenCall}>
         직원호출
       </CustomButton>
       <Dialog
+        classes={{ paper: classes.staffDialogPaper }}
         open={openCall}
         onClose={handleCloseCall}
         aria-labelledby="call-title"
@@ -194,7 +228,7 @@ function OrderMenu({ handleTextQuery }) {
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleCloseCall} color="primary" autoFocus>
+          <Button onClick={handleCloseCall} className={classes.menuCloseButton} autoFocus>
             닫기
           </Button>
         </DialogActions>
@@ -225,14 +259,14 @@ const CustomButton = styled.button`
   margin-left: 1%;
   margin-right: 1%;
   font-size: 16px;
-  font-weight: 500;
-  display: inline-block; /*이부분에 성질을 inline-block로 바꿔줘서 가로배치를 해줬다.*/
+  font-weight: 700;
+  display: inline-block; /*요소의 가로배치를 위해*/
   width: 33%;
   flex-shrink: 1;
   cursor: pointer;
   color: ${(props) => (props.disabled ? "#ffffff" : "#289cb2")};
   background-color: ${(props) => (props.disabled ? "#aaaaaa" : "#ffffff")};
-  box-shadow: 0 0 4px #999;
+  box-shadow: 1px 2px 2px rgba(74, 74, 74, 0.25);
   outline: none;
   transition: background 0.8s;
   background-position: center;
@@ -261,4 +295,4 @@ const CustomButton = styled.button`
   }
 `;
 
-export default OrderMenu;
+export default withStyles(styles)(OrderMenu);

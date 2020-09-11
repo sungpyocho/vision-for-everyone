@@ -86,6 +86,7 @@ const RecieptMessage = (props) => {
         </CardContent>
         {/* </CardActionArea> */}
       </Card>
+      {window.location.pathname === "/tutorial" && <div>kiwe 가입해</div>}
       {/* 자동 scroll을 위한 div */}
       <div
         ref={(el) => {

@@ -302,16 +302,20 @@ export default function Map({ mapRestaurantClick }) {
 
   return (
     <>
-      <div id="map" style={{ width: "99.999%", height: "50vh" }}></div>
-      <List component="nav">
+      <div id="map" style={{ width: "99.999%", height: "72vh", position: "relative" }}></div>
+      <List component="nav" style={{position: "relative", overflow:"auto"}}>
         {restaurantList &&
           restaurantList.map((element, i) => {
             return (
               <ListItem
                 key={i}
                 button
+                alignItems={"flex-start"}
                 onClick={() => handleMapRestaurantClick(i)}
               >
+                <ListItemText style={{ textAlign: "left" }}>
+                  {i+1}
+                </ListItemText>
                 <ListItemText style={{ textAlign: "left" }}>
                   {element.branchName}
                 </ListItemText>
