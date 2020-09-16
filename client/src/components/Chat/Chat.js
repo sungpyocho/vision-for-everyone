@@ -108,6 +108,9 @@ function Chat() {
     setInput(event.currentTarget.value);
   };
 
+  // Name of Selected Restaurant
+  const [resName, setResName] = useState(null);
+
   // component가 mount되면 실행
   useEffect(() => {
     checkUserId();
@@ -173,10 +176,12 @@ function Chat() {
       // 주문 전 일반 대화.
       // headers는 카카오페이 주문창 URL을 포함하므로, 일반대화에서는 없을수밖에 없다.
       if (!response.data.headers) {
+        setResName(response.data.restaurantName);
         response.data.fulfillmentMessages.forEach((content) => {
           conversation = {
             who: "kiwe",
             content: content,
+            resName: response.data.restaurantName
           };
           dispatch(saveMessage(conversation));
         });
@@ -312,7 +317,7 @@ function Chat() {
     // 일반 메세지일 경우
     else if (isNormalMessage(message)) {
       return (
-        <Message key={i} who={message.who} text={message.content.text.text} />
+        <Message key={i} who={message.who} text={message.content.text.text} resName={message.resName}/>
       );
     }
     // 카드 메세지일 경우
@@ -354,7 +359,7 @@ function Chat() {
     <Bg>
       <Wrapper>
         {/* Order Buttons */}
-        <OrderMenu aria-label="메뉴" handleTextQuery={handleTextQuery} />
+        <OrderMenu aria-label="메뉴" handleTextQuery={handleTextQuery} resName={resName} />
         <div aria-label="키위봇과 대화하는 채팅창입니다">
           {/* Chat Messages */}
           <Messages aria-live="polite">

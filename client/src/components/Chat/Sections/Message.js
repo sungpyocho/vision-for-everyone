@@ -4,6 +4,8 @@ import kiweAvatar from "../../../assets/kiwe-green.png";
 import UserAvatar from "../../../assets/kiwe-lime.png";
 import styled from "styled-components";
 import { makeStyles } from "@material-ui/core/styles";
+import { Button } from "@material-ui/core/";
+import Event from "./Event";
 
 const useStyles = makeStyles((theme) => ({
   avatar: {
@@ -25,12 +27,15 @@ const Message = (props) => {
   return (
     <MessageComponent who={props.who}>
       <div>
-        {whoIsAvatar && (<Avatar alt="" src={srcOfAvatar} className={classes.avatar} />) }
+        {whoIsAvatar && (
+          <Avatar alt="" src={srcOfAvatar} className={classes.avatar} />
+        )}
         <AvatarName>{whoIsAvatar}</AvatarName>
       </div>
       <MessageBox who={props.who}>
-        <span tabIndex='0'>{props.text}</span>
+        <span tabIndex="0">{props.text}</span>
       </MessageBox>
+      {props.resName && <Event></Event>}
       {/* 자동 scroll을 위한 div */}
       <div
         ref={(el) => {

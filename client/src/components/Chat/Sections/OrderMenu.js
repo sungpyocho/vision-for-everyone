@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import Map from "../Sections/Map";
 import Menu from "./Menu";
@@ -61,7 +61,7 @@ const MapDialog = withStyles(styles)((props) => {
   const { children, classes, onClose, ...other } = props;
 });
 
-function OrderMenu({ handleTextQuery }) {
+function OrderMenu({ handleTextQuery, resName }) {
   const [openMenu, setOpenMenu] = React.useState(false);
   const [isDisabled, setIsDisabled] = React.useState(true);
   const [openMap, setopenMap] = React.useState(false);
@@ -69,6 +69,14 @@ function OrderMenu({ handleTextQuery }) {
   const [userSelectedRestaurant, setUserSelectedRestaurant] = React.useState(
     null
   );
+
+  // props로 받아온 식당명을 통해, 메뉴를 굳이 클릭하지 않아도 식당 진입시 메뉴, 직원호출 버튼을 활성화합니다
+  // 주의!!!: 오는 식당명은 스타벅스인 반면, 메뉴판에 쓰이는 이름은 구체적인 브랜치입니다. 나중에 코드 수정할 때 유의하셔야 합니다!
+  useEffect(()=>{
+    if (resName === "스타벅스") {
+      handleUserSelectedRestaurant("스타벅스 안암역점");
+    }
+  }, [resName]);
 
   const useStyles = makeStyles((theme) => ({
     root: {
@@ -154,6 +162,7 @@ function OrderMenu({ handleTextQuery }) {
   const mapRestaurantClick = (res) => {
     handleCloseMap();
     handleUserSelectedRestaurant(res);
+    console.log(userSelectedRestaurant);
     handleTextQuery(res);
   };
 
