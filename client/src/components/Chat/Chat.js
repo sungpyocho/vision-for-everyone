@@ -95,6 +95,13 @@ function Chat() {
 
   // showCloseButton = iframe 창에서 맨 마지막 리디렉트 이후 버튼을 보여주시 위해 상태를 생성함.
   const [showCloseButton, setShowCloseButton] = useState(false);
+  
+  // 키위봇 로고를 처음 및 사용자 답변 이후에 띄워주기 위한 boolean 값 저장
+  const [showKiweChatLogo, setShowKiweChatLogo] = useState(true);
+
+  // 키위봇 로고를 띄워줄지 결정하기 위해 이전 채팅을 누가 보냈는지 string으로 저장(예: "kiwe", "user")
+  const [whoSentPrevMsg, setWhoSentPrevMsg] = useState(null);
+
   // redux 구조를 보면 state.message.messages가 메세지들의 배열이다.
   const messagesFromRedux = useSelector((state) => state.message.messages);
   const dispatch = useDispatch();
@@ -150,6 +157,7 @@ function Chat() {
     // 보낸 메세지 처리
     // conversation을 이렇게 만든 이유는
     // dialogflow의 fulfillmentMessages의 형식과 같은 형식을 취하기 위해!
+
     let conversation = {
       who: "user",
       content: {
@@ -284,12 +292,16 @@ function Chat() {
     if (!Input) {
       return alert("내용을 입력해주세요");
     }
+    // 튜토리얼봇으로 넘어가는 것을 막기 위한 코드
+    if ("[튜토리얼] 스타벅스 시청점".includes(Input) && Input !== '스타벅스') {
+      return alert("식당찾기 버튼을 눌러 진행해주세요.");
+    }
     // request를 server의 text Query로 전송
     textQuery(Input);
     setInput("");
   };
 
-  // Helper functions
+  // Helper functions: 메시지의 종류를 파악(일반메시지인지, 카드메시지인지, 영수증인지)할 수 있는 boolean 값을 반환
   const isNormalMessage = (message) => {
     return message.content && message.content.text && message.content.text.text;
   };
@@ -302,7 +314,7 @@ function Chat() {
     return message.orderResult && message.orderResult.restaurantName;
   };
 
-  // Render functions
+  // Render functions: redux에 저장된 메시지를 종류별로 렌더링하는 역할
   const renderCards = (cards) => {
     return cards.map((card, i) => (
       <CardMessage key={i} cardInfo={card.structValue} />
@@ -310,6 +322,14 @@ function Chat() {
   };
 
   const renderOneMessage = (message, i) => {
+    // 이전 메시지를 키위가 보내지 않았을 때만 키위 로고를 보여주는 로직: 무한 루프때문에 수정 필요
+    // if ((whoSentPrevMsg !== "kiwe") && (message.who === "kiwe")) {
+    //   setShowKiweChatLogo(true);
+    // } else if (whoSentPrevMsg==="kiwe"){
+    //   setShowKiweChatLogo(false);
+    // }
+    // setWhoSentPrevMsg(message.who);
+
     // 영수증 메시지일 경우
     if (isRecieptMessage(message)) {
       return <RecieptMessage key={i} orderResult={message.orderResult} />;
@@ -317,7 +337,7 @@ function Chat() {
     // 일반 메세지일 경우
     else if (isNormalMessage(message)) {
       return (
-        <Message key={i} who={message.who} text={message.content.text.text} resName={message.resName}/>
+        <Message key={i} showKiweChatLogo={showKiweChatLogo} who={message.who} text={message.content.text.text} resName={message.resName}/>
       );
     }
     // 카드 메세지일 경우

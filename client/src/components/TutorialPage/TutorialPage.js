@@ -82,6 +82,8 @@ const useStyles = makeStyles((theme) => ({
 function TutorialPage() {
   const classes = useStyles(); // Customize Material-UI
 
+  const [firstInstructionModal, setFirstInstructionModal] = useState(true);
+
   // Kakao Pay Link State for <iframe>
   const [kakaoPayLink, setKakaoPayLink] = useState(null);
 
@@ -113,6 +115,12 @@ function TutorialPage() {
 
   // Name of Selected Restaurant
   const [resName, setResName] = useState(null);
+
+  // 키위봇 로고를 처음 및 사용자 답변 이후에 띄워주기 위한 boolean 값 저장
+  const [showKiweChatLogo, setShowKiweChatLogo] = useState(true);
+
+  // 키위봇 로고를 띄워줄지 결정하기 위해 이전 채팅을 누가 보냈는지 string으로 저장(예: "kiwe", "user")
+  const [whoSentPrevMsg, setWhoSentPrevMsg] = useState(null);
 
   // component가 mount되면 실행
   // useEffect를 써서 렌더링하면 이 컴포넌트에서 이거 해야해!라고 지시
@@ -182,11 +190,12 @@ function TutorialPage() {
       // headers는 카카오페이 주문창 URL을 포함하므로, 일반대화에서는 없을수밖에 없다.
       if (!response.data.headers) {
         setResName(response.data.restaurantName);
+        console.log('set rest name', resName)
         response.data.fulfillmentMessages.forEach((content) => {
           conversation = {
             who: "kiwe",
             content: content,
-            resName: response.data.restaurantName
+            resName: response.data.restaurantName,
           };
           dispatch(saveMessage(conversation));
         });
@@ -285,12 +294,24 @@ function TutorialPage() {
     }
   };
 
-  // Functions about query input
+  // Function about submiting text input
   const handleSubmit = (event) => {
     if (event) event.preventDefault();
-
     if (!Input) {
       return alert("내용을 입력해주세요");
+    }
+    // 식당 미진입시 스벅 시청점, 스타벅스 시청점, 튜토리얼과 완벽히 일치할 경우만 통과
+    // 일치하지 않을 경우, window.alert
+    if ( resName === null &&
+      ![
+        "스벅 시청점",
+        "스타벅스 시청점",
+        "튜토리얼",
+        "[튜토리얼] 스타벅스 시청점",
+      ].includes(Input)
+    ) {
+      window.alert("식당찾기 버튼을 눌러 진행해주세요.");
+      return;
     }
     // request를 server의 text Query로 전송
     textQuery(Input);
@@ -318,15 +339,30 @@ function TutorialPage() {
   };
 
   const renderOneMessage = (message, i) => {
+
+    // 이전 메시지를 키위가 보내지 않았을 때만 키위 로고를 보여주는 로직: 무한 루프때문에 수정 필요
+    // if ((whoSentPrevMsg !== "kiwe") && (message.who === "kiwe")) {
+    //   setShowKiweChatLogo(true);
+    // } else if (whoSentPrevMsg==="kiwe"){
+    //   setShowKiweChatLogo(false);
+    // }
+    // setWhoSentPrevMsg(message.who);
+
     // 영수증 메시지일 경우
     if (isRecieptMessage(message)) {
       return <RecieptMessage key={i} orderResult={message.orderResult} />;
     }
     // 일반 메세지일 경우
     else if (isNormalMessage(message)) {
-      console.log(message);
       return (
-        <Message key={i} who={message.who} text={message.content.text.text} resName={message.resName}/>
+        <Message
+          key={i}
+          index={i}
+          who={message.who}
+          text={message.content.text.text}
+          resName={message.resName}
+          showKiweChatLogo={showKiweChatLogo}
+        />
       );
     }
     // 카드 메세지일 경우
@@ -369,7 +405,11 @@ function TutorialPage() {
       <Wrapper>
         <ProgressBar orderStep={orderStep} />
         {/* Order Buttons */}
-        <OrderMenu aria-label="메뉴" handleTextQuery={handleTextQuery} resName={resName}/>
+        <OrderMenu
+          aria-label="메뉴"
+          handleTextQuery={handleTextQuery}
+          resName={resName}
+        />
         <div aria-label="키위봇과 대화하는 채팅창입니다">
           {/* Chat Messages */}
           <Messages aria-live="polite">

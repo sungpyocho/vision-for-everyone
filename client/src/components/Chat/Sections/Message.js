@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import Avatar from "@material-ui/core/Avatar";
-import kiweAvatar from "../../../assets/kiwe-green.png";
-import UserAvatar from "../../../assets/kiwe-lime.png";
+import kiweAvatar from "../../../assets/kiwe-logo.svg";
+import UserAvatar from "../../../assets/kiwe-user.png";
 import styled from "styled-components";
 import { makeStyles } from "@material-ui/core/styles";
 import { Button } from "@material-ui/core/";
@@ -23,11 +23,10 @@ const Message = (props) => {
 
   const srcOfAvatar = props.who === "kiwe" ? kiweAvatar : UserAvatar;
   const whoIsAvatar = props.who === "kiwe" ? "키위봇" : "";
-
   return (
     <MessageComponent who={props.who}>
       <div>
-        {whoIsAvatar && (
+        {whoIsAvatar && props.showKiweChatLogo && (
           <Avatar alt="" src={srcOfAvatar} className={classes.avatar} />
         )}
         <AvatarName>{whoIsAvatar}</AvatarName>

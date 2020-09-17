@@ -9,8 +9,10 @@ import {
 } from "@material-ui/core";
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
+import IconButton from '@material-ui/core/IconButton';
 import { makeStyles } from "@material-ui/core/styles";
-import event_bears from "./event_bears.jpeg";
+import event_bears from '../../../assets/event_bears.jpeg';
+import event_icon from '../../../assets/event_icon.svg';
 
 import {
   Card,
@@ -54,9 +56,7 @@ export default function Event() {
 
   return (
     <div style={{ display: "inline-block" }}>
-      <Button variant="outlined" color="primary" onClick={handleOpenEvent}>
-        이벤트
-      </Button>
+      <img src={event_icon} onClick={handleOpenEvent}></img>
       <Dialog
         onClose={handleCloseEvent}
         aria-labelledby="simple-dialog-title"
@@ -66,7 +66,7 @@ export default function Event() {
         <DialogTitle style={{ textAlign: "center", color: "#289C8E" }}>
           이벤트
         </DialogTitle>
-        <CardMedia className={classes.media} image={require("./event_bears.jpeg")}>
+        <CardMedia className={classes.media} image={event_bears}>
         </CardMedia>
         <Typography variant="subtitle1">
           [페이스북] 키위 팔로우하고 귀여운 곰돌이 받아가자!
