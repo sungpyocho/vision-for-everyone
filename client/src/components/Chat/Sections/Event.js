@@ -9,10 +9,10 @@ import {
 } from "@material-ui/core";
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
-import IconButton from '@material-ui/core/IconButton';
+import IconButton from "@material-ui/core/IconButton";
 import { makeStyles } from "@material-ui/core/styles";
-import event_bears from '../../../assets/event_bears.jpeg';
-import event_icon from '../../../assets/event_icon.svg';
+import event_image from "../../../assets/event_image.png";
+import event_icon from "../../../assets/event_icon.svg";
 
 import {
   Card,
@@ -26,15 +26,15 @@ import {
 export default function Event() {
   const useStyles = makeStyles((theme) => ({
     eventDialogPaper: {
-      minWidth: "70vw",
-      maxWidth: "70vw",
+      minWidth: "80vw",
+      maxWidth: "80vw",
       margin: "0px",
-      minHeight: "70vw",
-      maxHeight: "70vw",
+      minHeight: "50vh",
+      maxHeight: "50vh",
       borderRadius: "20px",
     },
     media: {
-      height: "240px"
+      height: "240px",
     },
     menuCloseButton: {
       color: "#232323",
@@ -66,11 +66,12 @@ export default function Event() {
         <DialogTitle style={{ textAlign: "center", color: "#289C8E" }}>
           이벤트
         </DialogTitle>
-        <CardMedia className={classes.media} image={event_bears}>
-        </CardMedia>
-        <Typography variant="subtitle1">
-          [페이스북] 키위 팔로우하고 귀여운 곰돌이 받아가자!
-        </Typography>
+        <CardMedia className={classes.media} image={event_image}></CardMedia>
+        <span
+          style={{ fontWeight: "700" }}
+        >
+          2만원 이상 구매시 스타벅스 아메리카노 증정
+        </span>
         <DialogActions>
           <Button
             className={classes.menuCloseButton}
