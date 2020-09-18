@@ -39,7 +39,7 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: "#6ac48a",
   },
   form: {
-    width: "100%", // Fix IE 11 issue.
+    width: "85%", // Fix IE 11 issue.
     marginTop: theme.spacing(1),
   },
   inputText: {
@@ -77,6 +77,13 @@ const useStyles = makeStyles((theme) => ({
     boxShadow: "2px 4px 4px rgba(74, 74, 74, 0.25)",
     border: "1px solid #FFFFFF"
   },
+  loginError: {
+    color: "white",
+    backgroundColor: "#2fc4b2"
+  },
+  loginErrorIcon: {
+    color: "white"
+  }
 }));
 
 export default function LoginPage(props) {
@@ -120,12 +127,7 @@ export default function LoginPage(props) {
         <Container component="main" maxWidth="xs">
           <CssBaseline />
           <div className={classes.paper}>
-            <Avatar className={classes.avatar}>
-              <LockOutlinedIcon />
-            </Avatar>
-            <Typography component="h1" variant="h5">
-              키위 로그인
-            </Typography>
+            <img src={require("../../assets/kiwe-login.svg")} width="104" height="104"></img>
             <form
               className={classes.form}
               onSubmit={onSubmitHandler}
@@ -164,9 +166,8 @@ export default function LoginPage(props) {
             label="로그인 유지"
           /> */}
               {loginError && (
-                <Alert severity="error">
-                  로그인에 실패하였습니다. <br />
-                  아이디 혹은 비밀번호를 다시 확인해주세요.
+                <Alert severity="error" classes={{standardError: classes.loginError, icon:classes.loginErrorIcon}}>
+                  아이디 또는 비밀번호를 다시 확인해주세요.
                 </Alert>
               )}
               <Button

@@ -20,7 +20,7 @@ const sessionClient = new dialogflow.SessionsClient({
 const { payment, findMenuPrice } = require("../middleware/order");
 var restaurantName = ""; // 전역변수
 
-// Text Query Route
+// Text Query Route 
 router.post("/textQuery", async (req, res) => {
   // 유저마다 다른 session path 설정
   let sessionPath = sessionClient.sessionPath(
@@ -58,7 +58,7 @@ router.post("/textQuery", async (req, res) => {
     let matches = regExp.exec(result.fulfillmentMessages[0].text.text);
     restaurantName = matches[1];
     console.log("레스토랑명은", restaurantName);
-    result.step = "select restaurant";
+    result.restaurantName = restaurantName;
   }
 
   // 프론트엔드로 정보 보내기
@@ -95,6 +95,7 @@ router.post("/textQuery", async (req, res) => {
       }
     });
   } else {
+    console.log(result);
     res.send(result);
   }
 });
@@ -132,4 +133,4 @@ router.post("/eventQuery", async (req, res) => {
   res.send(result);
 });
 
-module.exports = router;
+module.exports = router; 

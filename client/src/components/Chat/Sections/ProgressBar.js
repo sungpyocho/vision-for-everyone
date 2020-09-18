@@ -31,12 +31,13 @@ function ProgressBar({orderStep}) {
   };
 
   const barContainerStyles = {
-    height: 20,
+    height: 8,
     width: "100%",
     backgroundColor: "#e0e0de",
-    borderRadius: 50,
+    borderRadius: "30px",
     marginLeft: "auto",
     marginRight: "auto",
+    marginTop: "12px"
   };
 
   const fillerStyles = {
@@ -45,6 +46,7 @@ function ProgressBar({orderStep}) {
     backgroundColor: "pink",
     borderRadius: "inherit",
     textAlign: "right",
+    borderRadius: "30px"
   };
 
   const labelStyles = {
@@ -52,6 +54,7 @@ function ProgressBar({orderStep}) {
     padding: 5,
     color: "#ffffff",
     fontWeight: "bold",
+    fontSize: "20px",
     zIndex: 3,
   };
 

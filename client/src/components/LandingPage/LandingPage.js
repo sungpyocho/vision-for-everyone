@@ -4,7 +4,9 @@ import { makeStyles } from "@material-ui/core/styles";
 import { Button } from "@material-ui/core";
 import kiwe_motion_1 from "../../assets/kiwe_motion_1.mp4";
 import kiwe_motion_2 from "../../assets/kiwe_motion_2.mp4";
-import kiwe_image_1 from "../../assets/kiwe_image_1.jpg";
+import kiwe_landing_serve from "../../assets/kiwe_landing_serve.svg";
+import kiwe_landing_friend from "../../assets/kiwe_landing_friend.svg";
+import MobileStepper from '@material-ui/core/MobileStepper';
 import createBreakpoints from "@material-ui/core/styles/createBreakpoints";
 
 const LandingpageBlock = styled.div`
@@ -36,10 +38,17 @@ const MotionBox = styled.video`
   width: 100%;
 `;
 
-const ImageBox = styled.img`
+const ImageBox = styled.div`
   height: 70%;
   width: 100%;
 `;
+
+const RealImage = styled.img`
+  height: 50%;
+  width: 50%;
+  left: 25%;
+  position: fixed;
+`
 
 const MotionContainer = styled.div`
   position: relative;
@@ -53,7 +62,7 @@ const MotionContainer = styled.div`
 
 const MessageParagraph = styled.p`
   margin: 4px;
-`
+`;
 
 const useStyles = makeStyles((theme) => ({
   button: {
@@ -66,8 +75,16 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: "pink",
     fontSize: "20px",
     padding: "5px",
-    boxShadow: "2px 4px 4px rgba(74, 74, 74, 0.25)"
+    boxShadow: "2px 4px 4px rgba(74, 74, 74, 0.25)",
   },
+  stepper: {
+    position: "relative",
+    backgroundColor: "#2fc4b2",
+    justifyContent: "center"
+  },
+  stepperDotActive: {
+    backgroundColor: "#ffc1c1"
+  }
 }));
 
 function LandingPage(props) {
@@ -81,8 +98,8 @@ function LandingPage(props) {
     kiwe_motion_1,
     kiwe_motion_1,
     kiwe_motion_2,
-    kiwe_image_1,
-    kiwe_image_1,
+    kiwe_landing_serve,
+    kiwe_landing_friend,
   ];
   // 모션 메시지를 담는 배열
   const motionTextArray = [
@@ -111,9 +128,11 @@ function LandingPage(props) {
       ></div>
       <MotionContainer id="motion_container" onClick={motionNumHandler}>
         {/* 개행 문자를 인식케 하기 위함 */}
-        <MessageBox>{motionTextArray[motionNum].split('\n').map((item, i) => {
-          return <MessageParagraph key={i}>{item}</MessageParagraph>
-        })}</MessageBox> 
+        <MessageBox>
+          {motionTextArray[motionNum].split("\n").map((item, i) => {
+            return <MessageParagraph key={i}>{item}</MessageParagraph>;
+          })}
+        </MessageBox>
         {motionNum < 3 ? (
           <MotionBox
             ref={motionReference}
@@ -125,11 +144,22 @@ function LandingPage(props) {
             playsInline
           ></MotionBox>
         ) : (
-          <ImageBox src={motionArray[motionNum]} key={motionNum}></ImageBox>
+          <ImageBox><RealImage src={motionArray[motionNum]} key={motionNum}></RealImage></ImageBox>
         )}
       </MotionContainer>
+      {/* 튜토리얼 모션이 몇 번째까지 왔는지 나타내는 닷 */}
+      <MobileStepper
+        variant="dots"
+        steps={5}
+        position="static"
+        activeStep={motionNum}
+        classes={{
+          root: classes.stepper,
+          dotActive: classes.stepperDotActive
+        }}
+      />
       <Button href="/tutorial" className={classes.button}>
-        {(motionNum<4) ? "건너뛸래요": "키위 시작하기"}
+        {motionNum < 4 ? "건너뛸래요" : "키위 시작하기"}
       </Button>
     </LandingpageBlock>
   );

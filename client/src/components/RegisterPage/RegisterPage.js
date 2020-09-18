@@ -37,7 +37,7 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: "#6ac48a",
   },
   form: {
-    width: "100%", // Fix IE 11 issue.
+    width: "85%", // Fix IE 11 issue.
     marginTop: theme.spacing(2),
   },
   inputText: {
@@ -50,15 +50,17 @@ const useStyles = makeStyles((theme) => ({
     paddingright: "15px",
   },
   submit: {
+    margin: theme.spacing(2),
     backgroundColor: "#ffc1c1",
-    color: "black",
+    fontSize: "18px",
+    color: "#232323",
     width: "70%",
     height: "50px",
     marginLeft: "15%",
     marginRight: "15%",
-    marginTop: theme.spacing(3),
-    marginBottom: "3%",
     borderRadius: "25px",
+    boxShadow: "2px 4px 4px rgba(74, 74, 74, 0.25)",
+    border: "1px solid #FFFFFF"
   },
 }));
 
