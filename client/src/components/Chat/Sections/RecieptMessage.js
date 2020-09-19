@@ -30,7 +30,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const RecieptMessage = (props) => {
+const RecieptMessage = ({ history }) => {
   const classes = useStyles();
   const kiweJingle = new Audio(kiwe_jingle);
   let endOfMessage = null;
@@ -42,7 +42,7 @@ const RecieptMessage = (props) => {
   const toRegisterPage = () => {
     kiweJingle.play();
     setTimeout(() => {
-      props.history.push("/register");
+      history.push("/register");
     }, 2000);
   };
 
