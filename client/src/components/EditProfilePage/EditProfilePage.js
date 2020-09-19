@@ -94,6 +94,10 @@ export default function RegisterPage(props) {
     setConfirmPassword(event.currentTarget.value);
   };
 
+  const emailHandler = (event) => {
+    setEmail(event.currentTarget.value);
+  };
+
   const submitHandler = (event) => {
     event.preventDefault();
     setArePasswordsSame(true);
@@ -184,6 +188,22 @@ export default function RegisterPage(props) {
                     autoComplete="current-password"
                     value={ConfirmPassword}
                     onChange={confirmPasswordHandler}
+                  />
+                </Grid>
+                <Grid item xs={3}>
+                  <h4>이메일</h4>
+                </Grid>
+                <Grid item xs={9}>
+                  <TextField
+                    variant="outlined"
+                    required
+                    fullWidth
+                    name="mail"
+                    placeholder="이메일 주소 변경"
+                    id="email"
+                    autoComplete="current-email"
+                    value={Email}
+                    onChange={emailHandler}
                   />
                 </Grid>
                 {!arePasswordsSame && (

@@ -34,13 +34,8 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: "#6ac48a",
   },
   form: {
-    width: "100%", // Fix IE 11 issue.
+    width: "85%", // Fix IE 11 issue.
     marginTop: theme.spacing(3),
-  },
-  submit: {
-    margin: theme.spacing(3, 0, 2),
-    backgroundColor: "#6ac48a",
-    color: "white",
   },
   inputText: {
     backgroundColor: "white",
@@ -51,16 +46,18 @@ const useStyles = makeStyles((theme) => ({
     paddingright: "15px",
     marginTop: "30px",
   },
-  changePassword: {
-    margin: theme.spacing(3, 0, 2),
+  submit: {
+    margin: theme.spacing(6),
     backgroundColor: "#ffc1c1",
-    color: "black",
-    width: "70%",
+    fontSize: "18px",
+    color: "#232323",
+    width: "50%",
     height: "50px",
-    marginLeft: "15%",
-    marginRight: "15%",
-    marginTop: "100px",
+    marginLeft: "25%",
+    marginRight: "25%",
     borderRadius: "25px",
+    boxShadow: "2px 4px 4px rgba(74, 74, 74, 0.25)",
+    border: "1px solid #FFFFFF"
   },
 }));
 
@@ -106,9 +103,6 @@ export default function ForgotPasswordPage(props) {
         <Container component="main" maxWidth="xs">
           <CssBaseline />
           <div className={classes.paper}>
-            <Avatar className={classes.avatar}>
-              <DraftsIcon />
-            </Avatar>
             <Typography component="h1" variant="h5">
               비밀번호 찾기
             </Typography>
@@ -150,7 +144,7 @@ export default function ForgotPasswordPage(props) {
                 type="submit"
                 fullWidth
                 variant="contained"
-                className={classes.changePassword}
+                className={classes.submit}
               >
                 확인
               </Button>
