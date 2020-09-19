@@ -56,7 +56,7 @@ export default function Event() {
 
   return (
     <div style={{ display: "inline-block" }}>
-      <img src={event_icon} onClick={handleOpenEvent}></img>
+      <img role="img" src={event_icon} aria-label="식당 이벤트 보기" onClick={handleOpenEvent}></img>
       <Dialog
         onClose={handleCloseEvent}
         aria-labelledby="simple-dialog-title"

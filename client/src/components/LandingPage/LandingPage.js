@@ -149,9 +149,10 @@ function LandingPage(props) {
             autoPlay
             muted
             preLoad="auto"
+            aria-hidden="true"
           ></MotionBox>
         ) : (
-          <ImageBox><RealImage src={motionArray[motionNum]} key={motionNum}></RealImage></ImageBox>
+          <ImageBox aria-hidden="true"><RealImage src={motionArray[motionNum]} key={motionNum}></RealImage></ImageBox>
         )}
       </MotionContainer>
       {/* 튜토리얼 모션이 몇 번째까지 왔는지 나타내는 닷 */}
@@ -165,7 +166,7 @@ function LandingPage(props) {
           dotActive: classes.stepperDotActive
         }}
       />
-      <Button href="/tutorial" className={classes.button}>
+      <Button href="/tutorial" className={classes.button} aria-label="건너뛰고 키위 튜토리얼 시작하기">
         {motionNum < 4 ? "건너뛸래요" : "키위 시작하기"}
       </Button>
     </LandingpageBlock>

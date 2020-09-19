@@ -160,7 +160,7 @@ function OrderMenu({ handleTextQuery, resName }) {
   return (
     <MenuComponent>
       {/* 1. 메뉴판 버튼 */}
-      <CustomButton disabled={isDisabled} onClick={handleOpenMenu}>
+      <CustomButton aria-disabled={isDisabled} disabled={isDisabled} onClick={handleOpenMenu}>
         메뉴판
       </CustomButton>
       <Dialog
@@ -209,7 +209,7 @@ function OrderMenu({ handleTextQuery, resName }) {
       </Dialog>
 
       {/* 3. 직원호출 버튼 */}
-      <CustomButton disabled={isDisabled} onClick={handleOpenCall}>
+      <CustomButton aria-disabled={isDisabled} disabled={isDisabled} onClick={handleOpenCall}>
         직원호출
       </CustomButton>
       <Dialog
