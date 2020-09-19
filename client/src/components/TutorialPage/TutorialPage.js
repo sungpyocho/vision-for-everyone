@@ -190,7 +190,6 @@ function TutorialPage() {
       // headers는 카카오페이 주문창 URL을 포함하므로, 일반대화에서는 없을수밖에 없다.
       if (!response.data.headers) {
         setResName(response.data.restaurantName);
-        console.log('set rest name', resName)
         response.data.fulfillmentMessages.forEach((content) => {
           conversation = {
             who: "kiwe",
@@ -302,7 +301,8 @@ function TutorialPage() {
     }
     // 식당 미진입시 스벅 시청점, 스타벅스 시청점, 튜토리얼과 완벽히 일치할 경우만 통과
     // 일치하지 않을 경우, window.alert
-    if ( resName === null &&
+    if (
+      resName === null &&
       ![
         "스벅 시청점",
         "스타벅스 시청점",
@@ -339,15 +339,6 @@ function TutorialPage() {
   };
 
   const renderOneMessage = (message, i) => {
-
-    // 이전 메시지를 키위가 보내지 않았을 때만 키위 로고를 보여주는 로직: 무한 루프때문에 수정 필요
-    // if ((whoSentPrevMsg !== "kiwe") && (message.who === "kiwe")) {
-    //   setShowKiweChatLogo(true);
-    // } else if (whoSentPrevMsg==="kiwe"){
-    //   setShowKiweChatLogo(false);
-    // }
-    // setWhoSentPrevMsg(message.who);
-
     // 영수증 메시지일 경우
     if (isRecieptMessage(message)) {
       return <RecieptMessage key={i} orderResult={message.orderResult} />;

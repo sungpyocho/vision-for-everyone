@@ -1,6 +1,6 @@
-import React, { useEffect } from "react";
+import React from "react";
 import styled from "styled-components";
-import handClap from "../../assets/hand-clap.png";
+import kiweFinish from "../../assets/kiwe-finish.jpg";
 
 const SuccessBlock = styled.div`
   margin: 0;
@@ -23,7 +23,7 @@ function Success() {
     <SuccessBlock>
       <h3>결제 성공했습니다!</h3>
       <div>
-        <img src={handClap} style={{ width: "100%" }} />
+        <img src={kiweFinish} style={{ width: "80%" }} />
       </div>
       <h4>닫기 버튼을 눌러주세요.</h4>
     </SuccessBlock>

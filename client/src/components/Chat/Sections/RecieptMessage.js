@@ -1,4 +1,6 @@
 import React, { useEffect } from "react";
+import kiwe_jingle from "../../../assets/kiwe_jingle.wav";
+
 import { makeStyles } from "@material-ui/core/styles";
 import Card from "@material-ui/core/Card";
 import { CardContent } from "@material-ui/core/";
@@ -30,11 +32,19 @@ const useStyles = makeStyles((theme) => ({
 
 const RecieptMessage = (props) => {
   const classes = useStyles();
+  const kiweJingle = new Audio(kiwe_jingle);
   let endOfMessage = null;
 
   useEffect(() => {
     endOfMessage.scrollIntoView({ behaviour: "smooth" });
   }, []);
+
+  const toRegisterPage = () => {
+    kiweJingle.play();
+    setTimeout(() => {
+      props.history.push("/register");
+    }, 2000);
+  };
 
   return (
     <div
@@ -101,7 +111,9 @@ const RecieptMessage = (props) => {
         {/* </CardActionArea> */}
       </Card>
       {window.location.pathname === "/tutorial" && (
-        <Button className={classes.registerButton}>키위 가입하기</Button>
+        <Button onClick={toRegisterPage} className={classes.registerButton}>
+          키위 가입하기
+        </Button>
       )}
       {/* 자동 scroll을 위한 div */}
       <div

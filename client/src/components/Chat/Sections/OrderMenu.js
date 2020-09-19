@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import Map from "../Sections/Map";
 import Menu from "./Menu";
-import PropTypes from "prop-types";
 
 import { withStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
@@ -54,17 +53,15 @@ const MapDialog = withStyles(styles)((props) => {
 });
 
 function OrderMenu({ handleTextQuery, resName }) {
-  const [openMenu, setOpenMenu] = React.useState(false);
-  const [isDisabled, setIsDisabled] = React.useState(true);
-  const [openMap, setopenMap] = React.useState(false);
-  const [openCall, setOpenCall] = React.useState(false);
-  const [userSelectedRestaurant, setUserSelectedRestaurant] = React.useState(
-    null
-  );
+  const [openMenu, setOpenMenu] = useState(false);
+  const [isDisabled, setIsDisabled] = useState(true);
+  const [openMap, setopenMap] = useState(false);
+  const [openCall, setOpenCall] = useState(false);
+  const [userSelectedRestaurant, setUserSelectedRestaurant] = useState(null);
 
   // props로 받아온 식당명을 통해, 메뉴를 굳이 클릭하지 않아도 식당 진입시 메뉴, 직원호출 버튼을 활성화합니다
   // 주의!!!: 오는 식당명은 스타벅스인 반면, 메뉴판에 쓰이는 이름은 구체적인 브랜치입니다. 나중에 코드 수정할 때 유의하셔야 합니다!
-  useEffect(()=>{
+  useEffect(() => {
     if (resName === "스타벅스") {
       handleUserSelectedRestaurant("스타벅스 안암역점");
     }
@@ -98,7 +95,7 @@ function OrderMenu({ handleTextQuery, resName }) {
       height: "calc(100% - 32px)",
       top: "32px",
       borderRadius: "25px 25px 0px 0px",
-      overflow: "auto"
+      overflow: "auto",
     },
     staffDialogPaper: {
       borderRadius: "25px",
@@ -160,7 +157,11 @@ function OrderMenu({ handleTextQuery, resName }) {
   return (
     <MenuComponent>
       {/* 1. 메뉴판 버튼 */}
-      <CustomButton aria-disabled={isDisabled} disabled={isDisabled} onClick={handleOpenMenu}>
+      <CustomButton
+        aria-disabled={isDisabled}
+        disabled={isDisabled}
+        onClick={handleOpenMenu}
+      >
         메뉴판
       </CustomButton>
       <Dialog
@@ -209,7 +210,11 @@ function OrderMenu({ handleTextQuery, resName }) {
       </Dialog>
 
       {/* 3. 직원호출 버튼 */}
-      <CustomButton aria-disabled={isDisabled} disabled={isDisabled} onClick={handleOpenCall}>
+      <CustomButton
+        aria-disabled={isDisabled}
+        disabled={isDisabled}
+        onClick={handleOpenCall}
+      >
         직원호출
       </CustomButton>
       <Dialog
@@ -228,7 +233,11 @@ function OrderMenu({ handleTextQuery, resName }) {
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleCloseCall} className={classes.menuCloseButton} autoFocus>
+          <Button
+            onClick={handleCloseCall}
+            className={classes.menuCloseButton}
+            autoFocus
+          >
             닫기
           </Button>
         </DialogActions>
