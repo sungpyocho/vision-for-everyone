@@ -17,6 +17,8 @@ import Message from "./Sections/Message";
 import CardMessage from "./Sections/CardMessage";
 import RecieptMessage from "./Sections/RecieptMessage";
 import chime from "../../assets/chime.mp3";
+import order_ready from "../../assets/order_ready.mp3";
+import order_success from "../../assets/order_success.mp3";
 
 const cookies = new Cookies(); //creating cookie object
 
@@ -100,14 +102,16 @@ function Chat() {
   const [showKiweChatLogo, setShowKiweChatLogo] = useState(true);
 
   // 키위봇 로고를 띄워줄지 결정하기 위해 이전 채팅을 누가 보냈는지 string으로 저장(예: "kiwe", "user")
-  const [whoSentPrevMsg, setWhoSentPrevMsg] = useState(null);
+  // const [whoSentPrevMsg, setWhoSentPrevMsg] = useState(null);
 
   // redux 구조를 보면 state.message.messages가 메세지들의 배열이다.
   const messagesFromRedux = useSelector((state) => state.message.messages);
   const dispatch = useDispatch();
 
-  // chime mp3
+  // SFX mp3
   const sound = new Audio(chime);
+  const orderSuccess = new Audio(order_success);
+  const orderReady = new Audio(order_ready);
 
   // Keyboard Input State
   const [Input, setInput] = useState("");
@@ -332,6 +336,7 @@ function Chat() {
 
     // 영수증 메시지일 경우
     if (isRecieptMessage(message)) {
+      orderSuccess.play();
       return <RecieptMessage key={i} orderResult={message.orderResult} />;
     }
     // 일반 메세지일 경우
