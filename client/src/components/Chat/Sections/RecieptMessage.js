@@ -30,7 +30,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const RecieptMessage = ({ props }) => {
+const RecieptMessage = (props) => {
   const classes = useStyles();
   const kiweJingle = new Audio(kiwe_jingle);
   let endOfMessage = null;

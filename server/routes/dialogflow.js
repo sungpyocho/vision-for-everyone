@@ -68,7 +68,7 @@ router.post("/textQuery", async (req, res) => {
     result.outputContexts.forEach((context) => {
       // Dialogflow 답변에서 선택한 메뉴 정보를 담은 context를 찾음
       if (context.name.includes("finished_order_need_payment")) {
-        let menuName = `${context.parameters.fields.coffee_menu.stringValue}(${context.parameters.fields.Size.stringValue})`; // '메뉴명(사이즈)'의 형식으로 DB에 저장된 메뉴 찾기
+        let menuName = `${context.parameters.fields.coffee_menu.stringValue}(${context.parameters.fields.size.stringValue})`; // '메뉴명(사이즈)'의 형식으로 DB에 저장된 메뉴 찾기
         let quantity = context.parameters.fields.number.numberValue;
         console.log(
           "메뉴명: ",
