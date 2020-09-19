@@ -1,13 +1,12 @@
-import React, { useRef, useState, useEffect } from "react";
+import React, { useRef, useState } from "react";
 import styled from "styled-components";
 import { makeStyles } from "@material-ui/core/styles";
 import { Button } from "@material-ui/core";
-import kiwe_motion_1 from "../../assets/kiwe_motion_1.gif";
-import kiwe_motion_2 from "../../assets/kiwe_motion_2.gif";
-import kiwe_landing_serve from "../../assets/kiwe_landing_serve.svg";
-import kiwe_landing_friend from "../../assets/kiwe_landing_friend.svg";
+import kiweFirstMotion from "../../assets/kiwe_motion_1.gif";
+import kiweSecondMotion from "../../assets/kiwe_motion_2.gif";
+import kiweServeImg from "../../assets/kiwe_landing_serve.svg";
+import kiweFriendImg from "../../assets/kiwe_landing_friend.svg";
 import MobileStepper from "@material-ui/core/MobileStepper";
-import createBreakpoints from "@material-ui/core/styles/createBreakpoints";
 import kiwe_jingle from "../../assets/kiwe_jingle.wav";
 
 const LandingpageBlock = styled.div`
@@ -20,7 +19,7 @@ const LandingpageBlock = styled.div`
 const MessageBox = styled.div`
   position: relative;
   top: 5%;
-  left: 15%;
+  left: 11%;
   width: 75%;
   line-height: 130%;
   background-color: white;
@@ -36,18 +35,22 @@ const MessageBox = styled.div`
 
 // 모션이 들어가는 박스
 const MotionBox = styled.img`
-  height: 70%;
-  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  display: block;
+  @media (max-width: 374px) {
+    width: 250px;
+  }
+  @media (min-width: 375px) and (max-width: 600px) {
+    width: 300px;
+  }
+  @media (min-width: 600px) {
+    width: 500px;
+  }
 `;
 
 // 이미지가 들어가는 박스
-const ImageBox = styled.div`
-  height: 70%;
-  width: 100%;
-`;
-
-// 이미지의 키위새 크기가 모션과 맞지 않아 임시로 맞춰놓기 위한 컨테이너
-const RealImage = styled.img`
+const ImageBox = styled.img`
   height: 50%;
   width: 50%;
   left: 25%;
@@ -56,12 +59,10 @@ const RealImage = styled.img`
 
 const MotionContainer = styled.div`
   position: relative;
-  height: 50%;
   top: 10%;
   left: 10%;
   height: 70%;
   width: 80%;
-  background-color: #2fc4b2;
 `;
 
 const MessageParagraph = styled.p`
@@ -95,17 +96,17 @@ function LandingPage(props) {
   const classes = useStyles();
   const [motionNum, setMotionNum] = useState(0);
   const [firstClick, setFirstClick] = useState(false); // 배터리 절약 모드시 자동재생 불가 우회 위해 첫 클릭 여부를 저장
-  const motionReference = React.useRef();
+  const motionReference = useRef();
 
   const kiweJingle = new Audio(kiwe_jingle);
 
   // 모션을 값에 따라 불러오기 위해 저장해두는 배열
   const motionArray = [
-    kiwe_motion_1,
-    kiwe_motion_1,
-    kiwe_motion_2,
-    kiwe_landing_serve,
-    kiwe_landing_friend,
+    kiweFirstMotion,
+    kiweFirstMotion,
+    kiweSecondMotion,
+    kiweServeImg,
+    kiweFriendImg,
   ];
   // 모션 메시지를 담는 배열
   const motionTextArray = [
@@ -158,9 +159,11 @@ function LandingPage(props) {
             aria-hidden="true"
           ></MotionBox>
         ) : (
-          <ImageBox aria-hidden="true">
-            <RealImage src={motionArray[motionNum]} key={motionNum}></RealImage>
-          </ImageBox>
+          <ImageBox
+            aria-hidden="true"
+            src={motionArray[motionNum]}
+            key={motionNum}
+          ></ImageBox>
         )}
       </MotionContainer>
       {/* 튜토리얼 모션이 몇 번째까지 왔는지 나타내는 닷 */}
