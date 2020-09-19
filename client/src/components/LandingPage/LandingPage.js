@@ -124,10 +124,14 @@ function LandingPage(props) {
       setFirstClick(true); // 첫 클릭이 이뤄졌음을 state에 저장
     } else {
       // 키위 이미지 사운드를 플레이하고 튜토리얼 페이지로 리다이렉트
-      kiweJingle.play();
-      setTimeout(()=>{props.history.push("/tutorial")}, 2000);
+      toNextPage();
     }
   };
+
+  const toNextPage = () => {
+    kiweJingle.play();
+    setTimeout(()=>{props.history.push("/tutorial")}, 2000);
+  }
 
   return (
     <LandingpageBlock id="landing_page">
@@ -166,7 +170,7 @@ function LandingPage(props) {
           dotActive: classes.stepperDotActive
         }}
       />
-      <Button href="/tutorial" className={classes.button} aria-label="건너뛰고 키위 튜토리얼 시작하기">
+      <Button onClick={toNextPage} className={classes.button} aria-label="건너뛰고 키위 튜토리얼 시작하기">
         {motionNum < 4 ? "건너뛸래요" : "키위 시작하기"}
       </Button>
     </LandingpageBlock>
