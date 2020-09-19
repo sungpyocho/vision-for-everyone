@@ -99,7 +99,7 @@ function Header(props) {
       <AppBar position="static" className={classes.appBar}>
         <Toolbar>
           <IconButton
-            aria-label="home"
+            aria-label="홈으로"
             aria-haspopup="true"
             color="inherit"
             href="/"

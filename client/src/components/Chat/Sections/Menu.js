@@ -91,14 +91,14 @@ function Menu({ selectedBranch, menuListClick }) {
                         >
                           <ListItemText
                             primary={menu.menuName}
-                            secondary={menu.menuPrice}
+                            secondary={menu.menuPrice+"원"}
                             className={classes.nested}
                           />
                         </ListItem>
                       ))}
                     </List>
                   </Collapse>
-                  <Divider />
+                  <Divider aria-hidden="true" />
                 </div>
               );
             })}
