@@ -6,7 +6,7 @@ import kiwe_motion_1 from "../../assets/kiwe_motion_1.gif";
 import kiwe_motion_2 from "../../assets/kiwe_motion_2.gif";
 import kiwe_landing_serve from "../../assets/kiwe_landing_serve.svg";
 import kiwe_landing_friend from "../../assets/kiwe_landing_friend.svg";
-import MobileStepper from '@material-ui/core/MobileStepper';
+import MobileStepper from "@material-ui/core/MobileStepper";
 import createBreakpoints from "@material-ui/core/styles/createBreakpoints";
 import kiwe_jingle from "../../assets/kiwe_jingle.wav";
 
@@ -52,7 +52,7 @@ const RealImage = styled.img`
   width: 50%;
   left: 25%;
   position: fixed;
-`
+`;
 
 const MotionContainer = styled.div`
   position: relative;
@@ -84,11 +84,11 @@ const useStyles = makeStyles((theme) => ({
   stepper: {
     position: "relative",
     backgroundColor: "#2fc4b2",
-    justifyContent: "center"
+    justifyContent: "center",
   },
   stepperDotActive: {
-    backgroundColor: "#ffc1c1"
-  }
+    backgroundColor: "#ffc1c1",
+  },
 }));
 
 function LandingPage(props) {
@@ -124,9 +124,15 @@ function LandingPage(props) {
       setFirstClick(true); // 첫 클릭이 이뤄졌음을 state에 저장
     } else {
       // 키위 이미지 사운드를 플레이하고 튜토리얼 페이지로 리다이렉트
-      kiweJingle.play();
-      setTimeout(()=>{props.history.push("/tutorial")}, 2000);
+      toNextPage();
     }
+  };
+
+  const toNextPage = () => {
+    kiweJingle.play();
+    setTimeout(() => {
+      props.history.push("/tutorial");
+    }, 2000);
   };
 
   return (
@@ -152,7 +158,9 @@ function LandingPage(props) {
             aria-hidden="true"
           ></MotionBox>
         ) : (
-          <ImageBox aria-hidden="true"><RealImage src={motionArray[motionNum]} key={motionNum}></RealImage></ImageBox>
+          <ImageBox aria-hidden="true">
+            <RealImage src={motionArray[motionNum]} key={motionNum}></RealImage>
+          </ImageBox>
         )}
       </MotionContainer>
       {/* 튜토리얼 모션이 몇 번째까지 왔는지 나타내는 닷 */}
@@ -163,10 +171,14 @@ function LandingPage(props) {
         activeStep={motionNum}
         classes={{
           root: classes.stepper,
-          dotActive: classes.stepperDotActive
+          dotActive: classes.stepperDotActive,
         }}
       />
-      <Button href="/tutorial" className={classes.button} aria-label="건너뛰고 키위 튜토리얼 시작하기">
+      <Button
+        onClick={toNextPage}
+        className={classes.button}
+        aria-label="건너뛰고 키위 튜토리얼 시작하기"
+      >
         {motionNum < 4 ? "건너뛸래요" : "키위 시작하기"}
       </Button>
     </LandingpageBlock>

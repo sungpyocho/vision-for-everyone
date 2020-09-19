@@ -3,16 +3,30 @@ import { makeStyles } from "@material-ui/core/styles";
 import Card from "@material-ui/core/Card";
 import { CardContent } from "@material-ui/core/";
 import Typography from "@material-ui/core/Typography";
-import { List, ListItem, ListItemText, Divider } from "@material-ui/core/";
+import {
+  List,
+  ListItem,
+  ListItemText,
+  Divider,
+  Button,
+} from "@material-ui/core/";
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
   root: {
     minWidth: 180,
     paddingTop: 10,
     marginBottom: "10px",
     marginTop: "30px",
   },
-});
+  registerButton: {
+    color: "#232323",
+    backgroundColor: "#FFB5B5",
+    borderRadius: "20px",
+    right: "5px",
+    bottom: "5px",
+    boxShadow: "1px 2px 2px rgba(74, 74, 74, 0.25)",
+  },
+}));
 
 const RecieptMessage = (props) => {
   const classes = useStyles();
@@ -86,7 +100,9 @@ const RecieptMessage = (props) => {
         </CardContent>
         {/* </CardActionArea> */}
       </Card>
-      {window.location.pathname === "/tutorial" && <div>kiwe 가입해</div>}
+      {window.location.pathname === "/tutorial" && (
+        <Button className={classes.registerButton}>키위 가입하기</Button>
+      )}
       {/* 자동 scroll을 위한 div */}
       <div
         ref={(el) => {
