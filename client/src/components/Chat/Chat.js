@@ -104,6 +104,8 @@ function Chat() {
   // 키위봇 로고를 띄워줄지 결정하기 위해 이전 채팅을 누가 보냈는지 string으로 저장(예: "kiwe", "user")
   // const [whoSentPrevMsg, setWhoSentPrevMsg] = useState(null);
 
+  const [isHeadMessage, setIsHeadMessage] = useState(true);
+
   // redux 구조를 보면 state.message.messages가 메세지들의 배열이다.
   const messagesFromRedux = useSelector((state) => state.message.messages);
   const dispatch = useDispatch();
@@ -158,6 +160,7 @@ function Chat() {
 
   // 클라이언트가 보낸 메세지 처리
   const textQuery = async (text) => {
+    setIsHeadMessage(true);
     // 보낸 메세지 처리
     // conversation을 이렇게 만든 이유는
     // dialogflow의 fulfillmentMessages의 형식과 같은 형식을 취하기 위해!
@@ -342,8 +345,8 @@ function Chat() {
     // 일반 메세지일 경우
     else if (isNormalMessage(message)) {
       return (
-        <Message key={i} showKiweChatLogo={showKiweChatLogo} who={message.who} text={message.content.text.text} resName={message.resName}/>
-      );
+        <Message key={i} isHeadMessage={isHeadMessage}
+        setIsHeadMessage={setIsHeadMessage} showKiweChatLogo={showKiweChatLogo} who={message.who} text={message.content.text.text} resName={message.resName}/>      );
     }
     // 카드 메세지일 경우
     else if (isCardMessage(message)) {
