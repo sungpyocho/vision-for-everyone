@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Avatar from "@material-ui/core/Avatar";
 import kiweAvatar from "../../../assets/kiwe-logo.svg";
 import UserAvatar from "../../../assets/kiwe-user.png";
@@ -17,20 +17,24 @@ const Message = (props) => {
   const classes = useStyles();
   let endOfMessage = null;
 
+  const [isHeadMessage, setIsHeadMessage] = useState(null);
+
   useEffect(() => {
     endOfMessage.scrollIntoView({ behaviour: "smooth" });
+    setIsHeadMessage(props.isHeadMessage);
+    if (props.who === "kiwe" && props.isHeadMessage) props.setIsHeadMessage(false);
   }, []);
 
   const srcOfAvatar = props.who === "kiwe" ? kiweAvatar : UserAvatar;
   const whoIsAvatar = props.who === "kiwe" ? "키위봇" : "";
   return (
     <MessageComponent who={props.who}>
-      <div>
+      {isHeadMessage ? <div>
         {whoIsAvatar && props.showKiweChatLogo && (
           <Avatar alt="" src={srcOfAvatar} className={classes.avatar} />
         )}
         <AvatarName>{whoIsAvatar}</AvatarName>
-      </div>
+      </div> : null} 
       <MessageBox who={props.who}>
         <span tabIndex="0">{props.text}</span>
       </MessageBox>

@@ -122,6 +122,8 @@ function TutorialPage(props) {
   // 키위봇 로고를 띄워줄지 결정하기 위해 이전 채팅을 누가 보냈는지 string으로 저장(예: "kiwe", "user")
   const [whoSentPrevMsg, setWhoSentPrevMsg] = useState(null);
 
+  const [isHeadMessage, setIsHeadMessage] = useState(true);
+  
   // component가 mount되면 실행
   // useEffect를 써서 렌더링하면 이 컴포넌트에서 이거 해야해!라고 지시
   useEffect(() => {
@@ -160,6 +162,7 @@ function TutorialPage(props) {
 
   // 클라이언트가 보낸 메세지 처리
   const textQuery = async (text) => {
+    setIsHeadMessage(true);
     // 보낸 메세지 처리
     // conversation을 이렇게 만든 이유는
     // dialogflow의 fulfillmentMessages의 형식과 같은 형식을 취하기 위해!
@@ -348,7 +351,8 @@ function TutorialPage(props) {
       return (
         <Message
           key={i}
-          index={i}
+          isHeadMessage={isHeadMessage}
+          setIsHeadMessage={setIsHeadMessage}
           who={message.who}
           text={message.content.text.text}
           resName={message.resName}
