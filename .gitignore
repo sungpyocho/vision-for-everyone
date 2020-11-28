@@ -34,3 +34,5 @@ yarn-error.log*
 
 # Let's Encrypt - Certbot
 /certbot
+
+node_modules

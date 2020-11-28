@@ -11,6 +11,8 @@ import SettingsIcon from "@material-ui/icons/Settings";
 import AccountCircleIcon from "@material-ui/icons/AccountCircle";
 import IconButton from "@material-ui/core/IconButton";
 
+import FontSizeChanger from 'react-font-size-changer';
+
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
@@ -133,7 +135,30 @@ function Header(props) {
             open={openSettings}
             onClose={handleCloseSettings}
           >
-            <MenuItem onClick={handleCloseSettings}>폰트</MenuItem>
+            <MenuItem>
+              <FontSizeChanger
+                targets={['#target']}
+                onChange={(element, newValue, oldValue) => {
+                  console.log(element, newValue, oldValue);
+                }}
+                options={{
+                  stepSize: 2,
+                  range: 3
+                }}
+                customButtons={{
+                  up: <span style={{'fontSize': '36px'}}>가</span>,
+                  down: <span style={{'fontSize': '20px'}}>가</span>,
+                  style: {
+                    backgroundColor: '#3bc3b3',
+                    color: 'white',
+                    WebkitBoxSizing: 'border-box',
+                    WebkitBorderRadius: '5px',
+                    width: '60px'
+                  },
+                  buttonsMargin: 10
+                }}          
+              />
+            </MenuItem>
             <MenuItem onClick={handleCloseSettings}>고대비</MenuItem>
           </Menu>
           {/* // 로그인 한 상태일때는 회원 버튼을 표시 */}

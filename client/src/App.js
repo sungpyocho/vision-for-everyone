@@ -20,42 +20,44 @@ function App() {
   const isKakaoPay = window.location.pathname.split('/');
 
   return (
-    <Router>
-      <div>
-        {isKakaoPay === 'kakaopay' ? null : <Header />}
-        {/* A <Switch> looks through its children <Route>s and
-          renders the first one that matches the current URL. */}
-        <Switch>
-          <Route exact path="/" component={Auth(LandingPage, null)} />
-          <Route exact path="/tutorial" component={Auth(TutorialPage, null)} />
-          <Route exact path="/chat" component={Auth(Chat, null)} />
-          <Route exact path="/login" component={Auth(LoginPage, false)} />
-          <Route exact path="/register" component={Auth(RegisterPage, false)} />
-          <Route exact path="/edit" component={Auth(EditProfilePage, true)} />
-          <Route
-            exact
-            path="/forgot"
-            component={Auth(ForgotPasswordPage, false)}
-          />
-          <Route
-            path="/reset/:token"
-            component={Auth(ResetPasswordPage, false)}
-          />
-          <Route
-            path="/kakaopay/success"
-            component={Auth(KakaopaySuccessPage, null)}
-          />
-          <Route
-            path="/kakaopay/fail"
-            component={Auth(KakaopayFailPage, null)}
-          />
-          <Route
-            path="/kakaopay/cancel"
-            component={Auth(KakaopayCancelPage, null)}
-          />
-        </Switch>
-      </div>
-    </Router>
+    <div className="app">
+      <Router>
+        <div id="target">
+          {isKakaoPay === 'kakaopay' ? null : <Header />}
+          {/* A <Switch> looks through its children <Route>s and
+            renders the first one that matches the current URL. */}
+          <Switch>
+            <Route exact path="/" component={Auth(LandingPage, null)} />
+            <Route exact path="/tutorial" component={Auth(TutorialPage, null)} />
+            <Route exact path="/chat" component={Auth(Chat, null)} />
+            <Route exact path="/login" component={Auth(LoginPage, false)} />
+            <Route exact path="/register" component={Auth(RegisterPage, false)} />
+            <Route exact path="/edit" component={Auth(EditProfilePage, true)} />
+            <Route
+              exact
+              path="/forgot"
+              component={Auth(ForgotPasswordPage, false)}
+            />
+            <Route
+              path="/reset/:token"
+              component={Auth(ResetPasswordPage, false)}
+            />
+            <Route
+              path="/kakaopay/success"
+              component={Auth(KakaopaySuccessPage, null)}
+            />
+            <Route
+              path="/kakaopay/fail"
+              component={Auth(KakaopayFailPage, null)}
+            />
+            <Route
+              path="/kakaopay/cancel"
+              component={Auth(KakaopayCancelPage, null)}
+            />
+          </Switch>
+        </div>
+      </Router>
+    </div>
   );
 }
 
