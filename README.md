@@ -77,29 +77,35 @@ Open https://kiwe.team to view it in the browser.
 
 #### Docker, Deploy
 
+- kiwe.app 도메인 결제(매년 1.11) / lightsail instance와 google domain 연결 (21.1.11)
 - Master에 올리면 자동으로 lightsail에 배포(CI 구성)
 - init-docker-compose.yml을 없앨 수 있는 방법 강구
 
 #### 백엔드
 
-- 코드 리팩토링
-- TypeScript로 변경
+담당: 성표, 창훈
+
+- 0. **성표** SSL 인증서 자동연장 손보기
+- 코드 리팩토링 / TypeScript로 변경
 - 회원정보 수정시, image 추가(User model에 image 항목 추가하는 로직)
 - 다이얼로그플로우 대화 내역 log로 저장(winston...? 쓸까)
 - 로그인 한 횟수 저장 후, 3번 이하 시 튜토리얼 추천 모달 띄우기.
 
-#### 프론트엔드(가장 시급)
+#### 프론트엔드
 
-- 코드 리팩토링
-- TypeScript로 변경
+담당: 성표, 창훈, 세준
+
+- 0. **다함께** 매주 토요일 코드 리뷰: 코드 리팩토링(style 통일) / TypeScript로 변경
+
+- 1. **창훈** 고대비(다크모드 참고) ~ 1.16 1차 구현, 그 후 장애인측 피드백 반영
+- 2. **세준** 폰트크기 변경: ~1.16 기존 라이브러리에서 탈피해 직접 코드 구현.
+- 3. **성표** 리액트 최적화: ~ 1.16 Chat/Tutorial.js에서 input이 바뀔때마다 conversation이 몇번이고 출력되는 문제 수정
+
 - [디자인 UI 확정안](https://www.figma.com/file/5MW2EAMDmQ6UtYHcaolFc4/KIWE?node-id=0%3A1)대로 모든 페이지 리디자인 진행
-- Chat/Tutorial.js에서 input이 바뀔때마다 conversation이 몇번이고 출력되는 문제 수정
-- 챠임 선정 및 변경
+
 - 랜딩 페이지에서 키위 말풍선 폰트 스타일 및 폰트 크기 조정
 - 채팅 페이지에서 키위봇이 다중 메시지 출력할 때, '키위봇' 이름 및 키위 아이콘이 각 말풍선마다 중복되어 보여지는 문제 수정
-- 채팅 페이지에서 현재 키위 아이콘이 'K'로 나와 있는데 키위 이미지로 수정 필요
 - 튜토리얼을 다 끝낸 후 사용자를 로그인/회원가입 페이지로 유도(로그인/회원가입 버튼을 제공하는 방법, ...)
-- 폰트, 고대비 기능 구현 필요
 
 #### UI 아이디어
 
