@@ -18,11 +18,12 @@ import KakaopayCancelPage from "./components/KakaoPayPage/Cancel";
 // Higher Order Component로 일반 컴포넌트를 감싸주자.
 function App() {
   const isKakaoPay = window.location.pathname.split('/');
+  const isLandingPage = window.location.pathname;
 
   return (
     <Router>
       <div>
-        {isKakaoPay === 'kakaopay' ? null : <Header />}
+        {(isKakaoPay === 'kakaopay' || isLandingPage === '/')? null : <Header />}
         {/* A <Switch> looks through its children <Route>s and
           renders the first one that matches the current URL. */}
         <Switch>
