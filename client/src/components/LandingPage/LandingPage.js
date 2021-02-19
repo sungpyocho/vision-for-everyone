@@ -96,6 +96,7 @@ const Description = styled.div`
   font-weight: 500;
   font-size: 22px;
   margin: 15px;
+  line-height: 33px;
   text-align: center;
   word-break: keep-all;
 `;

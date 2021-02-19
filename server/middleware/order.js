@@ -42,10 +42,10 @@ async function payment(restaurantName, totalAmount) {
   const vat_amount = Math.floor(total_amount / 11); // 사용자 총 결제금액 기준 부가세
   const tax_free_amount = 0;
 
-  // 개발시 https://kiwe.team 을 http://localhost:3000 로 변경 후 실행.
-  const approval_url = "https://kiwe.team/kakaopay/success"; // 성공시, 성공 페이지로 리다이렉트. 성공 페이지 만들어줘야함.
-  const fail_url = "https://kiwe.team/kakaopay/fail"; // 실패시, 실패 페이지로 리다이렉트. 실패 페이지 필요.
-  const cancel_url = "https://kiwe.team/kakaopay/cancel"; // 취소시, 취소페이지로 리다이렉트. 취소페이지 구현필요.
+  // 개발시 https://kiwe.app 을 http://localhost:3000 로 변경 후 실행.
+  const approval_url = "https://kiwe.app/kakaopay/success"; // 성공시, 성공 페이지로 리다이렉트. 성공 페이지 만들어줘야함.
+  const fail_url = "https://kiwe.app/kakaopay/fail"; // 실패시, 실패 페이지로 리다이렉트. 실패 페이지 필요.
+  const cancel_url = "https://kiwe.app/kakaopay/cancel"; // 취소시, 취소페이지로 리다이렉트. 취소페이지 구현필요.
 
   // set data
   const data = [
