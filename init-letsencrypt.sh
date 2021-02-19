@@ -5,7 +5,7 @@ if ! [ -x "$(command -v docker-compose)" ]; then
   exit 1
 fi
 
-domains=(kiwe.team www.kiwe.team)
+domains=(kiwe.app www.kiwe.app)
 rsa_key_size=4096
 data_path="./certbot"
 email="korra0501@gmail.com"

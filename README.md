@@ -2,7 +2,7 @@
 
 ## 홈페이지
 
-URL: https://kiwe.team/
+URL: https://kiwe.app/
 
 ## 특징
 
@@ -71,7 +71,7 @@ Third, In the project root directory, you should run:
 2. `docker-compose up --build`
 
 Runs the app in the production mode.
-Open https://kiwe.team to view it in the browser.
+Open https://kiwe.app to view it in the browser.
 
 ### 앞으로 추가해야할 기능 / 수정해야 할 버그
 
