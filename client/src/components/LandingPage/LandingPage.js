@@ -30,10 +30,10 @@ function LandingPage(props){
   const kiweJingle = new Audio(kiwe_jingle);
 
   const data = [
-    {"img": LandingFirstImg, "head": "안녕하세요<br/>저에게 주문하시겠어요?", "desc": "키위는 채팅으로<br/>음식을 주문할 수 있는 웹서비스입니다. 원하는 식당과 메뉴를 말씀해주시면 제가 찾아드릴게요!"},
-    {"img": LandingSecondImg, "head": "사용자님의<br/>간편한 주문을 위해", "desc": "저는 초성만 적어도 이해할 수 있는 똑똑한 인공지능이에요."},
+    {"img": LandingFirstImg, "head": "안녕하세요,<br/>저에게 주문하시겠어요?", "desc": "키위는 간단한 채팅으로<br/>음식을 주문할 수 있는<br/>인공지능이에요."},
+    {"img": LandingSecondImg, "head": "사용자님의<br/>간편한 주문을 위해", "desc": "원하는 식당과 메뉴의 초성만<br/>입력해도 제가 찾아드릴게요!"},
     {"img": LandingThirdImg, "head": "식당과 메뉴를 못 정했다면 식당찾기와 메뉴판을 클릭해서 탐색해보세요.", "desc": "식당찾기 혹은 ㅅㄷㅊㄱ,<br/>메뉴판 혹은 ㅁㄴㅍ이라고 메세지창에 입력해도 근처 식당과 메뉴판을 보여드릴게요!"},
-    {"img": LandingFourthImg, "head": "음식을 가져오기 힘들 땐, 음식전달받기<br/>기능을 활성화하세요", "desc": "결제 전 '전달받기'버튼을 누르면 돼요. 다른 사람을 위해<br/>꼭 필요할 때만 사용해주세요."},
+    {"img": LandingFourthImg, "head": "음식을 가져오기 힘들 땐, <b>음식전달받기</b><br/>기능을 활성화하세요", "desc": "결제 전 '전달받기'버튼을 누르면 돼요. 다른 사람을 위해<br/>꼭 필요할 때만 사용해주세요."},
     {"img": LandingFifthImg, "head": "사용자님에 맞게 사용환경을 변경해보세요.", "desc": "웹 상단의 설정 탭에서<br/>글자크기를 바꾸거나<br/>고대비 모드를 적용할 수 있어요."}
   ]
 
@@ -57,7 +57,7 @@ function LandingPage(props){
 
 const Container = styled.div`
   background-color: white;
-  height: 100vh;
+  height: 100%;
 `
 
 const ImageBox = styled.img`
@@ -102,7 +102,7 @@ const Description = styled.div`
 `;
 
 const ButtonContainer = styled.div`
-  position: absolute;
+  position: inherit;
   bottom: 4%;
   width: 100%;
   text-align: center;
