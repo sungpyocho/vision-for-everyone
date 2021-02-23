@@ -22,7 +22,7 @@ function App() {
 
   return (
     <Router>
-      <div>
+      <>
         {(isKakaoPay === 'kakaopay' || isLandingPage === '/')? null : <Header />}
         {/* A <Switch> looks through its children <Route>s and
           renders the first one that matches the current URL. */}
@@ -55,7 +55,7 @@ function App() {
             component={Auth(KakaopayCancelPage, null)}
           />
         </Switch>
-      </div>
+      </>
     </Router>
   );
 }

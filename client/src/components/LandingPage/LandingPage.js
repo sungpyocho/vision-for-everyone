@@ -16,11 +16,11 @@ function LandingPage(props){
     if (step < 4) {
       setStep(step + 1);
     } else {
-      toNextPage();
+      toChatPage();
     }
   }
 
-  const toNextPage = () => {
+  const toChatPage = () => {
     kiweJingle.play();
     setTimeout(() => {
       props.history.push("/chat");
@@ -30,11 +30,26 @@ function LandingPage(props){
   const kiweJingle = new Audio(kiwe_jingle);
 
   const data = [
-    {"img": LandingFirstImg, "head": "안녕하세요,<br/>저에게 주문하시겠어요?", "desc": "키위는 간단한 채팅으로<br/>음식을 주문할 수 있는<br/>인공지능이에요."},
-    {"img": LandingSecondImg, "head": "사용자님의<br/>간편한 주문을 위해", "desc": "원하는 식당과 메뉴의 초성만<br/>입력해도 제가 찾아드릴게요!"},
-    {"img": LandingThirdImg, "head": "식당과 메뉴를 못 정했다면 식당찾기와 메뉴판을 클릭해서 탐색해보세요.", "desc": "식당찾기 혹은 ㅅㄷㅊㄱ,<br/>메뉴판 혹은 ㅁㄴㅍ이라고 메세지창에 입력해도 근처 식당과 메뉴판을 보여드릴게요!"},
-    {"img": LandingFourthImg, "head": "음식을 가져오기 힘들 땐, <b>음식전달받기</b><br/>기능을 활성화하세요", "desc": "결제 전 '전달받기'버튼을 누르면 돼요. 다른 사람을 위해<br/>꼭 필요할 때만 사용해주세요."},
-    {"img": LandingFifthImg, "head": "사용자님에 맞게 사용환경을 변경해보세요.", "desc": "웹 상단의 설정 탭에서<br/>글자크기를 바꾸거나<br/>고대비 모드를 적용할 수 있어요."}
+    {
+      "img": LandingFirstImg, 
+      "head": "안녕하세요,<br/>저에게 주문하시겠어요?", "desc": "키위는 간단한 채팅으로<br/>음식을 주문할 수 있는<br/>인공지능이에요."
+    },
+    {
+      "img": LandingSecondImg, 
+      "head": "사용자님의<br/>간편한 주문을 위해", "desc": "원하는 식당과 메뉴의 초성만<br/>입력해도 제가 찾아드릴게요!"
+    },
+    {
+      "img": LandingThirdImg, 
+      "head": "식당과 메뉴를 못 정했다면 식당찾기와 메뉴판 버튼을<br/>클릭해서 탐색해보세요.", "desc": "메세지창에 식당찾기 혹은 ㅅㄷㅊㄱ,<br/> 메뉴판 혹은 ㅁㄴㅍ을 입력하세요."
+    },
+    {
+      "img": LandingFourthImg, 
+      "head": "음식을 가져오기 힘들 땐,<br/>결제 전 <b>음식 전달받기</b><br/>기능을 활성화하세요.", "desc": "다른 사람을 위해<br/>꼭 필요할 때만 사용해주세요."
+    },
+    {
+      "img": LandingFifthImg, 
+      "head": "사용자님에 맞게 사용환경을 변경해보세요.", "desc": "웹 상단의 설정 탭에서<br/>글자크기를 바꾸거나<br/>고대비 모드를 적용할 수 있어요."
+    }
   ]
 
   return (
@@ -56,127 +71,105 @@ function LandingPage(props){
 }
 
 const Container = styled.div`
-  background-color: white;
+  font-family: Noto Sans KR;
+  text-align: center;
+  background-color: #fff;
   height: 100%;
+  display: flex;
+  flex-direction: column;
+  word-break: keep-all;
 `
 
 const ImageBox = styled.img`
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
-  width: 35vh;
-  position: relative;
-`;
+  margin: 0 auto;
+  width: 35vh; 
+`
 
 const Headline = styled.div`
-  position: relative;
-  font-family: Noto Sans KR;
   font-weight: 700;
   font-size: 28px;
-  line-height: 41px;
-  text-align: center;
-  margin-bottom: 5%;
-  margin-left: 20px;
-  margin-right: 20px;
-  word-break: keep-all;
+  line-height: 1.5;
+  margin: 0 20px 20px;
+
   @media (max-height: 599px) {
-    margin-top: 0%;
+    margin-top: 15px;
+    font-size: 25px;
+    line-height: 1.4;
   }
-  @media (min-height: 600px) and (max-height: 699px){
-    margin-top: 5%;
-  }
-  @media (min-height: 700px) {
-    margin-top: 15%;
+
+  @media (min-height: 600px) {
+    margin-top: 20px;
   }
 `;
 
 const Description = styled.div`
-  position: relative;
-  font-family: Noto Sans KR;
   font-weight: 500;
   font-size: 22px;
   margin: 15px;
-  line-height: 33px;
-  text-align: center;
-  word-break: keep-all;
+  line-height: 1.5;
+  
+  @media (max-height: 599px) {
+    font-size: 18px;
+    line-height: 1.4;
+  }
 `;
 
 const ButtonContainer = styled.div`
-  position: inherit;
-  bottom: 4%;
-  width: 100%;
-  text-align: center;
+  margin-top: auto;
+  margin-bottom: 20px;
+  display: flex;
+  padding: 0 16px;
 `;
 
 const NextButton = styled.div`
-  background-color: black;
+  background-color: #000;
   border-radius: 15px;
   border: 1px solid;
-  color: white;
-  font-weight: bold;
+  color: #fff;
+  font-weight: 700;
   font-size: 18px;
   height: 51px;
-
-  text-align: center;
-  vertical-align: middle;
   line-height: 51px;
-  flex-direction: row;
+  flex: 1;
+  margin-right: 8px;
   
-  display: inline-block;
-  width: 40vw;
-  margin: 0px 4vw 0px 4vw;
-  
-  &:hover {
-    background-color: white;
-    color: black;
+  &:active {
+    background-color: #fff;
+    color: #000;
   }
 `;
 
 const SkipButton = styled.div`
-  background-color: white;
+  background-color: #fff;
   border-radius: 15px;
   border: 1px solid;
-  color: black;
-  font-weight: bold;
+  color: #000;
+  font-weight: 700;
   font-size: 18px;
   height: 51px;
-
-  text-align: center;
-  vertical-align: middle;
   line-height: 51px;
-  flex-direction: row;
+  flex: 1;
   
-  display: inline-block;
-  width: 40vw;
-  margin: 0px 4vw 0px 4vw;
-  
-  &:hover {
-    background-color: black;
-    color: white;
+  &:active {
+    background-color: #000;
+    color: #fff;
   }
 `;
 
 const StartOrderButton = styled.div`
-  background-color: black;
+  background-color: #000;
   border-radius: 15px;
   border: 1px solid;
-  color: white;
-  font-weight: bold;
+  color: #fff;
+  font-weight: 700;
   font-size: 18px;
   height: 51px;
-
-  text-align: center;
-  vertical-align: middle;
   line-height: 51px;
-  flex-direction: row;
+  flex: 1;
   
-  display: inline-block;
-  width: 85%;
-  margin: 0px 15px 0px 15px;
-  
-  &:hover {
-    background-color: white;
-    color: black;
+  &:active {
+    background-color: #fff;
+    color: #000;
   }
 `;
 
