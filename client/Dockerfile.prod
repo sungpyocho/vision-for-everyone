@@ -1,6 +1,6 @@
 # PRODUCTION BUILD
 # Stage 1: Build React client
-FROM node:latest as builder
+FROM node:lts-alpine as builder
 
 # Working Directory
 RUN mkdir -p /usr/app/client
@@ -17,7 +17,7 @@ RUN npm run build
 
 
 # Stage 2: Build Nginx Server
-FROM nginx:latest
+FROM nginx:alpine
 
 # 2-1. HTTPS 설정
 # 2-1은 전부 init-letsencrypt.sh에서 진행됨.

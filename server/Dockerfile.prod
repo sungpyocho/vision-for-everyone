@@ -1,6 +1,6 @@
 # PRODUCTION BUILD
 # Stage 1: Build Server
-FROM node:latest
+FROM node:lts-alpine
 
 # Install dependencies
 RUN mkdir -p /usr/app/server

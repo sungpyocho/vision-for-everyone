@@ -8,7 +8,7 @@
 # 애플리케이션 구동
 # 이렇게 우리가 하나씩 직접했던 작업을 Dockefile에 그대로 녹인다고 생각하면서, 필요한 명령어를 나열해보면 다음과 같습니다.
 
-FROM node:latest
+FROM node:lts-alpine
 
 # Create App Directory
 RUN mkdir -p /usr/app/server
