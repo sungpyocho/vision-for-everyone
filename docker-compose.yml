@@ -19,8 +19,7 @@ services:
   ##########################
   ### SETUP CLIENT(NGINX) CONTAINER
   ##########################
-  client:
-    container_name: kiwe-nginx
+  nginx:
     build:
       context: ./client
       dockerfile: Dockerfile.prod
@@ -29,19 +28,21 @@ services:
       - "443:443"
     links:
       - server
-    restart: always
+    restart: unless-stopped
     volumes:
+      - ./nginx:/etc/nginx/conf.d
       - ./certbot/conf:/etc/letsencrypt
-      - ./certbot/www:/usr/share/nginx/html
+      - ./certbot/www:/var/www/certbot
     # nginx가 매 6시간 설정과 인증서를 백그라운드에서 리로드하고, nginx를 포그라운드에서 런치
     command: '/bin/sh -c ''while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g "daemon off;"'''
   ##########################
   ### SETUP CERTBOT CONTAINER
   ##########################
   certbot:
-    image: certbot/certbot:latest
+    image: certbot/certbot
+    restart: unless-stopped
     volumes:
       - ./certbot/conf:/etc/letsencrypt
-      - ./certbot/www:/usr/share/nginx/html
+      - ./certbot/www:/var/www/certbot
     # 매 12시간마다 인증서가 갱신 대상인지 확인
     entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
