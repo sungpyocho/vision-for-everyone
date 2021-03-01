@@ -79,7 +79,7 @@ export default function ForgotPasswordPage(props) {
       alert("이메일을 입력해주세요.");
     } else {
       axios
-        .post("/api/users/forgot", {
+        .post("/api/user/forgot", {
           email: Email,
         })
         .then((res) => {

@@ -114,7 +114,7 @@ function reload_nginx {
 ###################################################################
 
 
-domains_list=("kiwe.app www.kiwe.app")
+domains_list=(kiwe.app www.kiwe.app)
 rsa_key_size=4096
 data_path="./certbot"
 email="korra0501@gmail.com" # Adding a valid address is strongly recommended

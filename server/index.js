@@ -31,20 +31,20 @@ const userRouter = require("./routes/user");
 const restaurantRouter = require("./routes/restaurant");
 
 app.use("/api/dialogflow", dialogflowRouter);
-app.use("/api/users", userRouter);
+app.use("/api/user", userRouter);
 app.use("/api/restaurant", restaurantRouter);
 
 // Serve static assets if in production
-const CLIENT_BUILD_PATH = path.join(__dirname, "../client/build");
-if (process.env.NODE_ENV === "production") {
-  // Set static folder
-  app.use(express.static(CLIENT_BUILD_PATH));
+// const CLIENT_BUILD_PATH = path.join(__dirname, "../client/build");
+// if (process.env.NODE_ENV === "production") {
+//   // Set static folder
+//   app.use(express.static(CLIENT_BUILD_PATH));
 
-  // redirect all the non-api routes to react frontend
-  app.get("*", (req, res) => {
-    res.sendFile(path.resolve(CLIENT_BUILD_PATH, "index.html"));
-  });
-}
+//   // redirect all the non-api routes to react frontend
+//   app.get("*", (req, res) => {
+//     res.sendFile(path.resolve(CLIENT_BUILD_PATH, "index.html"));
+//   });
+// }
 
 const port = process.env.PORT || 5000;
 app.listen(port, () => {
