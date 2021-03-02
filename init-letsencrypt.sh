@@ -77,7 +77,7 @@ function request_new_certificate {
   echo "### Requesting Let's Encrypt certificate for ${domains[*]} ..."
   #Join $domains to -d args
   domain_args=""
-  for domain in "${domains[@]}"; do
+  for domain in $domains; do
     domain_args="$domain_args -d $domain"
   done
 
@@ -114,11 +114,11 @@ function reload_nginx {
 ###################################################################
 
 
-domains_list=(kiwe.app www.kiwe.app)
+domains_list=("kiwe.app www.kiwe.app")
 rsa_key_size=4096
-data_path="./certbot"
+data_path="./client/certbot"
 email="korra0501@gmail.com" # Adding a valid address is strongly recommended
-staging=0 # Set to 1 if you're testing your setup to avoid hitting request limits
+staging=1 # Set to 1 if you're testing your setup to avoid hitting request limits
 
 check_if_docker_compose_installed
 
