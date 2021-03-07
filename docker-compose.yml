@@ -6,21 +6,20 @@ services:
   ##########################
   server:
     container_name: kiwe-server
+    restart: unless-stopped
     build:
       context: ./server
       dockerfile: Dockerfile.prod
     env_file: ./server/.env
-    environment:
-      NODE_ENV: production
     ports:
       - 3000:3000
-    restart: unless-stopped
-    networks:
-      - mern-app
+    environment:
+      NODE_ENV: production
   ##########################
   ### SETUP CLIENT(NGINX) CONTAINER
   ##########################
   nginx:
+    restart: unless-stopped
     build:
       context: ./client
       dockerfile: Dockerfile.prod
@@ -30,29 +29,20 @@ services:
       - 443:443
     depends_on:
       - server
-    restart: unless-stopped
-    # volumes:
-    #   - ./client/certbot/conf:/etc/letsencrypt
-    #   - ./client/certbot/www:/var/www/certbot
+    volumes:
+      - ./client/nginx:/etc/nginx/conf.d
+      - ./client/certbot/conf:/etc/letsencrypt
+      - ./client/certbot/www:/var/www/certbot
     environment:
       NODE_ENV: production
-    # nginx가 매 6시간 설정과 인증서를 백그라운드에서 리로드하고, nginx를 포그라운드에서 런치
-    # command: '/bin/sh -c ''while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g "daemon off;"'''
-    networks:
-      - mern-app
   ##########################
   ### SETUP CERTBOT CONTAINER
   ##########################
-  # certbot:
-  #   image: certbot/certbot
-  #   restart: unless-stopped
-  #   volumes:
-  #     - ./client/certbot/conf:/etc/letsencrypt
-  #     - ./client/certbot/www:/var/www/certbot
-  #   # 매 12시간마다 인증서가 갱신 대상인지 확인
-  #   entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
-  #   networks:
-  #     - mern-app
-networks:
-  mern-app:
-    driver: bridge
+  certbot:
+    image: certbot/certbot
+    restart: unless-stopped
+    volumes:
+      - ./client/certbot/conf:/etc/letsencrypt
+      - ./client/certbot/www:/var/www/certbot
+    # 매 12시간마다 인증서가 갱신 대상인지 확인
+    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"

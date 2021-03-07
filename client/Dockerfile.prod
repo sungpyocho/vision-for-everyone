@@ -16,16 +16,9 @@ COPY . .
 RUN npm run build
 
 # Stage 2: Build Nginx Server
-FROM nginx:alpine
+FROM nginx:stable-alpine
 
 # React app의 build 결과물을 nginx가 serve할 수 있도록 copy
 COPY --from=builder /usr/app/client/build /usr/share/nginx/html
-
-# nginx의 default.conf를 우리가 만든 default.conf로 바꿔주기
-COPY nginx/default.conf /etc/nginx/conf.d/
-
-# 80, 443포트 오픈
-EXPOSE 80
-EXPOSE 443
 
 CMD ["nginx", "-g", "daemon off;"]
