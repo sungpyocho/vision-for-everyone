@@ -8,7 +8,8 @@ const app = express();
 
 // Connect to MongoDB
 mongoose
-  .connect(process.env.MONGO_URI, {
+  .connect(`mongodb+srv://${process.env.MONGO_ID}:${process.env.MONGO_PASSWORD}@kiwebot-small-qkbxn.gcp.mongodb.net/test?retryWrites=true&w=majority`
+  , {
     useNewUrlParser: true,
     useUnifiedTopology: true,
     useCreateIndex: true,
