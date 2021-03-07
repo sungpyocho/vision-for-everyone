@@ -5,14 +5,13 @@ services:
   ### SETUP SERVER CONTAINER
   ##########################
   server:
-    container_name: kiwe-server
     restart: unless-stopped
     build:
       context: ./server
       dockerfile: Dockerfile.prod
     env_file: ./server/.env
     ports:
-      - 3000:3000
+      - 5000:5000
     environment:
       NODE_ENV: production
   ##########################

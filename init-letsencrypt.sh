@@ -118,7 +118,7 @@ domains_list=(kiwe.app www.kiwe.app)
 rsa_key_size=4096
 data_path="./client/certbot"
 email="korra0501@gmail.com" # Adding a valid address is strongly recommended
-staging=1 # Set to 1 if you're testing your setup to avoid hitting request limits
+staging=0 # Set to 1 if you're testing your setup to avoid hitting request limits
 
 check_if_docker_compose_installed
 

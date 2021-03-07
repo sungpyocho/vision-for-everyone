@@ -43,7 +43,7 @@ KAKAO_ADMIN_KEY = "----YOUR-KAKAO-DEVELPER-ADMIN-KEY----"
    And type your settings as below:
 
 ```
-REACT_APP_KAKAO_MAP_KEY=08cf2f37da342594fddeff0be0abbaa8
+REACT_APP_KAKAO_MAP_KEY=YOUR-KAKAO-MAP-KEY
 ```
 
 ## When you run the app(Dev)
@@ -61,14 +61,35 @@ You will also see any lint errors in the console.
 
 ## When you run the app(Prod)
 
-First, get any Cloud service instance(such as AWS Lightsail or EC2).
+- The React static files will be served by ngnix.
+- Nginx will be a reverse proxy to the Express server(running in port 3000).
+- To get and renew certificate, we will use `certbot`.
 
-Second, clone this repository.
+1. Get any VPS(such as AWS Lightsail or EC2).
 
-Third, In the project root directory, you should run:
+   Don't forget to allow HTTP(80) and HTTPS(443) ports!
 
-1. `./init-letsencrypt.sh`
-2. `docker-compose up --build`
+2. Install docker and clone this repository.
+```
+sudo snap install docker
+git clone https://www.github.com/sungpyocho/vision-for-everyone
+```
 
-Runs the app in the production mode.
-Open https://kiwe.app to view it in the browser.
+3. Set .env files according to basic settings above.
+
+
+4. In the project root directory, run following commands:
+
+```
+# First, build docker-compose containers
+sudo docker-compose build
+# Second, issue certificate from Let's Encrypt
+sudo ./init-letsencrypt.sh
+# If successful, stop containers and run them in the background
+sudo docker-compose down
+sudo docker-compose up --detach
+```
+
+These steps allow the app to run in the production mode.
+
+Finally, go to https://kiwe.app to view it in the browser.
