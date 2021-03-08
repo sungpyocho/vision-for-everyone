@@ -28,15 +28,16 @@ URL: https://kiwe.app/
    email address will be used as a mail which sends password reset messages.
 
 ```
-GOOGLE_PROJECT_ID = "----YOUR-PROJECT-ID----",
-DIALOGFLOW_SESSION_ID = "your-own-session",
-DIALOGFLOW_LANGUAGE_CODE = "ko-KR",
-GOOGLE_CLIENT_EMAIL = "sample.iam.gserviceaccount.com",
-GOOGLE_PRIVATE_KEY = "----YOUR-GOOGLE-PRIVATE-KEY----"
-MONGO_URI = "mongodb+srv://----YOUR-MONGODB-ATLAS-KEY----",
-EMAIL_ADDRESS = "----YOUR-GMAIL-ADDRESS----",
-EMAIL_PASSWORD = "----YOUR-MAIL-PASSWORD----",
-KAKAO_ADMIN_KEY = "----YOUR-KAKAO-DEVELPER-ADMIN-KEY----"
+GOOGLE_PROJECT_ID = ----YOUR-PROJECT-ID----,
+DIALOGFLOW_SESSION_ID = your-own-session,
+DIALOGFLOW_LANGUAGE_CODE = ko-KR,
+GOOGLE_CLIENT_EMAIL = sample.iam.gserviceaccount.com,
+GOOGLE_PRIVATE_KEY = ----YOUR-GOOGLE-PRIVATE-KEY----,
+MONGO_ID=----YOUR-MONGO-ID----,
+MONGO_PASSWORD=----YOUR-MONGO-PASSWORD----,
+EMAIL_ADDRESS = ----YOUR-GMAIL-ADDRESS----,
+EMAIL_PASSWORD = ----YOUR-MAIL-PASSWORD----,
+KAKAO_ADMIN_KEY = ----YOUR-KAKAO-DEVELPER-ADMIN-KEY----
 ```
 
 2. In the client directory, make a file named `.env`.
