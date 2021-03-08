@@ -2,14 +2,14 @@ const express = require("express");
 const router = express.Router();
 
 // Dialogflow
-const dialogflow = require("dialogflow");
+const dialogflow = require("@google-cloud/dialogflow");
 require("dotenv").config();
 const projectId = process.env.GOOGLE_PROJECT_ID;
 const sessionId = process.env.DIALOGFLOW_SESSION_ID;
 const languageCode = process.env.DIALOGFLOW_LANGUAGE_CODE;
 const credentials = {
   client_email: process.env.GOOGLE_CLIENT_EMAIL,
-  private_key: process.env.GOOGLE_PRIVATE_KEY,
+  private_key: process.env.GOOGLE_PRIVATE_KEY.replace(/\\n/g, '\n'),
 };
 const sessionClient = new dialogflow.SessionsClient({
   projectId: projectId,
@@ -23,7 +23,7 @@ var restaurantName = ""; // 전역변수
 // Text Query Route
 router.post("/textQuery", async (req, res) => {
   // 유저마다 다른 session path 설정
-  let sessionPath = sessionClient.sessionPath(
+  let sessionPath = sessionClient.projectAgentSessionPath(
     projectId,
     sessionId + req.body.userID
   );
@@ -102,7 +102,7 @@ router.post("/textQuery", async (req, res) => {
 // Event Query Route
 router.post("/eventQuery", async (req, res) => {
   // 유저마다 다른 session path 설정
-  let sessionPath = sessionClient.sessionPath(
+  let sessionPath = sessionClient.projectAgentSessionPath(
     projectId,
     sessionId + req.body.userID
   );
