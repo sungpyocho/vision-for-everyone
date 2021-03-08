@@ -19,6 +19,8 @@
 
 # production
 /client/build
+/client/certbot
+
 # misc
 .DS_Store
 .env

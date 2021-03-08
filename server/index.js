@@ -8,7 +8,8 @@ const app = express();
 
 // Connect to MongoDB
 mongoose
-  .connect(process.env.MONGO_URI, {
+  .connect(`mongodb+srv://${process.env.MONGO_ID}:${process.env.MONGO_PASSWORD}@kiwebot-small-qkbxn.gcp.mongodb.net/test?retryWrites=true&w=majority`
+  , {
     useNewUrlParser: true,
     useUnifiedTopology: true,
     useCreateIndex: true,
@@ -31,20 +32,8 @@ const userRouter = require("./routes/user");
 const restaurantRouter = require("./routes/restaurant");
 
 app.use("/api/dialogflow", dialogflowRouter);
-app.use("/api/users", userRouter);
+app.use("/api/user", userRouter);
 app.use("/api/restaurant", restaurantRouter);
-
-// Serve static assets if in production
-const CLIENT_BUILD_PATH = path.join(__dirname, "../client/build");
-if (process.env.NODE_ENV === "production") {
-  // Set static folder
-  app.use(express.static(CLIENT_BUILD_PATH));
-
-  // redirect all the non-api routes to react frontend
-  app.get("*", (req, res) => {
-    res.sendFile(path.resolve(CLIENT_BUILD_PATH, "index.html"));
-  });
-}
 
 const port = process.env.PORT || 5000;
 app.listen(port, () => {

@@ -76,7 +76,7 @@ export default function ResetPasswordPage(props) {
 
       // axios로 백엔드 API와 통신
       axios
-        .post("/api/users/reset", {
+        .post("/api/user/reset", {
           password: Password,
           resetPwdToken: props.location.pathname.slice(7),
         })

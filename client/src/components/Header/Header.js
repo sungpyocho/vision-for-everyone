@@ -79,7 +79,7 @@ function Header(props) {
   };
 
   const handleLogout = () => {
-    axios.get("/api/users/logout").then((response) => {
+    axios.get("/api/user/logout").then((response) => {
       if (response.data.success) {
         setIsLogin(false);
         props.history.push("/login");
