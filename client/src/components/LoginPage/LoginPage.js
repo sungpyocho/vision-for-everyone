@@ -120,10 +120,17 @@ export default function LoginPage(props) {
       }
     });
   };
-
+{/* <div style="height: 150px; overflow: hidden;" >
+  <svg viewBox="0 0 500 150" preserveAspectRatio="none" style="height: 100%; width: 100%;">
+    <path d="M-3.67,37.98 C68.00,-12.33 336.62,190.95 517.21,69.56 L500.00,150.00 L0.00,150.00 Z" style="stroke: none; fill: #08f;">
+      </path>
+  </svg>
+</div> */}
   return (
     <Bg>
-      <Wrapper>
+        {/* <Waves>
+          
+        </Waves> */}
         <Container component="main" maxWidth="xs">
           <CssBaseline />
           <div className={classes.paper}>
@@ -203,23 +210,9 @@ export default function LoginPage(props) {
             <Copyright />
           </Box>
         </Container>
-      </Wrapper>
     </Bg>
   );
 }
-const Wrapper = styled.div`
-  height: calc(100% - 56px);
-  position: absolute;
-  width: 66.6%;
-  left: 16.7%;
-  right: 16.7%;
-  background-color: #2fc4b2;
-  @media (max-width: 768px) {
-    width: 100%;
-    left: 0%;
-    right: 0%;
-  }
-`;
 
 const Bg = styled.div`
   height: calc(100% - 56px);

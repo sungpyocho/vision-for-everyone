@@ -51,7 +51,7 @@ router.post("/login", (req, res) => {
 
 router.post("/register", (req, res) => {
   // client에서 회원가입시 필요한 정보를 받으면 DB에 넣어줌.
-  const user = new User(req.body); // bodyParser가 있어서 req.body가 가능.
+  const user = new User(req.body);
 
   user.save((err, userInfo) => {
     // 실패 또는 성공시, 유저에게 JSON형식으로 전달

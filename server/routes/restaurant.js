@@ -22,7 +22,7 @@ router.post("/res-register", (req, res) => {
 // 메뉴 등록
 router.post("/menu-register", (req, res) => {
   // client 혹은 포스트맨에서 식당/메뉴등록 정보를 DB에 넣어줌.
-  const menu = new Menu(req.body); // bodyParser가 있어서 req.body가 가능.
+  const menu = new Menu(req.body);
 
   menu.save((err, menuInfo) => {
     // 실패 또는 성공시, 유저에게 JSON형식으로 전달

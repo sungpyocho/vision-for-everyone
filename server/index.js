@@ -1,8 +1,6 @@
 require("dotenv").config();
 const express = require("express");
-const path = require("path");
 const mongoose = require("mongoose");
-const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 const app = express();
 
@@ -22,8 +20,8 @@ mongoose
 // 1. application/x-www-form-urlencoded 데이터 분석
 // 2. application-json 데이터 분석
 // 3. cookie 분석
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
+app.use(express.urlencoded());
+app.use(express.json());
 app.use(cookieParser());
 
 // Router
