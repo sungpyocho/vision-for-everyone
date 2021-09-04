@@ -22,9 +22,12 @@ jobs:
       - name: Setup node environment
         uses: actions/setup-node@v2
         with:
-          node-version: lts
+          node-version: lts/fermium
 
-      - name: -${{ matrix.dir }}- Install dependencies & Lint and format code
+      - name: -${{ matrix.dir }}- Install dependencies
         working-directory: ${{ matrix.dir }}
         run: npm ci
+
+      - name: -${{ matrix.dir }}- Lint and format code
+        working-directory: ${{ matrix.dir }}
         run: npm run style-check
