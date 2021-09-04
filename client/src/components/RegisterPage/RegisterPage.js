@@ -1,66 +1,64 @@
-import React, { useState } from "react";
-import styled from "styled-components";
-import Alert from "@material-ui/lab/Alert";
-import Avatar from "@material-ui/core/Avatar";
-import { Button, InputBase } from "@material-ui/core";
-import CssBaseline from "@material-ui/core/CssBaseline";
-import TextField from "@material-ui/core/TextField";
-// import FormControlLabel from "@material-ui/core/FormControlLabel";
-// import Checkbox from "@material-ui/core/Checkbox";
-import { Link, Grid, Box } from "@material-ui/core";
-import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
-import Typography from "@material-ui/core/Typography";
-import { makeStyles } from "@material-ui/core/styles";
-import Container from "@material-ui/core/Container";
-import { useDispatch } from "react-redux";
-import { registerUser } from "../../_actions/user_actions";
+import React, { useState } from 'react';
+import PropTypes from 'prop-types';
+import styled from 'styled-components';
+import Alert from '@material-ui/lab/Alert';
+import Avatar from '@material-ui/core/Avatar';
+import { Button, InputBase } from '@material-ui/core';
+import CssBaseline from '@material-ui/core/CssBaseline';
+import { Link, Grid, Box } from '@material-ui/core';
+import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
+import Typography from '@material-ui/core/Typography';
+import { makeStyles } from '@material-ui/core/styles';
+import Container from '@material-ui/core/Container';
+import { useDispatch } from 'react-redux';
+import { registerUser } from '../../_actions/user_actions';
 
 function Copyright() {
   return (
     <Typography variant="body2" color="textSecondary" align="center">
-      {"Copyright © kiWE "}
+      {'Copyright © kiWE '}
       {new Date().getFullYear()}
     </Typography>
   );
 }
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(theme => ({
   paper: {
     marginTop: theme.spacing(4),
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-    color: "white",
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    color: 'white',
   },
   avatar: {
     marginTop: theme.spacing(0),
-    backgroundColor: "#6ac48a",
+    backgroundColor: '#6ac48a',
   },
   form: {
-    width: "85%", // Fix IE 11 issue.
+    width: '85%', // Fix IE 11 issue.
     marginTop: theme.spacing(2),
   },
   inputText: {
-    backgroundColor: "white",
-    height: "50px",
-    borderRadius: "25px",
+    backgroundColor: 'white',
+    height: '50px',
+    borderRadius: '25px',
     flex: 1,
     marginTop: theme.spacing(0),
-    paddingLeft: "15px",
-    paddingright: "15px",
+    paddingLeft: '15px',
+    paddingright: '15px',
   },
   submit: {
     margin: theme.spacing(2),
-    backgroundColor: "#ffc1c1",
-    fontSize: "18px",
-    color: "#232323",
-    width: "70%",
-    height: "50px",
-    marginLeft: "15%",
-    marginRight: "15%",
-    borderRadius: "25px",
-    boxShadow: "2px 4px 4px rgba(74, 74, 74, 0.25)",
-    border: "1px solid #FFFFFF"
+    backgroundColor: '#ffc1c1',
+    fontSize: '18px',
+    color: '#232323',
+    width: '70%',
+    height: '50px',
+    marginLeft: '15%',
+    marginRight: '15%',
+    borderRadius: '25px',
+    boxShadow: '2px 4px 4px rgba(74, 74, 74, 0.25)',
+    border: '1px solid #FFFFFF',
   },
 }));
 
@@ -68,30 +66,30 @@ export default function RegisterPage(props) {
   const classes = useStyles();
   const dispatch = useDispatch();
 
-  const [Name, setName] = useState("");
-  const [Email, setEmail] = useState("");
-  const [Password, setPassword] = useState("");
-  const [ConfirmPassword, setConfirmPassword] = useState("");
+  const [Name, setName] = useState('');
+  const [Email, setEmail] = useState('');
+  const [Password, setPassword] = useState('');
+  const [ConfirmPassword, setConfirmPassword] = useState('');
   const [arePasswordsSame, setArePasswordsSame] = useState(true); // 두 비번이 같은가?
   const [registerSuccess, setRegisterSuccess] = useState(true);
 
-  const emailHandler = (event) => {
+  const emailHandler = event => {
     setEmail(event.currentTarget.value);
   };
 
-  const nameHandler = (event) => {
+  const nameHandler = event => {
     setName(event.currentTarget.value);
   };
 
-  const passwordHandler = (event) => {
+  const passwordHandler = event => {
     setPassword(event.currentTarget.value);
   };
 
-  const confirmPasswordHandler = (event) => {
+  const confirmPasswordHandler = event => {
     setConfirmPassword(event.currentTarget.value);
   };
 
-  const submitHandler = (event) => {
+  const submitHandler = event => {
     event.preventDefault();
     setArePasswordsSame(true);
     setRegisterSuccess(true);
@@ -106,9 +104,9 @@ export default function RegisterPage(props) {
       password: Password,
     };
 
-    dispatch(registerUser(body)).then((response) => {
+    dispatch(registerUser(body)).then(response => {
       if (response.payload.success) {
-        props.history.push("/login");
+        props.history.push('/login');
       } else {
         setRegisterSuccess(false);
       }
@@ -207,7 +205,7 @@ export default function RegisterPage(props) {
             </Grid> */}
               </Grid>
               {!registerSuccess && (
-                <Grid item xs={12} style={{ marginTop: "15px" }}>
+                <Grid item xs={12} style={{ marginTop: '15px' }}>
                   <Alert severity="error">
                     회원가입에 실패했습니다. <br />
                     입력 내용을 다시 확인해주세요.
@@ -227,7 +225,7 @@ export default function RegisterPage(props) {
                   <Link
                     href="/login"
                     variant="body2"
-                    style={{ color: "white" }}
+                    style={{ color: 'white' }}
                   >
                     이미 계정이 있으신가요? 로그인
                   </Link>
@@ -243,6 +241,11 @@ export default function RegisterPage(props) {
     </Bg>
   );
 }
+
+RegisterPage.propTypes = {
+  history: PropTypes.object,
+};
+
 const Wrapper = styled.div`
   height: calc(100% - 56px);
   position: absolute;

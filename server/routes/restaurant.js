@@ -1,11 +1,10 @@
-const express = require("express");
+const express = require('express');
 const router = express.Router();
-const { Menu } = require("../models/Menu");
-const { Restaurant } = require("../models/Restaurant");
-const { json } = require("body-parser");
+const { Menu } = require('../models/Menu');
+const { Restaurant } = require('../models/Restaurant');
 
 // 레스토랑 등록
-router.post("/res-register", (req, res) => {
+router.post('/res-register', (req, res) => {
   // client 혹은 포스트맨에서 식당/메뉴등록 정보를 DB에 넣어줌.
   const restaurant = new Restaurant(req.body);
 
@@ -20,7 +19,7 @@ router.post("/res-register", (req, res) => {
 });
 
 // 메뉴 등록
-router.post("/menu-register", (req, res) => {
+router.post('/menu-register', (req, res) => {
   // client 혹은 포스트맨에서 식당/메뉴등록 정보를 DB에 넣어줌.
   const menu = new Menu(req.body); // bodyParser가 있어서 req.body가 가능.
 
@@ -35,11 +34,11 @@ router.post("/menu-register", (req, res) => {
 });
 
 // 채팅 페이지 메뉴판 버튼 누를 때, 해당 식당의 메뉴를 불러오는 방식.
-router.post("/get-menu", (req, res) => {
+router.post('/get-menu', (req, res) => {
   const branch = req.body.branchName;
 
   // 1.식당DB에서 지점 이름으로 해당 menuId 찾기
-  Restaurant.findOne({ branchName: branch }, "menuId", (err, resdb) => {
+  Restaurant.findOne({ branchName: branch }, 'menuId', (err, resdb) => {
     if (err) return console.error(err);
     const menuId = resdb.menuId;
 
@@ -51,15 +50,15 @@ router.post("/get-menu", (req, res) => {
   });
 });
 
-router.post("/closest-restaurant", (req, res) => {
+router.post('/closest-restaurant', (req, res) => {
   const { long, lat } = req.body;
 
   // 가까운 열곳을 거리와 함께 출력하는 함수.
-  const geoNear = async (limit) => {
+  const geoNear = async limit => {
     const results = await Restaurant.aggregate()
       .near({
-        near: { type: "Point", coordinates: [long, lat] },
-        distanceField: "distance", // meter
+        near: { type: 'Point', coordinates: [long, lat] },
+        distanceField: 'distance', // meter
       })
       .limit(limit);
     return res.status(200).json(results);

@@ -1,36 +1,37 @@
-import React, { useState, useEffect } from "react";
-import styled from "styled-components";
-import Map from "../Sections/Map";
-import Menu from "./Menu";
+import React, { useState, useEffect } from 'react';
+import PropTypes from 'prop-types';
+import styled from 'styled-components';
+import Map from '../Sections/Map';
+import Menu from './Menu';
 
-import { withStyles } from "@material-ui/core/styles";
-import Button from "@material-ui/core/Button";
+import { withStyles } from '@material-ui/core/styles';
+import Button from '@material-ui/core/Button';
 import {
   Dialog,
   DialogActions,
   DialogContent,
   DialogContentText,
-} from "@material-ui/core";
-import { makeStyles } from "@material-ui/core/styles";
-import MuiDialogTitle from "@material-ui/core/DialogTitle";
-import IconButton from "@material-ui/core/IconButton";
-import CloseIcon from "@material-ui/icons/Close";
-import Typography from "@material-ui/core/Typography";
+} from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
+import MuiDialogTitle from '@material-ui/core/DialogTitle';
+import IconButton from '@material-ui/core/IconButton';
+import CloseIcon from '@material-ui/icons/Close';
+import Typography from '@material-ui/core/Typography';
 
-const styles = (theme) => ({
+const styles = theme => ({
   root: {
     margin: 0,
     padding: theme.spacing(2),
   },
   closeButton: {
-    position: "absolute",
+    position: 'absolute',
     right: theme.spacing(1),
     top: theme.spacing(1),
     color: theme.palette.grey[500],
   },
 });
 
-const DialogTitle = withStyles(styles)((props) => {
+const DialogTitle = withStyles(styles)(props => {
   const { children, classes, onClose, ...other } = props;
   return (
     <MuiDialogTitle disableTypography className={classes.root} {...other}>
@@ -48,10 +49,6 @@ const DialogTitle = withStyles(styles)((props) => {
   );
 });
 
-const MapDialog = withStyles(styles)((props) => {
-  const { children, classes, onClose, ...other } = props;
-});
-
 function OrderMenu({ handleTextQuery, resName }) {
   const [openMenu, setOpenMenu] = useState(false);
   const [isDisabled, setIsDisabled] = useState(true);
@@ -62,51 +59,51 @@ function OrderMenu({ handleTextQuery, resName }) {
   // props로 받아온 식당명을 통해, 메뉴를 굳이 클릭하지 않아도 식당 진입시 메뉴, 직원호출 버튼을 활성화합니다
   // 주의!!!: 오는 식당명은 스타벅스인 반면, 메뉴판에 쓰이는 이름은 구체적인 브랜치입니다. 나중에 코드 수정할 때 유의하셔야 합니다!
   useEffect(() => {
-    if (resName === "스타벅스") {
-      handleUserSelectedRestaurant("스타벅스 안암역점");
+    if (resName === '스타벅스') {
+      handleUserSelectedRestaurant('스타벅스 안암역점');
     }
   }, [resName]);
 
-  const useStyles = makeStyles((theme) => ({
+  const useStyles = makeStyles(theme => ({
     root: {
-      top: "20vh",
-      width: "100vw",
-      height: "100vh",
-      borderRadius: "25px",
+      top: '20vh',
+      width: '100vw',
+      height: '100vh',
+      borderRadius: '25px',
     },
     nested: {
       paddingLeft: theme.spacing(4),
     },
     media: {
-      height: "200px",
+      height: '200px',
     },
     menuDialogPaper: {
-      minWidth: "90vw",
-      maxWidth: "90vw",
-      margin: "0px",
-      minHeight: "70vh",
-      maxHeight: "70vh",
-      borderRadius: "25px",
+      minWidth: '90vw',
+      maxWidth: '90vw',
+      margin: '0px',
+      minHeight: '70vh',
+      maxHeight: '70vh',
+      borderRadius: '25px',
     },
     mapDialogPaper: {
-      minWidth: "100vw",
-      maxWidth: "100vw",
-      margin: "0px",
-      height: "calc(100% - 32px)",
-      top: "32px",
-      borderRadius: "25px 25px 0px 0px",
-      overflow: "auto",
+      minWidth: '100vw',
+      maxWidth: '100vw',
+      margin: '0px',
+      height: 'calc(100% - 32px)',
+      top: '32px',
+      borderRadius: '25px 25px 0px 0px',
+      overflow: 'auto',
     },
     staffDialogPaper: {
-      borderRadius: "25px",
+      borderRadius: '25px',
     },
     menuCloseButton: {
-      color: "#232323",
-      backgroundColor: "#FFB5B5",
-      borderRadius: "20px",
-      right: "5px",
-      bottom: "5px",
-      boxShadow: "1px 2px 2px rgba(74, 74, 74, 0.25)",
+      color: '#232323',
+      backgroundColor: '#FFB5B5',
+      borderRadius: '20px',
+      right: '5px',
+      bottom: '5px',
+      boxShadow: '1px 2px 2px rgba(74, 74, 74, 0.25)',
     },
   }));
 
@@ -136,19 +133,19 @@ function OrderMenu({ handleTextQuery, resName }) {
     setOpenCall(false);
   };
 
-  const handleUserSelectedRestaurant = (name) => {
+  const handleUserSelectedRestaurant = name => {
     setIsDisabled(false);
     setUserSelectedRestaurant(name);
   };
 
   // 메뉴리스트 클릭시 메시지를 보내는 함수. 메뉴판 컴포넌트에 넘겨줍니다
-  const menuListClick = (res) => {
+  const menuListClick = res => {
     handleCloseMenu();
     handleTextQuery(res);
   };
 
   // 식당리스트 클릭시 메시지를 보내는 함수. 맵 컴포넌트에 넘겨줍니다
-  const mapRestaurantClick = (res) => {
+  const mapRestaurantClick = res => {
     handleCloseMap();
     handleUserSelectedRestaurant(res);
     handleTextQuery(res);
@@ -198,7 +195,7 @@ function OrderMenu({ handleTextQuery, resName }) {
       >
         <DialogTitle
           id="map-title"
-          style={{ textAlign: "left" }}
+          style={{ textAlign: 'left' }}
           onClose={handleCloseMap}
         >
           내 주변 식당찾기
@@ -224,8 +221,8 @@ function OrderMenu({ handleTextQuery, resName }) {
         aria-labelledby="call-title"
         aria-describedby="call-description"
       >
-        <DialogTitle id="call-title" style={{ textAlign: "center" }}>
-          {"직원호출"}
+        <DialogTitle id="call-title" style={{ textAlign: 'center' }}>
+          {'직원호출'}
         </DialogTitle>
         <DialogContent>
           <DialogContentText id="call-description">
@@ -245,6 +242,11 @@ function OrderMenu({ handleTextQuery, resName }) {
     </MenuComponent>
   );
 }
+
+OrderMenu.propTypes = {
+  handleTextQuery: PropTypes.func,
+  resName: PropTypes.string,
+};
 
 const MenuComponent = styled.div`
   display: flex;
@@ -273,8 +275,8 @@ const CustomButton = styled.button`
   width: 33%;
   flex-shrink: 1;
   cursor: pointer;
-  color: ${(props) => (props.disabled ? "#ffffff" : "#289cb2")};
-  background-color: ${(props) => (props.disabled ? "#aaaaaa" : "#ffffff")};
+  color: ${props => (props.disabled ? '#ffffff' : '#289cb2')};
+  background-color: ${props => (props.disabled ? '#aaaaaa' : '#ffffff')};
   box-shadow: 1px 2px 2px rgba(74, 74, 74, 0.25);
   outline: none;
   transition: background 0.8s;

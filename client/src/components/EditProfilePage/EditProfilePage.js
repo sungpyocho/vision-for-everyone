@@ -1,53 +1,54 @@
-import React, { useState, useEffect } from "react";
-import styled from "styled-components";
-import Alert from "@material-ui/lab/Alert";
-import Avatar from "@material-ui/core/Avatar";
-import Button from "@material-ui/core/Button";
-import CssBaseline from "@material-ui/core/CssBaseline";
-import TextField from "@material-ui/core/TextField";
-import Grid from "@material-ui/core/Grid";
-import Box from "@material-ui/core/Box";
-import Settings from "@material-ui/icons/Settings";
-import Typography from "@material-ui/core/Typography";
-import { makeStyles } from "@material-ui/core/styles";
-import Container from "@material-ui/core/Container";
-import { useDispatch } from "react-redux";
-import { auth } from "../../_actions/user_actions";
-import { editProfile } from "../../_actions/user_actions";
+import React, { useState, useEffect } from 'react';
+import PropTypes from 'prop-types';
+import styled from 'styled-components';
+import Alert from '@material-ui/lab/Alert';
+import Avatar from '@material-ui/core/Avatar';
+import Button from '@material-ui/core/Button';
+import CssBaseline from '@material-ui/core/CssBaseline';
+import TextField from '@material-ui/core/TextField';
+import Grid from '@material-ui/core/Grid';
+import Box from '@material-ui/core/Box';
+import Settings from '@material-ui/icons/Settings';
+import Typography from '@material-ui/core/Typography';
+import { makeStyles } from '@material-ui/core/styles';
+import Container from '@material-ui/core/Container';
+import { useDispatch } from 'react-redux';
+import { auth } from '../../_actions/user_actions';
+import { editProfile } from '../../_actions/user_actions';
 
 function Copyright() {
   return (
     <Typography variant="body2" color="textSecondary" align="center">
-      {"Copyright © kiWE "}
+      {'Copyright © kiWE '}
       {new Date().getFullYear()}
     </Typography>
   );
 }
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(theme => ({
   paper: {
     marginTop: theme.spacing(8),
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
   },
   avatar: {
     margin: theme.spacing(1),
-    backgroundColor: "#6ac48a",
+    backgroundColor: '#6ac48a',
   },
   form: {
-    width: "100%", // Fix IE 11 issue.
+    width: '100%', // Fix IE 11 issue.
     marginTop: theme.spacing(3),
   },
   submit: {
-    backgroundColor: "pink",
-    color: "black",
-    width: "70%",
-    height: "50px",
-    marginLeft: "15%",
-    marginRight: "15%",
+    backgroundColor: 'pink',
+    color: 'black',
+    width: '70%',
+    height: '50px',
+    marginLeft: '15%',
+    marginRight: '15%',
     marginTop: theme.spacing(4),
-    borderRadius: "25px",
+    borderRadius: '25px',
   },
 }));
 
@@ -61,44 +62,44 @@ export default function RegisterPage(props) {
   const classes = useStyles();
   const dispatch = useDispatch();
 
-  const [Name, setName] = useState("");
-  const [Password, setPassword] = useState("");
-  const [Email, setEmail] = useState("");
-  const [ConfirmPassword, setConfirmPassword] = useState("");
+  const [Name, setName] = useState('');
+  const [Password, setPassword] = useState('');
+  const [Email, setEmail] = useState('');
+  const [ConfirmPassword, setConfirmPassword] = useState('');
   const [arePasswordsSame, setArePasswordsSame] = useState(true); // 두 비번이 같은가?
 
   useEffect(() => {
-    dispatch(auth()).then((response) => {
+    dispatch(auth()).then(response => {
       if (response) {
-        const pastImage = response.payload.image;
+        // const pastImage = response.payload.image;
         const pastName = response.payload.name;
         const email = response.payload.email;
         setName(pastName);
         setEmail(email);
       } else {
-        props.history.push("/login");
+        props.history.push('/login');
       }
     });
   }, []);
   // useEffect()의 두 번째 인자로 빈 배열을 넣어줘야 마운트시만 호출된다
 
-  const nameHandler = (event) => {
+  const nameHandler = event => {
     setName(event.currentTarget.value);
   };
 
-  const passwordHandler = (event) => {
+  const passwordHandler = event => {
     setPassword(event.currentTarget.value);
   };
 
-  const confirmPasswordHandler = (event) => {
+  const confirmPasswordHandler = event => {
     setConfirmPassword(event.currentTarget.value);
   };
 
-  const emailHandler = (event) => {
+  const emailHandler = event => {
     setEmail(event.currentTarget.value);
   };
 
-  const submitHandler = (event) => {
+  const submitHandler = event => {
     event.preventDefault();
     setArePasswordsSame(true);
 
@@ -111,21 +112,21 @@ export default function RegisterPage(props) {
       password: Password,
       email: Email,
     };
-    var isEdit = window.confirm("사용자 정보를 변경합니다");
+    var isEdit = window.confirm('사용자 정보를 변경합니다');
     if (isEdit) {
       dispatch(editProfile(body))
-        .then((response) => {
+        .then(response => {
           if (response.payload.success) {
-            props.history.push("/chat");
+            props.history.push('/chat');
           }
         })
-        .catch((err) => console.log(err));
+        .catch(err => console.log(err));
     }
   };
 
   const handleClick = () => {
     // DB 정보 수정
-    alert("클릭시 발동되는 알림");
+    alert('클릭시 발동되는 알림');
   };
 
   return (
@@ -233,6 +234,11 @@ export default function RegisterPage(props) {
     </Bg>
   );
 }
+
+RegisterPage.propTypes = {
+  history: PropTypes.object,
+};
+
 const Wrapper = styled.div`
   height: 100%;
   position: absolute;

@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 
 /* 
     <Menu DB>
@@ -25,6 +25,6 @@ const menuSchema = mongoose.Schema({
 });
 
 // Schema를 model로 감싸야 한다.
-const Menu = mongoose.model("Menu", menuSchema);
+const Menu = mongoose.model('Menu', menuSchema);
 
 module.exports = { Menu };

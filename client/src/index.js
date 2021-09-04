@@ -1,20 +1,20 @@
-import React from "react";
-import ReactDOM from "react-dom";
-import App from "./App";
-import * as serviceWorker from "./serviceWorker";
-import { Provider } from "react-redux";
-import { applyMiddleware, createStore } from "redux";
-import promiseMiddleware from "redux-promise";
-import ReduxThunk from "redux-thunk";
-import Reducer from "./_reducers"; // index.js까지 안써줘도 자동으로 인식함.
-import { createMuiTheme } from "@material-ui/core/styles";
-import { ThemeProvider } from "@material-ui/styles";
-import "./index.css";
+import React from 'react';
+import ReactDOM from 'react-dom';
+import App from './App';
+import * as serviceWorker from './serviceWorker';
+import { Provider } from 'react-redux';
+import { applyMiddleware, createStore } from 'redux';
+import promiseMiddleware from 'redux-promise';
+import ReduxThunk from 'redux-thunk';
+import Reducer from './_reducers'; // index.js까지 안써줘도 자동으로 인식함.
+import { createTheme } from '@material-ui/core/styles';
+import { ThemeProvider } from '@material-ui/styles';
+import './index.css';
 
 // set default Typography font of Material UI
-const theme = createMuiTheme({
+const theme = createTheme({
   typography: {
-    fontFamily: ["Spoqa Han Sans", "Roboto", "sans-serif"].join(","),
+    fontFamily: ['Spoqa Han Sans', 'Roboto', 'sans-serif'].join(','),
   },
 });
 
@@ -23,7 +23,7 @@ const createStoreWithMiddleware = applyMiddleware(
   promiseMiddleware,
   ReduxThunk
 )(createStore);
-const destination = document.getElementById("root");
+const destination = document.getElementById('root');
 
 ReactDOM.render(
   <Provider

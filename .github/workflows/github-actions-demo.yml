@@ -1,17 +1,30 @@
-name: GitHub Actions Demo
-on: [push]
+name: KIWE CI/CD
+on:
+  push:
+    branches:
+      - dev
+      - master
+  pull_request:
+    branches:
+      - dev
+      - master
+
 jobs:
-  Explore-GitHub-Actions:
+  CI:
     runs-on: ubuntu-latest
+    # Server, Client 폴더 내에 node_modules가 따로 있으므로 매트릭스로 각자 실행
+    strategy:
+      matrix: { dir: ["./server", "./client"] }
     steps:
-      - run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
-      - run: echo "🐧 This job is now running on a ${{ runner.os }} server hosted by GitHub!"
-      - run: echo "🔎 The name of your branch is ${{ github.ref }} and your repository is ${{ github.repository }}."
       - name: Check out repository code
         uses: actions/checkout@v2
-      - run: echo "💡 The ${{ github.repository }} repository has been cloned to the runner."
-      - run: echo "🖥️ The workflow is now ready to test your code on the runner."
-      - name: List files in the repository
-        run: |
-          ls ${{ github.workspace }}
-      - run: echo "🍏 This job's status is ${{ job.status }}."
+
+      - name: Setup node environment
+        uses: actions/setup-node@v2
+        with:
+          node-version: lts
+
+      - name: -${{ matrix.dir }}- Install dependencies & Lint and format code
+        working-directory: ${{ matrix.dir }}
+        run: npm ci
+        run: npm run style-check

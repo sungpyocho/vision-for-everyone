@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
+import React, { useState, useEffect } from 'react';
+import PropTypes from 'prop-types';
+import axios from 'axios';
 
-import List from "@material-ui/core/List";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemText from "@material-ui/core/ListItemText";
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemText from '@material-ui/core/ListItemText';
 
 const { kakao } = window;
 
@@ -15,9 +16,10 @@ export default function Map({ mapRestaurantClick }) {
       .then(({ lat, lng }) => {
         displayMap(lat, lng);
       })
-      .catch((err) => {
+      .catch(err => {
         // 위치정보를 얻을 수 없을 경우, 서울시청을 기준으로 표시
-        displayMap(37.5666805, 126.9784147); 
+        console.log(err);
+        displayMap(37.5666805, 126.9784147);
       });
   }, []);
 
@@ -34,8 +36,8 @@ export default function Map({ mapRestaurantClick }) {
       );
     } else {
       // 브라우저가 Geolocation API 미지원
-      alert("이 브라우저에서는 사용자 위치를 알 수 없습니다.");
-      return new Promise((resolve) => resolve({}));
+      alert('이 브라우저에서는 사용자 위치를 알 수 없습니다.');
+      return new Promise(resolve => resolve({}));
     }
   };
 
@@ -48,17 +50,17 @@ export default function Map({ mapRestaurantClick }) {
       switch (error.code) {
         case error.PERMISSION_DENIED:
           msg =
-            "위치정보 허용이 되어있지 않습니다. 설정에서 위치정보 사용을 허용해주세요.";
+            '위치정보 허용이 되어있지 않습니다. 설정에서 위치정보 사용을 허용해주세요.';
           break;
         case error.POSITION_UNAVAILABLE:
-          msg = "현재 위치를 불러올 수 없습니다. 다시 시도해 주세요.";
+          msg = '현재 위치를 불러올 수 없습니다. 다시 시도해 주세요.';
           break;
         case error.TIMEOUT:
           msg =
-            "위치 정보 응답에 너무 많은 시간이 걸리네요. 다시 시도해 주세요.";
+            '위치 정보 응답에 너무 많은 시간이 걸리네요. 다시 시도해 주세요.';
           break;
         case error.UNKNOWN_ERROR:
-          msg = "알수 없는 에러가 발생했습니다. 다시 시도해 주세요.";
+          msg = '알수 없는 에러가 발생했습니다. 다시 시도해 주세요.';
           break;
       }
       alert(msg);
@@ -72,7 +74,7 @@ export default function Map({ mapRestaurantClick }) {
   //지도 기초 설정
   const basicMapSettings = (userLat, userLng) => {
     //지도를 담을 영역의 DOM 레퍼런스
-    const container = document.getElementById("map");
+    const container = document.getElementById('map');
     //지도를 생성할 때 필요한 기본 옵션
     let options = {
       center: new kakao.maps.LatLng(userLat, userLng), //지도의 중심좌표.
@@ -101,15 +103,15 @@ export default function Map({ mapRestaurantClick }) {
   const displayMap = (userLat, userLng) => {
     let map = basicMapSettings(userLat, userLng);
     axios
-      .post("/api/restaurant/closest-restaurant", {
+      .post('/api/restaurant/closest-restaurant', {
         long: userLng,
         lat: userLat,
       })
-      .then((rs) => {
+      .then(rs => {
         rs = rs.data;
         setRestaurantList(rs); // 꼭 "렌더링 전에" 리스트를 업데이트해야 컴포넌트가 데이터값을 활용
         let positions = [];
-        rs.forEach((r) => {
+        rs.forEach(r => {
           positions.push({
             title: r.branchName,
             latlng: new kakao.maps.LatLng(
@@ -121,21 +123,21 @@ export default function Map({ mapRestaurantClick }) {
 
         // 자신의 위치 추가.
         positions.push({
-          title: "현재 위치",
+          title: '현재 위치',
           latlng: new kakao.maps.LatLng(userLat, userLng),
         });
 
-        positions.forEach((p) => {
+        positions.forEach(p => {
           // (내 위치용) 마커 이미지의 이미지 주소
           let imageSrc =
-            "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png";
+            'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png';
 
           // (내 위치용) 마커 이미지의 이미지크기
           let imageSize = new kakao.maps.Size(24, 35);
 
           // 마커 이미지를 생성. 나의 위치는 별표, 식당은 일반 마커(null)로 표시.
           let markerImage =
-            p.title === "현재 위치"
+            p.title === '현재 위치'
               ? new kakao.maps.MarkerImage(imageSrc, imageSize)
               : null;
 
@@ -155,24 +157,24 @@ export default function Map({ mapRestaurantClick }) {
           });
 
           // 마커에 마우스오버 이벤트를 등록합니다
-          kakao.maps.event.addListener(marker, "mouseover", function () {
+          kakao.maps.event.addListener(marker, 'mouseover', function () {
             // 마커에 마우스오버 이벤트가 발생하면 인포윈도우를 마커위에 표시합니다
             infowindow.open(map, marker);
           });
 
           // 마커에 마우스아웃 이벤트를 등록합니다
-          kakao.maps.event.addListener(marker, "mouseout", function () {
+          kakao.maps.event.addListener(marker, 'mouseout', function () {
             // 마커에 마우스아웃 이벤트가 발생하면 인포윈도우를 제거합니다
             infowindow.close();
           });
         });
       })
-      .catch((err) => {
+      .catch(err => {
         console.log(err);
       });
   };
 
-  const handleMapRestaurantClick = (index) => {
+  const handleMapRestaurantClick = index => {
     // 지금 restaurantList가 state로 관리되고 있다
     // 사용자가 해당 listitem 클릭 했을 때, 그 listitem에 해당하는 index 번호에 따라 restaurantList에도 참조해주려고 한다.
     // restaurantList[index].restaurantTitle을 mapRestaurantClick 함수의 파라미터로 보내려한다.
@@ -181,24 +183,27 @@ export default function Map({ mapRestaurantClick }) {
 
   return (
     <>
-      <div id="map" style={{ width: "99.999%", height: "72vh", position: "relative" }}></div>
-      <List component="nav" style={{position: "relative", overflow:"auto"}}>
+      <div
+        id="map"
+        style={{ width: '99.999%', height: '72vh', position: 'relative' }}
+      ></div>
+      <List component="nav" style={{ position: 'relative', overflow: 'auto' }}>
         {restaurantList &&
           restaurantList.map((element, i) => {
             return (
               <ListItem
                 key={i}
                 button
-                alignItems={"flex-start"}
+                alignItems={'flex-start'}
                 onClick={() => handleMapRestaurantClick(i)}
               >
-                <ListItemText style={{ textAlign: "left" }}>
-                  {i+1}
+                <ListItemText style={{ textAlign: 'left' }}>
+                  {i + 1}
                 </ListItemText>
-                <ListItemText style={{ textAlign: "left" }}>
+                <ListItemText style={{ textAlign: 'left' }}>
                   {element.branchName}
                 </ListItemText>
-                <ListItemText style={{ textAlign: "right" }}>
+                <ListItemText style={{ textAlign: 'right' }}>
                   {`${parseInt(element.distance)} m`}
                 </ListItemText>
               </ListItem>
@@ -208,3 +213,7 @@ export default function Map({ mapRestaurantClick }) {
     </>
   );
 }
+
+Map.propTypes = {
+  mapRestaurantClick: PropTypes.array,
+};

@@ -1,7 +1,7 @@
-const mongoose = require("mongoose");
-const bcrypt = require("bcrypt");
-const jwt = require("jsonwebtoken");
-const moment = require("moment");
+const mongoose = require('mongoose');
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+const moment = require('moment');
 const saltRounds = 10; // 해시 암호화를 할 때 필요한 salt의 길이
 
 const userSchema = mongoose.Schema({
@@ -41,11 +41,11 @@ const userSchema = mongoose.Schema({
 });
 
 // pre()를 처리하고 index.js의 save()를 실행함. next() -> save()
-userSchema.pre("save", function (next) {
+userSchema.pre('save', function (next) {
   let user = this; // userSchema 가져오기
 
   // 비밀번호가 변경될때만(isModified) 비밀번호를 해시 암호화
-  if (user.isModified("password")) {
+  if (user.isModified('password')) {
     bcrypt.genSalt(saltRounds, (err, salt) => {
       if (err) return next(err);
 
@@ -71,8 +71,8 @@ userSchema.methods.comparePassword = function (plainPassword, cb) {
 
 userSchema.methods.generateToken = function (cb) {
   let user = this;
-  let token = jwt.sign(user._id.toHexString(), "secret-Token");
-  let halfHour = moment().add(30, "minutes").valueOf();
+  let token = jwt.sign(user._id.toHexString(), 'secret-Token');
+  let halfHour = moment().add(30, 'minutes').valueOf();
 
   user.tokenExp = halfHour;
   user.token = token;
@@ -87,7 +87,7 @@ userSchema.statics.findByToken = function (token, cb) {
   let user = this;
 
   // 토큰을 복호화한다.
-  jwt.verify(token, "secret-Token", (err, decodedToken) => {
+  jwt.verify(token, 'secret-Token', (err, decodedToken) => {
     // 유저 아이디를 이용해서 유저를 찾은 다음에
     // 클라이언트에서 가져온 토큰과 DB에 저장된 토큰이 일치하는지 확인
     user.findOne({ _id: decodedToken, token: token }, (err, user) => {
@@ -98,6 +98,6 @@ userSchema.statics.findByToken = function (token, cb) {
 };
 
 // Schema를 model로 감싸야 한다.
-const User = mongoose.model("User", userSchema);
+const User = mongoose.model('User', userSchema);
 
 module.exports = { User };

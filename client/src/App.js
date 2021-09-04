@@ -1,19 +1,19 @@
-import React from "react";
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import React from 'react';
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 
-import Chat from "./components/Chat/Chat";
-import LandingPage from "./components/LandingPage/LandingPage";
-import LoginPage from "./components/LoginPage/LoginPage";
-import RegisterPage from "./components/RegisterPage/RegisterPage";
-import Auth from "./hoc/auth";
-import Header from "./components/Header/Header";
-import TutorialPage from "./components/TutorialPage/TutorialPage";
-import ForgotPasswordPage from "./components/FindPasswordPage/ForgotPasswordPage";
-import ResetPasswordPage from "./components/FindPasswordPage/ResetPasswordPage";
-import EditProfilePage from "./components/EditProfilePage/EditProfilePage";
-import KakaopaySuccessPage from "./components/KakaoPayPage/Success";
-import KakaopayFailPage from "./components/KakaoPayPage/Fail";
-import KakaopayCancelPage from "./components/KakaoPayPage/Cancel";
+import Chat from './components/Chat/Chat';
+import LandingPage from './components/LandingPage/LandingPage';
+import LoginPage from './components/LoginPage/LoginPage';
+import RegisterPage from './components/RegisterPage/RegisterPage';
+import Auth from './hoc/auth';
+import Header from './components/Header/Header';
+import TutorialPage from './components/TutorialPage/TutorialPage';
+import ForgotPasswordPage from './components/FindPasswordPage/ForgotPasswordPage';
+import ResetPasswordPage from './components/FindPasswordPage/ResetPasswordPage';
+import EditProfilePage from './components/EditProfilePage/EditProfilePage';
+import KakaopaySuccessPage from './components/KakaoPayPage/Success';
+import KakaopayFailPage from './components/KakaoPayPage/Fail';
+import KakaopayCancelPage from './components/KakaoPayPage/Cancel';
 
 // Higher Order Component로 일반 컴포넌트를 감싸주자.
 function App() {
@@ -23,7 +23,7 @@ function App() {
   return (
     <Router>
       <>
-        {(isKakaoPay === 'kakaopay' || isLandingPage === '/')? null : <Header />}
+        {isKakaoPay === 'kakaopay' || isLandingPage === '/' ? null : <Header />}
         {/* A <Switch> looks through its children <Route>s and
           renders the first one that matches the current URL. */}
         <Switch>
@@ -59,7 +59,5 @@ function App() {
     </Router>
   );
 }
-
-
 
 export default App;

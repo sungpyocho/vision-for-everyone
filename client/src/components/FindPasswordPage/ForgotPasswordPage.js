@@ -1,97 +1,94 @@
-import React, { useState } from "react";
-import Alert from "@material-ui/lab/Alert";
-import Avatar from "@material-ui/core/Avatar";
-import styled from "styled-components";
-import { Button, InputBase } from "@material-ui/core";
-import CssBaseline from "@material-ui/core/CssBaseline";
-import TextField from "@material-ui/core/TextField";
-import Box from "@material-ui/core/Box";
-import DraftsIcon from "@material-ui/icons/Drafts";
-import Typography from "@material-ui/core/Typography";
-import { makeStyles } from "@material-ui/core/styles";
-import Container from "@material-ui/core/Container";
-import axios from "axios";
+import React, { useState } from 'react';
+import Alert from '@material-ui/lab/Alert';
+import styled from 'styled-components';
+import { Button, InputBase } from '@material-ui/core';
+import CssBaseline from '@material-ui/core/CssBaseline';
+import Box from '@material-ui/core/Box';
+import Typography from '@material-ui/core/Typography';
+import { makeStyles } from '@material-ui/core/styles';
+import Container from '@material-ui/core/Container';
+import axios from 'axios';
 
 function Copyright() {
   return (
     <Typography variant="body2" color="textSecondary" align="center">
-      {"Copyright © kiWE "}
+      {'Copyright © kiWE '}
       {new Date().getFullYear()}
     </Typography>
   );
 }
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(theme => ({
   paper: {
     marginTop: theme.spacing(8),
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
-    color: "white",
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    color: 'white',
   },
   avatar: {
     margin: theme.spacing(1),
-    backgroundColor: "#6ac48a",
+    backgroundColor: '#6ac48a',
   },
   form: {
-    width: "85%", // Fix IE 11 issue.
+    width: '85%', // Fix IE 11 issue.
     marginTop: theme.spacing(3),
   },
   inputText: {
-    backgroundColor: "white",
-    height: "50px",
-    borderRadius: "25px",
+    backgroundColor: 'white',
+    height: '50px',
+    borderRadius: '25px',
     flex: 1,
-    paddingLeft: "15px",
-    paddingright: "15px",
-    marginTop: "30px",
+    paddingLeft: '15px',
+    paddingright: '15px',
+    marginTop: '30px',
   },
   submit: {
     margin: theme.spacing(6),
-    backgroundColor: "#ffc1c1",
-    fontSize: "18px",
-    color: "#232323",
-    width: "50%",
-    height: "50px",
-    marginLeft: "25%",
-    marginRight: "25%",
-    borderRadius: "25px",
-    boxShadow: "2px 4px 4px rgba(74, 74, 74, 0.25)",
-    border: "1px solid #FFFFFF"
+    backgroundColor: '#ffc1c1',
+    fontSize: '18px',
+    color: '#232323',
+    width: '50%',
+    height: '50px',
+    marginLeft: '25%',
+    marginRight: '25%',
+    borderRadius: '25px',
+    boxShadow: '2px 4px 4px rgba(74, 74, 74, 0.25)',
+    border: '1px solid #FFFFFF',
   },
 }));
 
-export default function ForgotPasswordPage(props) {
+export default function ForgotPasswordPage() {
   const classes = useStyles();
 
-  const [Email, setEmail] = useState("");
+  const [Email, setEmail] = useState('');
   const [showError, setShowError] = useState(false);
   const [sentEmail, setSentEmail] = useState(false);
 
-  const emailHandler = (event) => {
+  const emailHandler = event => {
     setEmail(event.currentTarget.value);
   };
 
-  const sendEmailHandler = (event) => {
+  const sendEmailHandler = event => {
     event.preventDefault(); // page refresh 방지
 
-    if (Email === "") {
-      alert("이메일을 입력해주세요.");
+    if (Email === '') {
+      alert('이메일을 입력해주세요.');
     } else {
       axios
-        .post("/api/user/forgot", {
+        .post('/api/user/forgot', {
           email: Email,
         })
-        .then((res) => {
-          if (res.data.message === "해당 이메일로 가입한 이력이 없습니다.") {
+        .then(res => {
+          if (res.data.message === '해당 이메일로 가입한 이력이 없습니다.') {
             setShowError(true);
             setSentEmail(false);
-          } else if (res.data.message === "비밀번호 복구 이메일 송신 완료") {
+          } else if (res.data.message === '비밀번호 복구 이메일 송신 완료') {
             setShowError(false);
             setSentEmail(true);
           }
         })
-        .catch((err) => {
+        .catch(err => {
           console.log(err);
         });
     }

@@ -1,4 +1,4 @@
-import { SAVE_MESSAGE, CLEAR_MESSAGE } from "../_actions/types";
+import { SAVE_MESSAGE, CLEAR_MESSAGE } from '../_actions/types';
 
 export default function (state = { messages: [] }, action) {
   switch (action.type) {

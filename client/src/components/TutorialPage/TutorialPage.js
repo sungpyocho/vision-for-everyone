@@ -1,61 +1,62 @@
-import React, { useEffect, useState, useCallback } from "react";
-import axios from "axios";
-import { useDispatch, useSelector } from "react-redux";
-import { saveMessage, clearMessage } from "../../_actions/message_actions";
+import React, { useEffect, useState, useCallback } from 'react';
+import PropTypes from 'prop-types';
+import axios from 'axios';
+import { useDispatch, useSelector } from 'react-redux';
+import { saveMessage, clearMessage } from '../../_actions/message_actions';
 
-import Cookies from "universal-cookie"; //set id to cookie
-import { v4 as uuid } from "uuid"; //generate unique id for sessions in visitors v4 for random id generation
+import Cookies from 'universal-cookie'; //set id to cookie
+import { v4 as uuid } from 'uuid'; //generate unique id for sessions in visitors v4 for random id generation
 
-import { makeStyles } from "@material-ui/core/styles";
-import { Button, Paper, InputBase } from "@material-ui/core";
-import SendIcon from "@material-ui/icons/Send";
-import styled from "styled-components";
-import { Dialog } from "@material-ui/core";
+import { makeStyles } from '@material-ui/core/styles';
+import { Button, Paper, InputBase } from '@material-ui/core';
+import SendIcon from '@material-ui/icons/Send';
+import styled from 'styled-components';
+import { Dialog } from '@material-ui/core';
 
-import ProgressBar from "../Chat/Sections/ProgressBar";
-import OrderMenu from "../Chat/Sections/OrderMenu";
-import Message from "../Chat/Sections/Message";
-import CardMessage from "../Chat/Sections/CardMessage";
-import RecieptMessage from "../Chat/Sections/RecieptMessage";
-import chime from "../../assets/chime.mp3";
+import ProgressBar from '../Chat/Sections/ProgressBar';
+import OrderMenu from '../Chat/Sections/OrderMenu';
+import Message from '../Chat/Sections/Message';
+import CardMessage from '../Chat/Sections/CardMessage';
+import RecieptMessage from '../Chat/Sections/RecieptMessage';
+import chime from '../../assets/chime.mp3';
 
 const cookies = new Cookies(); //creating cookie object
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(theme => ({
   inputForm: {
-    display: "flex",
+    display: 'flex',
     borderRadius: 0,
-    backgroundColor: "#2FC4B2",
-    borderTop: "1px solid lightgrey",
+    backgroundColor: '#2FC4B2',
+    borderTop: '1px solid lightgrey',
     bottom: 0,
-    height: "50px",
-    position: "absolute",
-    width: "calc(100% - 20px)",
-    padding: "10px",
+    height: '50px',
+    position: 'absolute',
+    width: 'calc(100% - 20px)',
+    padding: '10px',
   },
   input: {
     marginLeft: theme.spacing(0),
-    backgroundColor: "white",
-    borderRadius: "25px",
+    backgroundColor: 'white',
+    borderRadius: '25px',
     flex: 1,
-    marginRight: "10px",
-    paddingLeft: "15px",
-    paddingRight: "15px",
+    marginRight: '10px',
+    paddingLeft: '15px',
+    paddingRight: '15px',
   },
   button: {
-    backgroundColor: "#ffb5b5",
-    color: "white",
+    backgroundColor: '#ffb5b5',
+    color: 'white',
     borderRadius: 25,
   },
   dialog: {
-    position: "fixed",
+    position: 'fixed',
     top: 0,
     left: 0,
     bottom: 0,
     right: 0,
-    width: "100%",
-    height: "100%",
-    border: "none",
+    width: '100%',
+    height: '100%',
+    border: 'none',
     margin: 0,
     padding: 0,
   },
@@ -64,25 +65,25 @@ const useStyles = makeStyles((theme) => ({
     left: 0,
     bottom: 0,
     right: 0,
-    width: "100%",
-    height: "100%",
-    border: "none",
+    width: '100%',
+    height: '100%',
+    border: 'none',
     margin: 0,
     padding: 0,
-    position: "fixed",
-    backgroundColor: "white",
+    position: 'fixed',
+    backgroundColor: 'white',
   },
   closeButton: {
-    position: "fixed",
-    bottom: "5%",
-    right: "5%",
+    position: 'fixed',
+    bottom: '5%',
+    right: '5%',
   },
 }));
 
 function TutorialPage(props) {
   const classes = useStyles(); // Customize Material-UI
 
-  const [firstInstructionModal, setFirstInstructionModal] = useState(true);
+  // const [firstInstructionModal, setFirstInstructionModal] = useState(true);
 
   // Kakao Pay Link State for <iframe>
   const [kakaoPayLink, setKakaoPayLink] = useState(null);
@@ -100,16 +101,16 @@ function TutorialPage(props) {
   const [showCloseButton, setShowCloseButton] = useState(false);
 
   // redux 구조를 보면 state.message.messages가 메세지들의 배열이다.
-  const messagesFromRedux = useSelector((state) => state.message.messages);
+  const messagesFromRedux = useSelector(state => state.message.messages);
   const dispatch = useDispatch();
 
   // chime mp3
   const sound = new Audio(chime);
 
   // 주문 스텝을 받아오는 부분
-  const [orderStep, setOrderStep] = useState("select restaurant"); // Keyboard Input State
-  const [Input, setInput] = useState("");
-  const inputHandler = (event) => {
+  const [orderStep, setOrderStep] = useState('select restaurant'); // Keyboard Input State
+  const [Input, setInput] = useState('');
+  const inputHandler = event => {
     setInput(event.currentTarget.value);
   };
 
@@ -117,54 +118,54 @@ function TutorialPage(props) {
   const [resName, setResName] = useState(null);
 
   // 키위봇 로고를 처음 및 사용자 답변 이후에 띄워주기 위한 boolean 값 저장
-  const [showKiweChatLogo, setShowKiweChatLogo] = useState(true);
+  const [showKiweChatLogo] = useState(true);
 
   // 키위봇 로고를 띄워줄지 결정하기 위해 이전 채팅을 누가 보냈는지 string으로 저장(예: "kiwe", "user")
-  const [whoSentPrevMsg, setWhoSentPrevMsg] = useState(null);
+  // const [whoSentPrevMsg, setWhoSentPrevMsg] = useState(null);
 
   // component가 mount되면 실행
   // useEffect를 써서 렌더링하면 이 컴포넌트에서 이거 해야해!라고 지시
   useEffect(() => {
     checkUserId();
     dispatch(clearMessage());
-    eventQuery("tutorial");
+    eventQuery('tutorial');
 
-    const handler = (event) => {
-      if (typeof event.data === "string" || event.data instanceof String) {
+    const handler = event => {
+      if (typeof event.data === 'string' || event.data instanceof String) {
         const data = JSON.parse(event.data);
         setKakaoPayResult(data.message);
       } else return;
     };
-    window.addEventListener("message", handler);
+    window.addEventListener('message', handler);
 
-    return () => window.removeEventListener("message", handler);
+    return () => window.removeEventListener('message', handler);
   }, []);
 
   useEffect(() => {
-    if (kakaoPayResult === "Success") {
-      setOrderStep("Confirm_After_Payment");
+    if (kakaoPayResult === 'Success') {
+      setOrderStep('Confirm_After_Payment');
       setShowCloseButton(true);
       dispatch(saveMessage(receipt));
-    } else if (kakaoPayResult === "Fail" || kakaoPayResult === "Cancel") {
+    } else if (kakaoPayResult === 'Fail' || kakaoPayResult === 'Cancel') {
       setShowCloseButton(true);
     }
   }, [kakaoPayResult]);
 
   // 쿠키를 체크해서 UserId값이 없으면 추가
   const checkUserId = () => {
-    if (cookies.get("userID") === undefined) {
+    if (cookies.get('userID') === undefined) {
       //if cookie is already not present before then generate new cookie
-      cookies.set("userID", uuid(), { path: "/" }); //  '/' means that the cookie will be accessible for all pages i.e unique session for all pages
+      cookies.set('userID', uuid(), { path: '/' }); //  '/' means that the cookie will be accessible for all pages i.e unique session for all pages
     }
   };
 
   // 클라이언트가 보낸 메세지 처리
-  const textQuery = async (text) => {
+  const textQuery = async text => {
     // 보낸 메세지 처리
     // conversation을 이렇게 만든 이유는
     // dialogflow의 fulfillmentMessages의 형식과 같은 형식을 취하기 위해!
     let conversation = {
-      who: "user",
+      who: 'user',
       content: {
         text: {
           text: text,
@@ -177,22 +178,22 @@ function TutorialPage(props) {
     // 챗봇이 보낸 답변 처리
     const textQueryVariables = {
       text: text,
-      userID: cookies.get("userID"),
+      userID: cookies.get('userID'),
     };
 
     try {
       // textQuery route로 리퀘스트 전송
       const response = await axios.post(
-        "/api/dialogflow/textQuery",
+        '/api/dialogflow/textQuery',
         textQueryVariables
       );
       // 주문 전 일반 대화.
       // headers는 카카오페이 주문창 URL을 포함하므로, 일반대화에서는 없을수밖에 없다.
       if (!response.data.headers) {
         setResName(response.data.restaurantName);
-        response.data.fulfillmentMessages.forEach((content) => {
+        response.data.fulfillmentMessages.forEach(content => {
           conversation = {
-            who: "kiwe",
+            who: 'kiwe',
             content: content,
             resName: response.data.restaurantName,
           };
@@ -201,12 +202,12 @@ function TutorialPage(props) {
       } else {
         // 마지막 주문 단계. 메세지 출력.
         conversation = {
-          who: "kiwe",
+          who: 'kiwe',
           content: {
-            message: "text",
-            platform: "PLATFORM_UNSPECIFIED",
+            message: 'text',
+            platform: 'PLATFORM_UNSPECIFIED',
             text: {
-              text: ["카카오페이에서 결제를 완료하세요."],
+              text: ['카카오페이에서 결제를 완료하세요.'],
             },
           },
         };
@@ -225,7 +226,7 @@ function TutorialPage(props) {
       sound.play();
 
       conversation = {
-        who: "kiwe",
+        who: 'kiwe',
         orderResult: {
           restaurantName: response.data.restaurantName,
           menuName: response.data.menuName,
@@ -240,11 +241,10 @@ function TutorialPage(props) {
       console.log(error);
       // 에러 발생 시
       conversation = {
-        who: "kiwe",
+        who: 'kiwe',
         content: {
           text: {
-            text:
-              "챗봇의 답변 처리과정에서 에러가 발생했습니다. 페이지를 새로고침해주세요.",
+            text: '챗봇의 답변 처리과정에서 에러가 발생했습니다. 페이지를 새로고침해주세요.',
           },
         },
       };
@@ -254,21 +254,21 @@ function TutorialPage(props) {
   };
 
   // 챗봇의 첫 인사 메세지 처리
-  const eventQuery = async (event) => {
+  const eventQuery = async event => {
     // 챗봇이 보낸 답변 처리
     const eventQueryVariables = {
       event: event,
-      userID: cookies.get("userID"),
+      userID: cookies.get('userID'),
     };
     try {
       // eventQuery 라우트로 리퀘스트 전송
       const response = await axios.post(
-        "/api/dialogflow/eventQuery",
+        '/api/dialogflow/eventQuery',
         eventQueryVariables
       );
-      response.data.fulfillmentMessages.forEach((content) => {
+      response.data.fulfillmentMessages.forEach(content => {
         let conversation = {
-          who: "kiwe",
+          who: 'kiwe',
           content: content,
         };
         dispatch(saveMessage(conversation));
@@ -280,11 +280,10 @@ function TutorialPage(props) {
     } catch (error) {
       // 에러 발생 시
       let conversation = {
-        who: "kiwe",
+        who: 'kiwe',
         content: {
           text: {
-            text:
-              "챗봇의 답변 처리과정에서 에러가 발생했습니다. 페이지를 새로고침해주세요.",
+            text: '챗봇의 답변 처리과정에서 에러가 발생했습니다. 페이지를 새로고침해주세요.',
           },
         },
       };
@@ -294,45 +293,45 @@ function TutorialPage(props) {
   };
 
   // Function about submiting text input
-  const handleSubmit = (event) => {
+  const handleSubmit = event => {
     if (event) event.preventDefault();
     if (!Input) {
-      return alert("내용을 입력해주세요");
+      return alert('내용을 입력해주세요');
     }
     // 식당 미진입시 스벅 시청점, 스타벅스 시청점, 튜토리얼과 완벽히 일치할 경우만 통과
     // 일치하지 않을 경우, window.alert
     if (
       resName === null &&
       ![
-        "스벅 시청점",
-        "스타벅스 시청점",
-        "튜토리얼",
-        "[튜토리얼] 스타벅스 시청점",
+        '스벅 시청점',
+        '스타벅스 시청점',
+        '튜토리얼',
+        '[튜토리얼] 스타벅스 시청점',
       ].includes(Input)
     ) {
-      window.alert("식당찾기 버튼을 눌러 진행해주세요.");
+      window.alert('식당찾기 버튼을 눌러 진행해주세요.');
       return;
     }
     // request를 server의 text Query로 전송
     textQuery(Input);
-    setInput("");
+    setInput('');
   };
 
   // Helper functions
-  const isNormalMessage = (message) => {
+  const isNormalMessage = message => {
     return message.content && message.content.text && message.content.text.text;
   };
 
-  const isCardMessage = (message) => {
+  const isCardMessage = message => {
     return message.content && message.content.payload.fields.card;
   };
 
-  const isRecieptMessage = (message) => {
+  const isRecieptMessage = message => {
     return message.orderResult && message.orderResult.restaurantName;
   };
 
   // Render functions
-  const renderCards = (cards) => {
+  const renderCards = cards => {
     return cards.map((card, i) => (
       <CardMessage key={i} cardInfo={card.structValue} />
     ));
@@ -341,7 +340,13 @@ function TutorialPage(props) {
   const renderOneMessage = (message, i) => {
     // 영수증 메시지일 경우
     if (isRecieptMessage(message)) {
-      return <RecieptMessage key={i} orderResult={message.orderResult} history={props.history} />;
+      return (
+        <RecieptMessage
+          key={i}
+          orderResult={message.orderResult}
+          history={props.history}
+        />
+      );
     }
     // 일반 메세지일 경우
     else if (isNormalMessage(message)) {
@@ -359,14 +364,14 @@ function TutorialPage(props) {
     // 카드 메세지일 경우
     else if (isCardMessage(message)) {
       return (
-        <div style={{ width: "100%", maxHeight: "350px", overflow: "auto" }}>
+        <div style={{ width: '100%', maxHeight: '350px', overflow: 'auto' }}>
           {renderCards(message.content.payload.fields.card.listValue.values)}
         </div>
       );
     }
   };
 
-  const renderMessages = (messagesFromRedux) => {
+  const renderMessages = messagesFromRedux => {
     if (messagesFromRedux) {
       return messagesFromRedux.map((message, i) => {
         return renderOneMessage(message, i);
@@ -376,12 +381,12 @@ function TutorialPage(props) {
     }
   };
 
-  const handleTextQuery = useCallback((text) => {
+  const handleTextQuery = useCallback(text => {
     textQuery(text);
   }, []);
 
   const handleCloseCall = () => {
-    if (kakaoPayResult === "Fail" || kakaoPayResult === "Cancel") {
+    if (kakaoPayResult === 'Fail' || kakaoPayResult === 'Cancel') {
       // 결제 실패, 결제 취소 시 /chat 페이지 리로드
       window.location.reload(false);
     }
@@ -453,6 +458,10 @@ function TutorialPage(props) {
     </Bg>
   );
 }
+
+TutorialPage.propTypes = {
+  history: PropTypes.object,
+};
 
 const Wrapper = styled.div`
   height: 100%;

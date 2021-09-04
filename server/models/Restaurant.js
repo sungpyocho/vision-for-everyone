@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 
 /*
     <Restaurant DB>
@@ -27,7 +27,7 @@ const restaurantSchema = mongoose.Schema({
   location: {
     type: {
       type: String,
-      enum: ["Point"],
+      enum: ['Point'],
       required: true,
     },
     coordinates: {
@@ -39,9 +39,9 @@ const restaurantSchema = mongoose.Schema({
   menuId: { type: String, required: true }, // 메뉴id '고려대학교_애기능', '스타벅스' 등. 맨 위 주석 참고.
 });
 
-restaurantSchema.index({ location: "2dsphere" });
+restaurantSchema.index({ location: '2dsphere' });
 
 // Schema를 model로 감싸야 한다.
-const Restaurant = mongoose.model("Restaurant", restaurantSchema);
+const Restaurant = mongoose.model('Restaurant', restaurantSchema);
 
 module.exports = { Restaurant };

@@ -1,10 +1,10 @@
-import axios from "axios";
-import { LOGIN_USER, REGISTER_USER, AUTH_USER, EDIT_PROFILE } from "./types";
+import axios from 'axios';
+import { LOGIN_USER, REGISTER_USER, AUTH_USER, EDIT_PROFILE } from './types';
 
 export function loginUser(dataToSubmit) {
   const request = axios
-    .post("/api/user/login", dataToSubmit)
-    .then((response) => response.data);
+    .post('/api/user/login', dataToSubmit)
+    .then(response => response.data);
 
   return {
     type: LOGIN_USER,
@@ -14,8 +14,8 @@ export function loginUser(dataToSubmit) {
 
 export function registerUser(dataToSubmit) {
   const request = axios
-    .post("/api/user/register", dataToSubmit)
-    .then((response) => response.data);
+    .post('/api/user/register', dataToSubmit)
+    .then(response => response.data);
 
   return {
     type: REGISTER_USER,
@@ -24,10 +24,10 @@ export function registerUser(dataToSubmit) {
 }
 
 export function editProfile(dataToSubmit) {
-  console.log("edit profile action");
+  console.log('edit profile action');
   const request = axios
-    .post("/api/user/edit", dataToSubmit)
-    .then((response) => response.data);
+    .post('/api/user/edit', dataToSubmit)
+    .then(response => response.data);
 
   return {
     type: EDIT_PROFILE,
@@ -36,9 +36,7 @@ export function editProfile(dataToSubmit) {
 }
 
 export function auth() {
-  const request = axios
-    .get("/api/user/auth")
-    .then((response) => response.data);
+  const request = axios.get('/api/user/auth').then(response => response.data);
 
   return {
     type: AUTH_USER,

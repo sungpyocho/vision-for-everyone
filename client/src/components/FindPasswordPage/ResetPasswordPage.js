@@ -1,71 +1,72 @@
-import React, { useState } from "react";
-import Avatar from "@material-ui/core/Avatar";
-import Alert from "@material-ui/lab/Alert";
-import Button from "@material-ui/core/Button";
-import CssBaseline from "@material-ui/core/CssBaseline";
-import TextField from "@material-ui/core/TextField";
-import Grid from "@material-ui/core/Grid";
-import Box from "@material-ui/core/Box";
-import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
-import Typography from "@material-ui/core/Typography";
-import { makeStyles } from "@material-ui/core/styles";
-import Container from "@material-ui/core/Container";
-import axios from "axios";
+import React, { useState } from 'react';
+import PropTypes from 'prop-types';
+import Avatar from '@material-ui/core/Avatar';
+import Alert from '@material-ui/lab/Alert';
+import Button from '@material-ui/core/Button';
+import CssBaseline from '@material-ui/core/CssBaseline';
+import TextField from '@material-ui/core/TextField';
+import Grid from '@material-ui/core/Grid';
+import Box from '@material-ui/core/Box';
+import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
+import Typography from '@material-ui/core/Typography';
+import { makeStyles } from '@material-ui/core/styles';
+import Container from '@material-ui/core/Container';
+import axios from 'axios';
 
 function Copyright() {
   return (
     <Typography variant="body2" color="textSecondary" align="center">
-      {"Copyright © kiWE "}
+      {'Copyright © kiWE '}
       {new Date().getFullYear()}
     </Typography>
   );
 }
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(theme => ({
   paper: {
     marginTop: theme.spacing(8),
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "center",
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
   },
   avatar: {
     margin: theme.spacing(1),
-    backgroundColor: "#6ac48a",
+    backgroundColor: '#6ac48a',
   },
   form: {
-    width: "100%", // Fix IE 11 issue.
+    width: '100%', // Fix IE 11 issue.
     marginTop: theme.spacing(3),
   },
   submit: {
     margin: theme.spacing(3, 0, 2),
-    backgroundColor: "#6ac48a",
-    color: "white",
+    backgroundColor: '#6ac48a',
+    color: 'white',
   },
 }));
 
 export default function ResetPasswordPage(props) {
   const classes = useStyles();
 
-  const [Password, setPassword] = useState(""); // 비번
-  const [ConfirmPassword, setConfirmPassword] = useState(""); // 비번 확인
+  const [Password, setPassword] = useState(''); // 비번
+  const [ConfirmPassword, setConfirmPassword] = useState(''); // 비번 확인
   const [arePasswordsSame, setArePasswordsSame] = useState(true); // 두 비번이 같은가?
   const [isLinkValid, setIsLinkValid] = useState(true); // 링크가 유효한가?
   const [isUsingPastPassword, setIsUsingPastPassword] = useState(false); // 과거 비밀번호를 또 입력했나?
 
-  const passwordHandler = (event) => {
+  const passwordHandler = event => {
     setPassword(event.currentTarget.value);
   };
 
-  const confirmPasswordHandler = (event) => {
+  const confirmPasswordHandler = event => {
     setConfirmPassword(event.currentTarget.value);
   };
 
-  const submitHandler = (event) => {
+  const submitHandler = event => {
     event.preventDefault();
 
     // 1. 비밀번호를 입력하지 않았다면...? => (그럴일은 잘 없으니) 브라우저단의 Alert
-    if (Password === "" || ConfirmPassword === "") {
-      alert("비밀번호를 입력해주세요.");
+    if (Password === '' || ConfirmPassword === '') {
+      alert('비밀번호를 입력해주세요.');
     } else if (Password !== ConfirmPassword) {
       // 2. 입력한 비밀번호가 서로 다르다면...? => Material UI의 화면상 Alert. Submit 버튼 밑에 뜨게.
       setArePasswordsSame(false);
@@ -76,13 +77,13 @@ export default function ResetPasswordPage(props) {
 
       // axios로 백엔드 API와 통신
       axios
-        .post("/api/user/reset", {
+        .post('/api/user/reset', {
           password: Password,
           resetPwdToken: props.location.pathname.slice(7),
         })
-        .then((res) => {
+        .then(res => {
           // 3. 비밀번호 재설정 링크가 유효하지 않다면..
-          if (res.data.message === "link not valid") {
+          if (res.data.message === 'link not valid') {
             setIsLinkValid(false);
             setIsUsingPastPassword(false);
           } else {
@@ -95,11 +96,11 @@ export default function ResetPasswordPage(props) {
           }
           // 5. 전부 관문을 통과한다면 로그인 페이지로 리다이렉트
           if (res.data.success === true && res.data.userInfo) {
-            alert("비밀번호가 성공적으로 변경되었습니다.");
-            props.history.push("/login");
+            alert('비밀번호가 성공적으로 변경되었습니다.');
+            props.history.push('/login');
           }
         })
-        .catch((err) => {
+        .catch(err => {
           console.log(err);
         });
     }
@@ -185,3 +186,8 @@ export default function ResetPasswordPage(props) {
     </Container>
   );
 }
+
+ResetPasswordPage.propTypes = {
+  location: PropTypes.object,
+  history: PropTypes.object,
+};

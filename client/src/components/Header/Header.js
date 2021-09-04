@@ -1,22 +1,23 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
-import { useDispatch } from "react-redux";
-import { auth } from "../../_actions/user_actions";
-import { withRouter } from "react-router-dom";
+import React, { useState, useEffect } from 'react';
+import PropTypes from 'prop-types';
+import axios from 'axios';
+import { useDispatch } from 'react-redux';
+import { auth } from '../../_actions/user_actions';
+import { withRouter } from 'react-router-dom';
 
-import { AppBar, Button, Toolbar, Menu, MenuItem } from "@material-ui/core";
-import { makeStyles } from "@material-ui/core/styles";
-import HomeIcon from "@material-ui/icons/Home";
-import SettingsIcon from "@material-ui/icons/Settings";
-import AccountCircleIcon from "@material-ui/icons/AccountCircle";
-import IconButton from "@material-ui/core/IconButton";
+import { AppBar, Button, Toolbar, Menu, MenuItem } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
+import HomeIcon from '@material-ui/icons/Home';
+import SettingsIcon from '@material-ui/icons/Settings';
+import AccountCircleIcon from '@material-ui/icons/AccountCircle';
+import IconButton from '@material-ui/core/IconButton';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(theme => ({
   root: {
     flexGrow: 1,
   },
   appBar: {
-    backgroundColor: "#2FC4B2",
+    backgroundColor: '#2FC4B2',
   },
   title: {
     flexGrow: 1,
@@ -46,7 +47,7 @@ function Header(props) {
 
   useEffect(() => {
     // 페이지 이동할때마다 dispatch가 작동해서 백엔드에 계속 요청
-    dispatch(auth()).then((response) => {
+    dispatch(auth()).then(response => {
       // 로그인하지 않은 상태일때는 로그인 버튼을 표시
       if (!response.payload.isAuth) {
         setIsLogin(false);
@@ -58,11 +59,11 @@ function Header(props) {
     });
   }, [props.history.location.pathname]);
 
-  const handleMenuSettings = (event) => {
+  const handleMenuSettings = event => {
     setAnchorElSettings(event.currentTarget);
   };
 
-  const handleMenuMypage = (event) => {
+  const handleMenuMypage = event => {
     setAnchorElMypage(event.currentTarget);
   };
 
@@ -75,23 +76,23 @@ function Header(props) {
   };
 
   const redirectToEditPage = () => {
-    props.history.push("/edit");
+    props.history.push('/edit');
   };
 
   const handleLogout = () => {
-    axios.get("/api/user/logout").then((response) => {
+    axios.get('/api/user/logout').then(response => {
       if (response.data.success) {
         setIsLogin(false);
-        props.history.push("/login");
+        props.history.push('/login');
       } else {
-        alert("로그아웃이 실패하였습니다.");
+        alert('로그아웃이 실패하였습니다.');
       }
     });
     setAnchorElMypage(null);
   };
 
   const handleLogin = () => {
-    props.history.push("/login");
+    props.history.push('/login');
   };
 
   return (
@@ -122,13 +123,13 @@ function Header(props) {
             id="settings-appbar"
             anchorEl={anchorElSettings}
             anchorOrigin={{
-              vertical: "top",
-              horizontal: "right",
+              vertical: 'top',
+              horizontal: 'right',
             }}
             keepMounted
             transformOrigin={{
-              vertical: "top",
-              horizontal: "right",
+              vertical: 'top',
+              horizontal: 'right',
             }}
             open={openSettings}
             onClose={handleCloseSettings}
@@ -151,13 +152,13 @@ function Header(props) {
                 id="settings-appbar"
                 anchorEl={anchorElMypage}
                 anchorOrigin={{
-                  vertical: "top",
-                  horizontal: "right",
+                  vertical: 'top',
+                  horizontal: 'right',
                 }}
                 keepMounted
                 transformOrigin={{
-                  vertical: "top",
-                  horizontal: "right",
+                  vertical: 'top',
+                  horizontal: 'right',
                 }}
                 open={openMypage}
                 onClose={handleCloseMypage}
@@ -180,5 +181,9 @@ function Header(props) {
     </div>
   );
 }
+
+Header.propTypes = {
+  history: PropTypes.object,
+};
 
 export default withRouter(Header);
