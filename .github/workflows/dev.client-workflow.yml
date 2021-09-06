@@ -1,0 +1,41 @@
+name: KIWE Dev Client CI
+on:
+  push:
+    branches:
+      - dev
+  pull_request:
+    types:
+      - closed
+    branches:
+      - dev
+
+jobs:
+  CI:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v2
+
+      - name: Setup node environment
+        uses: actions/setup-node@v2
+        with:
+          node-version: lts/fermium
+
+      - name: CLIENT Install dependencies
+        working-directory: ./client
+        run: npm ci
+
+      - name: CLIENT Lint and format code
+        working-directory: ./client
+        run: npm run style-check
+
+      - name: CLIENT Create .env file
+        working-directory: ./client
+        run: |
+          touch .env
+          echo "REACT_APP_KAKAO_MAP_KEY=${{ secrets.REACT_APP_KAKAO_MAP_KEY }}" >> .env
+        shell: bash
+
+      # - name: CLIENT Test
+      #   working-directory: ./client
+      #   run: npm run test

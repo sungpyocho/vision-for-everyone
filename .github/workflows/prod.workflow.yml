@@ -1,20 +1,19 @@
-name: KIWE CI/CD
+name: KIWE Production CI/CD
 on:
   push:
     branches:
-      - dev
       - master
   pull_request:
+    types:
+      - closed
     branches:
-      - dev
       - master
 
 jobs:
   CI:
     runs-on: ubuntu-latest
-    # Server, Client 폴더 내에 node_modules가 따로 있으므로 매트릭스로 각자 실행
-    strategy:
-      matrix: { dir: ["./server", "./client"] }
+    # strategy:
+    #   matrix: { dir: ["./server", "./client"] }
     steps:
       - name: Check out repository code
         uses: actions/checkout@v2
@@ -24,15 +23,23 @@ jobs:
         with:
           node-version: lts/fermium
 
-      - name: -${{ matrix.dir }}- Install dependencies
-        working-directory: ${{ matrix.dir }}
+      - name: SERVER Install dependencies
+        working-directory: ./server
         run: npm ci
 
-      - name: -${{ matrix.dir }}- Lint and format code
-        working-directory: ${{ matrix.dir }}
+      - name: CLIENT Install dependencies
+        working-directory: ./client
+        run: npm ci
+
+      - name: SERVER Lint and format code
+        working-directory: ./server
         run: npm run style-check
 
-      - name: Create server .env file
+      - name: CLIENT Lint and format code
+        working-directory: ./client
+        run: npm run style-check
+
+      - name: SERVER Create .env file
         working-directory: ./server
         run: |
           touch .env
@@ -48,15 +55,13 @@ jobs:
           echo "KAKAO_ADMIN_KEY=${{ secrets.KAKAO_ADMIN_KEY }}" >> .env
         shell: bash
 
-      - name: Create client .env file
+      - name: CLIENT Create .env file
         working-directory: ./client
         run: |
           touch .env
           echo "REACT_APP_KAKAO_MAP_KEY=${{ secrets.REACT_APP_KAKAO_MAP_KEY }}" >> .env
         shell: bash
 
-      - name: -${{ matrix.dir }}- Lint and format code
-        working-directory: ${{ matrix.dir }}
-        # 현재 서버용 test file밖에 없는 관계로 if 제약 추가. 향후 삭제 예정
-        if: ${{ matrix.dir }} == './server'
+      - name: SERVER Test
+        working-directory: ./server
         run: npm run test
