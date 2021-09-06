@@ -6,7 +6,7 @@ import { Provider } from 'react-redux';
 import { applyMiddleware, createStore } from 'redux';
 import promiseMiddleware from 'redux-promise';
 import ReduxThunk from 'redux-thunk';
-import Reducer from './_reducers'; // index.js까지 안써줘도 자동으로 인식함.
+import Reducer from './_reducers'; // app.js까지 안써줘도 자동으로 인식함.
 import { createTheme } from '@material-ui/core/styles';
 import { ThemeProvider } from '@material-ui/styles';
 import './index.css';
