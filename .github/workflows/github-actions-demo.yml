@@ -31,3 +31,32 @@ jobs:
       - name: -${{ matrix.dir }}- Lint and format code
         working-directory: ${{ matrix.dir }}
         run: npm run style-check
+
+      - name: Create server .env file
+        working-directory: ./server
+        run: |
+          touch .env
+          echo "GOOGLE_PROJECT_ID=${{ GOOGLE_PROJECT_ID }}" >> .env
+          echo "DIALOGFLOW_SESSION_ID=${{ DIALOGFLOW_SESSION_ID }}" >> .env
+          echo "DIALOGFLOW_LANGUAGE_CODE=${{ DIALOGFLOW_LANGUAGE_CODE }}" >> .env
+          echo "GOOGLE_CLIENT_EMAIL=${{ GOOGLE_CLIENT_EMAIL }}" >> .env
+          echo "GOOGLE_PRIVATE_KEY=${{ GOOGLE_PRIVATE_KEY }}" >> .env
+          echo "MONGO_ID=${{ MONGO_ID }}" >> .env
+          echo "MONGO_PASSWORD=${{ MONGO_PASSWORD }}" >> .env
+          echo "EMAIL_ADDRESS=${{ EMAIL_ADDRESS }}" >> .env
+          echo "EMAIL_PASSWORD=${{ EMAIL_PASSWORD }}" >> .env
+          echo "KAKAO_ADMIN_KEY=${{ KAKAO_ADMIN_KEY }}" >> .env
+        shell: bash
+
+      - name: Create client .env file
+        working-directory: ./client
+        run: |
+          touch .env
+          echo "REACT_APP_KAKAO_MAP_KEY=${{ REACT_APP_KAKAO_MAP_KEY }}" >> .env
+        shell: bash
+
+      - name: -${{ matrix.dir }}- Lint and format code
+        working-directory: ${{ matrix.dir }}
+        # 현재 서버용 test file밖에 없는 관계로 if 제약 추가. 향후 삭제 예정
+        if: ${{ matrix.dir }} == './server'
+        run: npm run test
