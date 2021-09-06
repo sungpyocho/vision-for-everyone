@@ -40,7 +40,7 @@ const userSchema = mongoose.Schema({
   },
 });
 
-// pre()를 처리하고 index.js의 save()를 실행함. next() -> save()
+// pre()를 처리하고 app.js의 save()를 실행함. next() -> save()
 userSchema.pre('save', function (next) {
   let user = this; // userSchema 가져오기
 

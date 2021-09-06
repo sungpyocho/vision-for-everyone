@@ -37,7 +37,6 @@ router.post('/textQuery', async (req, res) => {
     queryInput: {
       text: {
         // The query to send to the dialogflow agent
-        // bodyParser 라이브러리를 설치했기 때문에, req.body로 받아올 수 있음
         text: req.body.text,
         // The language used by the client
         languageCode: languageCode,
@@ -113,7 +112,6 @@ router.post('/eventQuery', async (req, res) => {
     queryInput: {
       event: {
         // The query to send to the dialogflow agent
-        // bodyParser 라이브러리를 설치했기 때문에, req.body로 받아올 수 있음
         name: req.body.event,
         // The language used by the client
         languageCode: languageCode,
