@@ -36,23 +36,23 @@ jobs:
         working-directory: ./server
         run: |
           touch .env
-          echo "GOOGLE_PROJECT_ID=${{ GOOGLE_PROJECT_ID }}" >> .env
-          echo "DIALOGFLOW_SESSION_ID=${{ DIALOGFLOW_SESSION_ID }}" >> .env
-          echo "DIALOGFLOW_LANGUAGE_CODE=${{ DIALOGFLOW_LANGUAGE_CODE }}" >> .env
-          echo "GOOGLE_CLIENT_EMAIL=${{ GOOGLE_CLIENT_EMAIL }}" >> .env
-          echo "GOOGLE_PRIVATE_KEY=${{ GOOGLE_PRIVATE_KEY }}" >> .env
-          echo "MONGO_ID=${{ MONGO_ID }}" >> .env
-          echo "MONGO_PASSWORD=${{ MONGO_PASSWORD }}" >> .env
-          echo "EMAIL_ADDRESS=${{ EMAIL_ADDRESS }}" >> .env
-          echo "EMAIL_PASSWORD=${{ EMAIL_PASSWORD }}" >> .env
-          echo "KAKAO_ADMIN_KEY=${{ KAKAO_ADMIN_KEY }}" >> .env
+          echo "GOOGLE_PROJECT_ID=${{ secrets.GOOGLE_PROJECT_ID }}" >> .env
+          echo "DIALOGFLOW_SESSION_ID=${{ secrets.DIALOGFLOW_SESSION_ID }}" >> .env
+          echo "DIALOGFLOW_LANGUAGE_CODE=${{ secrets.DIALOGFLOW_LANGUAGE_CODE }}" >> .env
+          echo "GOOGLE_CLIENT_EMAIL=${{ secrets.GOOGLE_CLIENT_EMAIL }}" >> .env
+          echo "GOOGLE_PRIVATE_KEY=${{ secrets.GOOGLE_PRIVATE_KEY }}" >> .env
+          echo "MONGO_ID=${{ secrets.MONGO_ID }}" >> .env
+          echo "MONGO_PASSWORD=${{ secrets.MONGO_PASSWORD }}" >> .env
+          echo "EMAIL_ADDRESS=${{ secrets.EMAIL_ADDRESS }}" >> .env
+          echo "EMAIL_PASSWORD=${{ secrets.EMAIL_PASSWORD }}" >> .env
+          echo "KAKAO_ADMIN_KEY=${{ secrets.KAKAO_ADMIN_KEY }}" >> .env
         shell: bash
 
       - name: Create client .env file
         working-directory: ./client
         run: |
           touch .env
-          echo "REACT_APP_KAKAO_MAP_KEY=${{ REACT_APP_KAKAO_MAP_KEY }}" >> .env
+          echo "REACT_APP_KAKAO_MAP_KEY=${{ secrets.REACT_APP_KAKAO_MAP_KEY }}" >> .env
         shell: bash
 
       - name: -${{ matrix.dir }}- Lint and format code
