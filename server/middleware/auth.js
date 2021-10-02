@@ -12,6 +12,7 @@ let auth = (req, res, next) => {
     return now > tokenExp;
   };
   console.log(token);
+  console.log(req);
   // 쿠키에서 가져온 토큰이 이 유저의 토큰인가?
   User.findByToken(token, (err, user) => {
     if (err) throw err;

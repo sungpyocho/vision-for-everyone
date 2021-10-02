@@ -111,14 +111,14 @@ describe('POST /edit', () => {
       email: 'testmail@outlook.com',
       password: 'password',
     });
-    let cookie = loginres._header.match(new RegExp('(^| )x_auth=([^;]+)'))[2];
-    // 쿠키를 MOCK?
-    // 검증
-    const response = await request(app).post('/api/user/edit').send({
+    
+    let cookie = loginres.res.rawHeaders[5];
+    const response = await request(app).post('/api/user/edit').set('Cookie', [cookie]).send({
       name: 'Mocha',
       password: 'new_password',
     });
+    
     expect(response.statusCode).toBe(200);
-    expect(response.body).toEqual('Mocha');
+    expect(response.body.userInfo.name).toEqual('Mocha');
   });
 });
