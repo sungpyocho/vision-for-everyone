@@ -99,7 +99,7 @@ describe('POST /register', () => {
 });
 
 describe('POST /edit', () => {
-  test('should return true when edit is correctly done', async () => {
+  test('should return status code 200 when edit is correctly done', async () => {
     // 계정 등록
     await request(app).post('/api/user/register').send({
       name: 'Jest',
@@ -107,12 +107,12 @@ describe('POST /edit', () => {
       password: 'password',
     });
     // 로그인
-    const loginres = await request(app).post('/api/user/login').send({
+    const loginRes = await request(app).post('/api/user/login').send({
       email: 'testmail@outlook.com',
       password: 'password',
     });
     
-    let cookie = loginres.res.rawHeaders[5];
+    let cookie = loginRes.res.rawHeaders[5];
     const response = await request(app).post('/api/user/edit').set('Cookie', [cookie]).send({
       name: 'Mocha',
       password: 'new_password',
@@ -122,3 +122,27 @@ describe('POST /edit', () => {
     expect(response.body.userInfo.name).toEqual('Mocha');
   });
 });
+
+describe('GET /logout', () => {
+  test('should return status code 200 when successfully logged out', async () => {
+    
+    // 계정 등록
+    await request(app).post('/api/user/register').send({
+      name: 'Jest',
+      email: 'testmail@outlook.com',
+      password: 'password',
+    });
+    
+    // 로그인
+    const loginRes = await request(app).post('/api/user/login').send({
+      email: 'testmail@outlook.com',
+      password: 'password',
+    });
+    
+    let cookie = loginRes.res.rawHeaders[5];
+    const response = await request(app).get('/api/user/logout').set('Cookie', [cookie]).send();
+  
+    console.log(response);
+    expect(response.statusCode).toBe(200);
+  })
+})
