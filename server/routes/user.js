@@ -64,8 +64,9 @@ router.post('/register', (req, res) => {
 });
 
 // 회원정보 수정 API
-router.post('/edit', (req, res) => {
-  User.findOne({ email: req.body.email }, (err, user) => {
+// 로그인 후에만 이용할 수 있도록 auth 미들웨어를 추가
+router.post('/edit', auth, (req, res) => {
+  User.findOne({ _id: req.user._id }, (err, user) => {
     if (err) {
       return res.status(400).send(err);
     }

@@ -15,7 +15,7 @@
     "style-check": "npm run linter && npm run formatter",
     "linter": "eslint --fix '**/*.{js,jsx,ts,tsx}'",
     "formatter": "prettier --write '**/*.{js,jsx,ts,tsx}'",
-    "test": "jest"
+    "test": "jest --detectOpenHandles"
   },
   "jest": {
     "coveragePathIgnorePatterns": [

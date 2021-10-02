@@ -3,6 +3,7 @@ on:
   push:
     branches:
       - dev
+      - feature-server-test
   pull_request:
     types:
       - closed
