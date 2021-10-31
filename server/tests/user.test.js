@@ -111,13 +111,16 @@ describe('POST /edit', () => {
       email: 'testmail@outlook.com',
       password: 'password',
     });
-    
+
     let cookie = loginRes.res.rawHeaders[5];
-    const response = await request(app).post('/api/user/edit').set('Cookie', [cookie]).send({
-      name: 'Mocha',
-      password: 'new_password',
-    });
-    
+    const response = await request(app)
+      .post('/api/user/edit')
+      .set('Cookie', [cookie])
+      .send({
+        name: 'Mocha',
+        password: 'new_password',
+      });
+
     expect(response.statusCode).toBe(200);
     expect(response.body.userInfo.name).toEqual('Mocha');
   });
@@ -125,24 +128,24 @@ describe('POST /edit', () => {
 
 describe('GET /logout', () => {
   test('should return status code 200 when successfully logged out', async () => {
-    
     // 계정 등록
     await request(app).post('/api/user/register').send({
       name: 'Jest',
       email: 'testmail@outlook.com',
       password: 'password',
     });
-    
+
     // 로그인
     const loginRes = await request(app).post('/api/user/login').send({
       email: 'testmail@outlook.com',
       password: 'password',
     });
-    
+
     let cookie = loginRes.res.rawHeaders[5];
-    const response = await request(app).get('/api/user/logout').set('Cookie', [cookie]).send();
-  
-    console.log(response);
+    const response = await request(app)
+      .get('/api/user/logout')
+      .set('Cookie', [cookie])
+      .send();
     expect(response.statusCode).toBe(200);
-  })
-})
+  });
+});
